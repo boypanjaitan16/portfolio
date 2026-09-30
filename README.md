@@ -36,6 +36,21 @@ pnpm --filter @portfolio/home dev
 pnpm --filter @portfolio/tools dev
 ```
 
+## Design direction
+
+App home menggunakan arah visual **Red Index**. Eksplorasi awal lengkap tetap tersimpan di branch `prototype/home-visual-directions`.
+
+Route utama app home:
+
+- `/` — overview personal brand
+- `/work` — indeks karya dan studi kasus konsep
+- `/about` — bio, kemampuan, prinsip, dan toolkit
+- `/notes` — daftar artikel dan antrean tulisan
+- `/notes/:slug` — halaman artikel
+- `/tools/` — aplikasi tools terpisah
+
+Data artikel bilingual berada di `apps/home/src/content/articles.ts`. Artikel yang belum selesai harus tetap berstatus `planned` agar tidak tampil sebagai tulisan yang sudah diterbitkan.
+
 ## GitHub Pages
 
 Workflow `Deploy GitHub Pages` hanya berjalan secara manual dari tab Actions. Ia membangun kedua app, meletakkan output home pada root artefak, dan output tools pada `/tools/`.

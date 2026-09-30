@@ -41,7 +41,9 @@ jobs:
           mkdir -p site/tools
           cp -R apps/home/dist/. site/
           cp -R apps/tools/dist/. site/tools/
+          cp site/index.html site/404.html
           test -f site/index.html
+          test -f site/404.html
           test -f site/tools/index.html
 
       - name: Upload Pages artifact

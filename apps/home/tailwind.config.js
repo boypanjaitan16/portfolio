@@ -7,17 +7,19 @@ export default {
 	theme: {
 		extend: {
 			colors: {
-				ink: "#0f172a",
-				mist: "#f8fafc",
-				sand: "#e2e8f0",
-				accent: "#0ea5e9",
+				ink: "#111111",
+				paper: "#f5f2eb",
+				line: "#d9d4ca",
+				muted: "#696762",
+				signal: "#e60023",
 			},
 			fontFamily: {
-				display: ["Space Grotesk", "Sora", ...defaultTheme.fontFamily.sans],
-				sans: ["Work Sans", ...defaultTheme.fontFamily.sans],
+				display: ["Instrument Sans Variable", ...defaultTheme.fontFamily.sans],
+				sans: ["Instrument Sans Variable", ...defaultTheme.fontFamily.sans],
+				mono: ["IBM Plex Mono", ...defaultTheme.fontFamily.mono],
 			},
 			boxShadow: {
-				soft: "0 18px 44px rgba(15, 23, 42, 0.08)",
+				soft: "0 24px 60px rgba(17, 17, 17, 0.14)",
 			},
 		},
 	},
