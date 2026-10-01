@@ -2,14 +2,18 @@ import { ArrowDown, ArrowRight, ArrowUpRight, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
 import { ContactBand } from "../components/ContactBand";
 import { PageMeta } from "../components/PageMeta";
-import { getArticles } from "../content/articles";
 import { pageContent } from "../content/pageContent";
+import { usePublishedArticles } from "../hooks/usePublishedArticles";
 import { useLocale } from "../i18n/LocaleProvider";
 
 export function HomePage() {
 	const { content, locale } = useLocale();
 	const pages = pageContent[locale];
-	const articles = getArticles(locale);
+	const {
+		data: articles = [],
+		isLoading: articlesLoading,
+		error: articlesError,
+	} = usePublishedArticles(locale);
 
 	return (
 		<main id="top">
@@ -182,14 +186,31 @@ export function HomePage() {
 						</Link>
 					</div>
 				</div>
-				<div className="grid md:grid-cols-3">
-					{articles.map((article) => (
+				<div
+					className="grid md:grid-cols-3"
+					data-prerender-ready={
+						!articlesLoading && !articlesError ? "true" : undefined
+					}
+					data-prerender-error={articlesError ? "true" : undefined}
+				>
+					{articlesLoading && (
+						<p className="py-7 text-muted">{pages.notes.loading}</p>
+					)}
+					{articlesError && (
+						<p role="alert" className="py-7 text-signal">
+							{pages.notes.error}
+						</p>
+					)}
+					{!articlesLoading && !articlesError && articles.length === 0 && (
+						<p className="py-7 text-muted">{pages.notes.empty}</p>
+					)}
+					{articles.slice(0, 3).map((article, index) => (
 						<article
-							key={article.slug}
+							key={article.id}
 							className="border-b border-ink/20 py-7 md:border-b-0 md:border-r md:px-7 first:pl-0 last:border-r-0 last:pr-0"
 						>
 							<p className="font-mono text-[10px] uppercase tracking-[0.16em] text-signal">
-								{pages.notes.plannedStatus} · {article.number}
+								{article.topic} · {String(index + 1).padStart(2, "0")}
 							</p>
 							<h3 className="mt-8 text-2xl font-semibold leading-tight tracking-[-0.025em]">
 								<Link
@@ -199,7 +220,7 @@ export function HomePage() {
 									{article.title}
 								</Link>
 							</h3>
-							<p className="mt-4 leading-6 text-muted">{article.description}</p>
+							<p className="mt-4 leading-6 text-muted">{article.summary}</p>
 						</article>
 					))}
 				</div>

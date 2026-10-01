@@ -42,14 +42,10 @@ export type PageContent = {
 		intro: string;
 		queueLabel: string;
 		queueSummary: string;
-		plannedStatus: string;
 		openArticle: string;
-	};
-	article: {
-		plannedLabel: string;
-		plannedTitle: string;
-		plannedBody: string;
-		outlineLabel: string;
+		loading: string;
+		error: string;
+		empty: string;
 	};
 	notFound: {
 		metaTitle: string;
@@ -158,22 +154,16 @@ export const pageContent: Record<Locale, PageContent> = {
 			metaTitle: "Notes",
 			metaDescription:
 				"Engineering notes by Boy Boni Panjaitan on interfaces, reliability, and product development.",
-			eyebrow: "Notes · writing queue",
+			eyebrow: "Notes · published writing",
 			title: "Working through software in public.",
 			intro:
-				"Essays in preparation on engineering judgment, interface design, reliability, and building smaller, more useful software.",
-			queueLabel: "Publication status",
-			queueSummary:
-				"Nothing here is presented as published yet. These are the first three essays in the writing queue.",
-			plannedStatus: "Planned",
-			openArticle: "View outline",
-		},
-		article: {
-			plannedLabel: "Planned note",
-			plannedTitle: "This essay is being prepared.",
-			plannedBody:
-				"The page and outline are ready, but the article itself will only be published when the argument and examples are complete.",
-			outlineLabel: "Working outline",
+				"Published essays on engineering judgment, interface design, reliability, and useful software.",
+			queueLabel: "Published notes",
+			queueSummary: "Articles written and published in English.",
+			openArticle: "Read article",
+			loading: "Loading articles…",
+			error: "Articles could not be loaded. Please try again later.",
+			empty: "No published articles yet.",
 		},
 		notFound: {
 			metaTitle: "Page not found",
@@ -281,22 +271,17 @@ export const pageContent: Record<Locale, PageContent> = {
 			metaTitle: "Catatan",
 			metaDescription:
 				"Catatan engineering Boy Boni Panjaitan tentang antarmuka, reliability, dan pengembangan produk.",
-			eyebrow: "Catatan · antrean tulisan",
+			eyebrow: "Catatan · tulisan terbit",
 			title: "Mengurai software di ruang publik.",
 			intro:
-				"Esai yang sedang disiapkan tentang pertimbangan engineering, desain antarmuka, reliability, dan membangun software yang lebih kecil serta berguna.",
-			queueLabel: "Status publikasi",
+				"Esai tentang pertimbangan engineering, desain antarmuka, reliability, dan software yang berguna.",
+			queueLabel: "Catatan terbit",
 			queueSummary:
-				"Belum ada yang ditampilkan sebagai artikel terbit. Ini adalah tiga esai pertama dalam antrean penulisan.",
-			plannedStatus: "Direncanakan",
-			openArticle: "Lihat kerangka",
-		},
-		article: {
-			plannedLabel: "Catatan terencana",
-			plannedTitle: "Esai ini sedang disiapkan.",
-			plannedBody:
-				"Halaman dan kerangkanya sudah tersedia, tetapi artikel baru akan diterbitkan ketika argumen dan contohnya lengkap.",
-			outlineLabel: "Kerangka kerja",
+				"Artikel yang ditulis dan diterbitkan dalam bahasa Indonesia.",
+			openArticle: "Baca artikel",
+			loading: "Memuat artikel…",
+			error: "Artikel gagal dimuat. Coba lagi nanti.",
+			empty: "Belum ada artikel terbit.",
 		},
 		notFound: {
 			metaTitle: "Halaman tidak ditemukan",

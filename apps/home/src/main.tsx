@@ -1,3 +1,4 @@
+import { applyPortfolioTheme } from "@portfolio/config";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
@@ -9,6 +10,17 @@ import "@fontsource-variable/instrument-sans";
 import "./index.css";
 
 const queryClient = new QueryClient();
+
+applyPortfolioTheme();
+
+const redirect = new URLSearchParams(window.location.search).get("__redirect");
+if (
+	redirect?.startsWith("/") &&
+	!redirect.startsWith("/admin/") &&
+	!redirect.startsWith("/tools/")
+) {
+	window.history.replaceState(null, "", redirect);
+}
 
 const rootElement = document.getElementById("root");
 

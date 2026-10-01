@@ -4,9 +4,9 @@
 
 @layer base {
 	:root {
-		font-family: "Work Sans", ui-sans-serif, system-ui, sans-serif;
-		color: #0f172a;
-		background: #f8fafc;
+		font-family: var(--portfolio-font-sans);
+		color: var(--portfolio-ink);
+		background: var(--portfolio-paper);
 	}
 
 	body {

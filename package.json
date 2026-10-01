@@ -11,7 +11,8 @@
 		"format": "turbo run format",
 		"format:check": "turbo run format:check",
 		"test": "turbo run test",
-		"test:coverage": "turbo run test:coverage"
+		"test:coverage": "turbo run test:coverage",
+		"test:pages:smoke": "firebase emulators:exec --project demo-portfolio --only firestore,storage 'bash scripts/test-pages-smoke.sh'"
 	},
 	"author": "Boy Boni Panjaitan",
 	"license": "ISC",

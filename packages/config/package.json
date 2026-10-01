@@ -1,0 +1,22 @@
+{
+	"name": "@portfolio/config",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./index.d.ts",
+			"default": "./index.js"
+		},
+		"./tailwind": "./tailwind.js"
+	},
+	"dependencies": {
+		"@tailwindcss/typography": "^0.5.20",
+		"tailwindcss": "^3.4.14"
+	},
+	"scripts": {
+		"lint": "biome check .",
+		"format": "biome format --write .",
+		"format:check": "biome check --linter-enabled=false --assist-enabled=false ."
+	}
+}

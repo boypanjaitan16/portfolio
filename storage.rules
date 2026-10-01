@@ -1,0 +1,14 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /articles/{articleId}/{kind}/{fileName} {
+      allow get: if true;
+      allow list: if false;
+      allow create, update: if request.auth != null
+        && (kind == 'cover' || kind == 'body')
+        && request.resource.size <= 5 * 1024 * 1024
+        && request.resource.contentType.matches('image/(jpeg|png|webp|gif)');
+      allow delete: if request.auth != null;
+    }
+  }
+}

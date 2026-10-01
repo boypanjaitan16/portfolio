@@ -33,18 +33,34 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build applications
-        run: pnpm build
+      - name: Install Chrome for prerendering
+        run: pnpm --filter @portfolio/home exec puppeteer browsers install chrome
+
+      - name: Build applications and public HTML
+        env:
+          VITE_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
+          VITE_FIREBASE_AUTH_DOMAIN: ${{ secrets.VITE_FIREBASE_AUTH_DOMAIN }}
+          VITE_FIREBASE_PROJECT_ID: ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
+          VITE_FIREBASE_STORAGE_BUCKET: ${{ secrets.VITE_FIREBASE_STORAGE_BUCKET }}
+          VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.VITE_FIREBASE_MESSAGING_SENDER_ID }}
+          VITE_FIREBASE_APP_ID: ${{ secrets.VITE_FIREBASE_APP_ID }}
+        run: |
+          pnpm --filter @portfolio/tools build
+          pnpm --filter @portfolio/admin build
+          pnpm --filter @portfolio/home build:pages
 
       - name: Assemble Pages artifact
         run: |
-          mkdir -p site/tools
+          mkdir -p site/tools site/admin
           cp -R apps/home/dist/. site/
           cp -R apps/tools/dist/. site/tools/
-          cp site/index.html site/404.html
+          cp -R apps/admin/dist/. site/admin/
           test -f site/index.html
           test -f site/404.html
           test -f site/tools/index.html
+          test -f site/admin/index.html
+          test -f site/notes/index.html
+          test -f site/sitemap.xml
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3

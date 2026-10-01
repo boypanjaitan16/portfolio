@@ -4,6 +4,8 @@ import { useLocation } from "react-router-dom";
 type PageMetaProps = {
 	title: string;
 	description: string;
+	image?: string;
+	lang?: string;
 };
 
 function setMeta(property: string, content: string) {
@@ -20,10 +22,11 @@ function setMeta(property: string, content: string) {
 	element.content = content;
 }
 
-export function PageMeta({ title, description }: PageMetaProps) {
+export function PageMeta({ title, description, image, lang }: PageMetaProps) {
 	const { pathname } = useLocation();
 
 	useEffect(() => {
+		if (lang) document.documentElement.lang = lang;
 		const pageTitle = `${title} | Boy Boni Panjaitan`;
 		const url = `https://boypanjaitan.com${pathname}`;
 		document.title = pageTitle;
@@ -51,7 +54,9 @@ export function PageMeta({ title, description }: PageMetaProps) {
 		setMeta("og:title", pageTitle);
 		setMeta("og:description", description);
 		setMeta("og:url", url);
-	}, [description, pathname, title]);
+		if (image) setMeta("og:image", image);
+		else document.head.querySelector('meta[property="og:image"]')?.remove();
+	}, [description, image, lang, pathname, title]);
 
 	return null;
 }
