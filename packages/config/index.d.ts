@@ -10,6 +10,12 @@ export declare const portfolioTheme: {
 	shadows: { soft: string };
 };
 
+export declare const socialLinks: {
+	instagram: string;
+	facebook: string;
+	github: string;
+};
+
 export declare const adminAntdTheme: {
 	token: {
 		colorPrimary: string;

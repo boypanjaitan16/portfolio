@@ -1,3 +1,4 @@
+import { socialLinks } from "@portfolio/config";
 import { ArrowUpRight, Github } from "lucide-react";
 import { useLocale } from "../i18n/LocaleProvider";
 
@@ -22,9 +23,9 @@ export function ContactBand() {
 					</p>
 					<a
 						className="mt-8 inline-flex items-center gap-3 border-b border-white pb-1 font-semibold"
-						href="https://github.com/boypanjaitan16"
+						href={socialLinks.github}
 						target="_blank"
-						rel="noreferrer"
+						rel="noopener noreferrer"
 					>
 						<Github size={19} aria-hidden="true" />
 						{content.contact.githubAction}

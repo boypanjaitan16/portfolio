@@ -60,6 +60,7 @@ export type PortfolioContent = {
 		siteNote: string;
 		summary: string;
 		footerNavigationLabel: string;
+		socialNavigationLabel: string;
 		photoBy: string;
 	};
 	images: {
@@ -163,6 +164,7 @@ export const portfolioContent: Record<Locale, PortfolioContent> = {
 			summary:
 				"Software engineer shaping dependable products, clear interfaces, and useful tools.",
 			footerNavigationLabel: "Footer navigation",
+			socialNavigationLabel: "Social media",
 			photoBy: "Photography via Unsplash",
 		},
 		images: {
@@ -264,6 +266,7 @@ export const portfolioContent: Record<Locale, PortfolioContent> = {
 			summary:
 				"Software engineer yang membangun produk andal, antarmuka jelas, dan tools yang berguna.",
 			footerNavigationLabel: "Navigasi footer",
+			socialNavigationLabel: "Media sosial",
 			photoBy: "Fotografi melalui Unsplash",
 		},
 		images: {

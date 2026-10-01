@@ -97,6 +97,9 @@ try {
 	for (const path of paths) {
 		const page = await browser.newPage();
 		try {
+			await page.evaluateOnNewDocument((publicOrigin) => {
+				window.__portfolioPrerenderOrigin = publicOrigin;
+			}, origin);
 			await page.goto(baseUrl + path, { waitUntil: "domcontentloaded" });
 			if (path === "/" || path.startsWith("/notes")) {
 				await page.waitForFunction(

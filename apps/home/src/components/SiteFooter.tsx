@@ -1,6 +1,14 @@
-import { Github } from "lucide-react";
+import { socialLinks } from "@portfolio/config";
+import { Facebook, Github, Instagram } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useLocale } from "../i18n/LocaleProvider";
+import { LocaleToggle } from "./LocaleToggle";
+
+const socialProfiles = [
+	{ label: "Instagram", href: socialLinks.instagram, Icon: Instagram },
+	{ label: "Facebook", href: socialLinks.facebook, Icon: Facebook },
+	{ label: "GitHub", href: socialLinks.github, Icon: Github },
+];
 
 export function SiteFooter() {
 	const { content } = useLocale();
@@ -31,21 +39,30 @@ export function SiteFooter() {
 						{content.navigation.tools}
 					</a>
 				</nav>
-				<div className="flex items-start gap-5 md:col-span-3 md:justify-end">
-					<a
-						className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.14em]"
-						href="https://github.com/boypanjaitan16"
-						target="_blank"
-						rel="noreferrer"
-					>
-						<Github size={15} aria-hidden="true" />
-						GitHub
-					</a>
-				</div>
+				<nav
+					className="flex flex-wrap items-start gap-x-5 gap-y-3 md:col-span-3 md:justify-end"
+					aria-label={content.footer.socialNavigationLabel}
+				>
+					{socialProfiles.map(({ label, href, Icon }) => (
+						<a
+							key={label}
+							className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.14em] hover:text-signal"
+							href={href}
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							<Icon size={15} aria-hidden="true" />
+							{label}
+						</a>
+					))}
+				</nav>
 			</div>
-			<div className="mx-auto mt-10 flex max-w-[1440px] flex-col justify-between gap-3 border-t border-ink/15 pt-5 font-mono text-[9px] uppercase tracking-[0.13em] text-muted sm:flex-row">
+			<div className="mx-auto mt-10 flex max-w-[1440px] flex-col justify-between gap-3 border-t border-ink/15 pt-5 font-mono text-[9px] uppercase tracking-[0.13em] text-muted sm:flex-row sm:items-center">
 				<span>{content.footer.siteNote}</span>
-				<span>© {new Date().getFullYear()} Boy Boni Panjaitan</span>
+				<div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+					<LocaleToggle tone="paper" />
+					<span>© {new Date().getFullYear()} Boy Boni Panjaitan</span>
+				</div>
 			</div>
 		</footer>
 	);

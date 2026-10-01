@@ -15,6 +15,12 @@ export const portfolioTheme = {
 	},
 };
 
+export const socialLinks = {
+	instagram: "https://www.instagram.com/boypanjaitan16/",
+	facebook: "https://www.facebook.com/boypanjaitan16/",
+	github: "https://github.com/boypanjaitan16",
+};
+
 export const adminAntdTheme = {
 	token: {
 		colorPrimary: portfolioTheme.colors.primary,

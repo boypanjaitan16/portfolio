@@ -1,5 +1,6 @@
 import { ArrowDown, ArrowRight, ArrowUpRight, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
+import { ArticleCard } from "../components/ArticleCard";
 import { ContactBand } from "../components/ContactBand";
 import { PageMeta } from "../components/PageMeta";
 import { pageContent } from "../content/pageContent";
@@ -187,7 +188,7 @@ export function HomePage() {
 					</div>
 				</div>
 				<div
-					className="grid md:grid-cols-3"
+					className="grid gap-5 pt-7 md:grid-cols-3"
 					data-prerender-ready={
 						!articlesLoading && !articlesError ? "true" : undefined
 					}
@@ -205,23 +206,12 @@ export function HomePage() {
 						<p className="py-7 text-muted">{pages.notes.empty}</p>
 					)}
 					{articles.slice(0, 3).map((article, index) => (
-						<article
+						<ArticleCard
 							key={article.id}
-							className="border-b border-ink/20 py-7 md:border-b-0 md:border-r md:px-7 first:pl-0 last:border-r-0 last:pr-0"
-						>
-							<p className="font-mono text-[10px] uppercase tracking-[0.16em] text-signal">
-								{article.topic} · {String(index + 1).padStart(2, "0")}
-							</p>
-							<h3 className="mt-8 text-2xl font-semibold leading-tight tracking-[-0.025em]">
-								<Link
-									className="hover:text-signal"
-									to={`/notes/${article.slug}`}
-								>
-									{article.title}
-								</Link>
-							</h3>
-							<p className="mt-4 leading-6 text-muted">{article.summary}</p>
-						</article>
+							article={article}
+							index={index}
+							headingLevel="h3"
+						/>
 					))}
 				</div>
 			</section>

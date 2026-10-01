@@ -4,7 +4,8 @@ export type PageContent = {
 	common: {
 		viewAllWork: string;
 		viewAllNotes: string;
-		backToNotes: string;
+		home: string;
+		breadcrumbLabel: string;
 		backHome: string;
 	};
 	work: {
@@ -61,7 +62,8 @@ export const pageContent: Record<Locale, PageContent> = {
 		common: {
 			viewAllWork: "View all work",
 			viewAllNotes: "Browse all notes",
-			backToNotes: "Back to notes",
+			home: "Home",
+			breadcrumbLabel: "Breadcrumb",
 			backHome: "Back home",
 		},
 		work: {
@@ -177,7 +179,8 @@ export const pageContent: Record<Locale, PageContent> = {
 		common: {
 			viewAllWork: "Lihat semua karya",
 			viewAllNotes: "Jelajahi semua catatan",
-			backToNotes: "Kembali ke catatan",
+			home: "Beranda",
+			breadcrumbLabel: "Jejak navigasi",
 			backHome: "Kembali ke beranda",
 		},
 		work: {

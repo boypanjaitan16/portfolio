@@ -5,7 +5,8 @@ type PageMetaProps = {
 	title: string;
 	description: string;
 	image?: string;
-	lang?: string;
+	kind?: "website" | "article";
+	publishedAt?: string | null;
 };
 
 function setMeta(property: string, content: string) {
@@ -22,11 +23,28 @@ function setMeta(property: string, content: string) {
 	element.content = content;
 }
 
-export function PageMeta({ title, description, image, lang }: PageMetaProps) {
+function setNamedMeta(name: string, content: string) {
+	let element = document.head.querySelector<HTMLMetaElement>(
+		`meta[name="${name}"]`,
+	);
+	if (!element) {
+		element = document.createElement("meta");
+		element.name = name;
+		document.head.appendChild(element);
+	}
+	element.content = content;
+}
+
+export function PageMeta({
+	title,
+	description,
+	image,
+	kind = "website",
+	publishedAt,
+}: PageMetaProps) {
 	const { pathname } = useLocation();
 
 	useEffect(() => {
-		if (lang) document.documentElement.lang = lang;
 		const pageTitle = `${title} | Boy Boni Panjaitan`;
 		const url = `https://boypanjaitan.com${pathname}`;
 		document.title = pageTitle;
@@ -54,9 +72,25 @@ export function PageMeta({ title, description, image, lang }: PageMetaProps) {
 		setMeta("og:title", pageTitle);
 		setMeta("og:description", description);
 		setMeta("og:url", url);
-		if (image) setMeta("og:image", image);
-		else document.head.querySelector('meta[property="og:image"]')?.remove();
-	}, [description, image, lang, pathname, title]);
+		setMeta("og:type", kind);
+		setNamedMeta("twitter:title", pageTitle);
+		setNamedMeta("twitter:description", description);
+		setNamedMeta("twitter:card", image ? "summary_large_image" : "summary");
+		if (image) {
+			setMeta("og:image", image);
+			setNamedMeta("twitter:image", image);
+		} else {
+			document.head.querySelector('meta[property="og:image"]')?.remove();
+			document.head.querySelector('meta[name="twitter:image"]')?.remove();
+		}
+		if (kind === "article" && publishedAt) {
+			setMeta("article:published_time", publishedAt);
+		} else {
+			document.head
+				.querySelector('meta[property="article:published_time"]')
+				?.remove();
+		}
+	}, [description, image, kind, pathname, publishedAt, title]);
 
 	return null;
 }
