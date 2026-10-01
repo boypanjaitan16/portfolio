@@ -10,6 +10,7 @@ const ArticlePreviewPage = lazy(
 	() => import("./pages/articles/ArticlePreviewPage"),
 );
 const ArticlesPage = lazy(() => import("./pages/articles/ArticlesPage"));
+const ContactsPage = lazy(() => import("./pages/contacts/ContactsPage"));
 
 import { LoginPage } from "./pages/LoginPage";
 
@@ -46,6 +47,7 @@ export default function App() {
 				<Route element={<Guard />}>
 					<Route path="/" element={<DashboardPage />} />
 					<Route path="/articles" element={<ArticlesPage />} />
+					<Route path="/contacts" element={<ContactsPage />} />
 					<Route path="/articles/new" element={<ArticleFormPage />} />
 					<Route
 						path="/articles/:articleId/edit"

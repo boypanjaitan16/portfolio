@@ -34,6 +34,7 @@ assert.ok(script);
 
 for (const [pathname, expected] of [
 	["/admin/articles/example/edit", "/admin/?__redirect=%2Fadmin%2Farticles%2Fexample%2Fedit"],
+	["/admin/contacts", "/admin/?__redirect=%2Fadmin%2Fcontacts"],
 	["/tools/missing", "/tools/?__redirect=%2Ftools%2Fmissing"],
 	["/missing", "/?__redirect=%2Fmissing"],
 ]) {

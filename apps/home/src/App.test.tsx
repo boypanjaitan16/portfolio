@@ -1,4 +1,5 @@
 import { socialLinks } from "@portfolio/config";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
@@ -66,9 +67,11 @@ vi.mock("./hooks/usePublishedArticles", () => ({
 
 function renderApp(route = "/") {
 	return render(
-		<MemoryRouter initialEntries={[route]}>
-			<App />
-		</MemoryRouter>,
+		<QueryClientProvider client={new QueryClient()}>
+			<MemoryRouter initialEntries={[route]}>
+				<App />
+			</MemoryRouter>
+		</QueryClientProvider>,
 	);
 }
 
@@ -309,7 +312,7 @@ describe("locale and metadata", () => {
 		expect(screen.getAllByRole("button", { name: "EN" })).toHaveLength(1);
 	});
 
-	it("uses the shared social URLs in the footer and contact section", () => {
+	it("uses the shared social URLs in the footer", () => {
 		window.localStorage.setItem("portfolio-locale", "en");
 		renderApp();
 		const social = screen.getByRole("navigation", { name: "Social media" });
@@ -323,10 +326,7 @@ describe("locale and metadata", () => {
 				href,
 			);
 		}
-		expect(screen.getByRole("link", { name: "Visit GitHub" })).toHaveAttribute(
-			"href",
-			socialLinks.github,
-		);
+		expect(screen.queryByRole("link", { name: "Visit GitHub" })).toBeNull();
 	});
 
 	it("changes and persists the selected locale", async () => {

@@ -54,7 +54,6 @@ export type PortfolioContent = {
 		label: string;
 		title: string;
 		body: string;
-		githubAction: string;
 	};
 	footer: {
 		siteNote: string;
@@ -156,8 +155,7 @@ export const portfolioContent: Record<Locale, PortfolioContent> = {
 		contact: {
 			label: "Next conversation",
 			title: "Have a difficult problem worth making simpler?",
-			body: "Contact details are being prepared. For now, the public GitHub profile is the most reliable way to follow the work.",
-			githubAction: "Visit GitHub",
+			body: "Tell me what you are working on. I will reply to the email address you provide.",
 		},
 		footer: {
 			siteNote: "Personal portfolio · concept work clearly labelled",
@@ -258,8 +256,7 @@ export const portfolioContent: Record<Locale, PortfolioContent> = {
 		contact: {
 			label: "Percakapan berikutnya",
 			title: "Punya masalah sulit yang layak dibuat lebih sederhana?",
-			body: "Detail kontak sedang disiapkan. Untuk saat ini, profil GitHub publik adalah cara paling pasti untuk mengikuti karya saya.",
-			githubAction: "Kunjungi GitHub",
+			body: "Ceritakan kebutuhan Anda. Saya akan membalas ke alamat email yang Anda berikan.",
 		},
 		footer: {
 			siteNote: "Portfolio personal · karya konsep diberi label dengan jelas",

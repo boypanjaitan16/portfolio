@@ -102,3 +102,93 @@ test("only authenticated accounts upload media, and public readers can get it", 
 	);
 	await assertSucceeds(anonymous.ref(path).getMetadata());
 });
+
+test("anonymous visitors can submit valid messages but cannot read or change them", async () => {
+	const { default: firebase } = await import("firebase/compat/app");
+	await import("firebase/compat/firestore");
+	const db = environment.unauthenticatedContext().firestore();
+	const now = firebase.firestore.FieldValue.serverTimestamp();
+	const valid = {
+		name: "Ada",
+		email: "ada@example.com",
+		message: "A project question for you.",
+		locale: "en",
+		sourcePath: "/work",
+		status: "NEW",
+		adminNote: "",
+		createdAt: now,
+		updatedAt: now,
+	};
+	await assertSucceeds(
+		db.collection("contactMessages").doc("valid").set(valid),
+	);
+	await assertFails(db.collection("contactMessages").doc("valid").get());
+	await assertFails(db.collection("contactMessages").get());
+	await assertFails(
+		db.collection("contactMessages").doc("valid").update({ status: "DONE" }),
+	);
+	await assertFails(db.collection("contactMessages").doc("valid").delete());
+	await assertFails(
+		db
+			.collection("contactMessages")
+			.doc("bad-status")
+			.set({ ...valid, status: "DONE" }),
+	);
+	await assertFails(
+		db
+			.collection("contactMessages")
+			.doc("bad-note")
+			.set({ ...valid, adminNote: "injected" }),
+	);
+	await assertFails(
+		db
+			.collection("contactMessages")
+			.doc("bad-email")
+			.set({ ...valid, email: "invalid" }),
+	);
+	await assertFails(
+		db
+			.collection("contactMessages")
+			.doc("bad-header")
+			.set({
+				...valid,
+				email: "ada@example.com%0Acc:other@example.com",
+			}),
+	);
+	await assertFails(
+		db
+			.collection("contactMessages")
+			.doc("bad-extra")
+			.set({ ...valid, privileged: true }),
+	);
+	await assertFails(
+		db
+			.collection("contactMessages")
+			.doc("bad-size")
+			.set({ ...valid, message: "x".repeat(4001) }),
+	);
+});
+
+test("authenticated accounts can update follow-up fields and delete messages", async () => {
+	const { default: firebase } = await import("firebase/compat/app");
+	await import("firebase/compat/firestore");
+	const db = environment.authenticatedContext("editor").firestore();
+	const message = db.collection("contactMessages").doc("valid");
+	const snapshot = await assertSucceeds(message.get());
+	assert.equal(snapshot.data().email, "ada@example.com");
+	await assertSucceeds(
+		message.update({
+			status: "IN_PROGRESS",
+			adminNote: "Reply tomorrow",
+			updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+		}),
+	);
+	await assertFails(message.update({ email: "other@example.com" }));
+	await assertFails(
+		message.update({
+			adminNote: "x".repeat(2001),
+			updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+		}),
+	);
+	await assertSucceeds(message.delete());
+});

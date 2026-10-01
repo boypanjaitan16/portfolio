@@ -1,5 +1,9 @@
 import { getApps, initializeApp } from "firebase/app";
 import {
+	initializeAppCheck,
+	ReCaptchaEnterpriseProvider,
+} from "firebase/app-check";
+import {
 	connectFirestoreEmulator,
 	type Firestore,
 	getFirestore,
@@ -15,13 +19,36 @@ const config = {
 };
 
 let database: Firestore | null = null;
+let appCheckInitialized = false;
+
+function getFirebaseApp() {
+	const app = getApps()[0] ?? initializeApp(config);
+	const siteKey = import.meta.env.VITE_FIREBASE_APPCHECK_SITE_KEY;
+	const prerender = Boolean(
+		(window as Window & { __portfolioPrerenderArticles?: unknown })
+			.__portfolioPrerenderArticles,
+	);
+	if (
+		siteKey &&
+		!appCheckInitialized &&
+		!import.meta.env.VITE_FIRESTORE_EMULATOR_HOST &&
+		!prerender
+	) {
+		initializeAppCheck(app, {
+			provider: new ReCaptchaEnterpriseProvider(siteKey),
+			isTokenAutoRefreshEnabled: true,
+		});
+		appCheckInitialized = true;
+	}
+	return app;
+}
 
 export function getFirestoreDb() {
 	if (!config.apiKey || !config.projectId || !config.appId) {
 		throw new Error("Firebase belum dikonfigurasi.");
 	}
 	if (!database) {
-		database = getFirestore(getApps()[0] ?? initializeApp(config));
+		database = getFirestore(getFirebaseApp());
 		const emulator = import.meta.env.VITE_FIRESTORE_EMULATOR_HOST;
 		if (emulator) {
 			const [host, port] = emulator.split(":");

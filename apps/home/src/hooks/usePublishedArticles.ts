@@ -45,10 +45,20 @@ export async function fetchPublishedArticle(
 	return snapshot.docs[0] ? (snapshot.docs[0].data() as Article) : null;
 }
 
+function prerenderArticles(): Article[] | undefined {
+	return (window as Window & { __portfolioPrerenderArticles?: Article[] })
+		.__portfolioPrerenderArticles;
+}
+
 export function usePublishedArticles(locale: ArticleLocale) {
+	const initial = prerenderArticles();
 	return useQuery({
 		queryKey: publicArticleKeys.list(locale),
 		queryFn: () => fetchPublishedArticles(locale),
+		enabled: !initial,
+		initialData: initial
+			?.filter((article) => article.locale === locale)
+			.sort((a, b) => (b.publishedAt ?? "").localeCompare(a.publishedAt ?? "")),
 		staleTime: 30_000,
 		refetchOnWindowFocus: true,
 		retry: 1,
@@ -56,10 +66,14 @@ export function usePublishedArticles(locale: ArticleLocale) {
 }
 
 export function usePublishedArticle(slug: string | undefined) {
+	const initial = prerenderArticles();
 	return useQuery({
 		queryKey: publicArticleKeys.detail(slug ?? ""),
 		queryFn: () => fetchPublishedArticle(slug ?? ""),
-		enabled: Boolean(slug),
+		enabled: Boolean(slug) && !initial,
+		initialData: initial
+			? (initial.find((article) => article.slug === slug) ?? null)
+			: undefined,
 		staleTime: 30_000,
 		refetchOnWindowFocus: true,
 		retry: 1,

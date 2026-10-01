@@ -1,9 +1,15 @@
 import { portfolioTheme } from "@portfolio/config";
 import { Alert, Card, Spin, Statistic } from "antd";
 import { useArticles } from "../hooks/useArticles";
+import { useContactMessages } from "../hooks/useContactMessages";
 
 export function DashboardPage() {
 	const { data, isLoading, error } = useArticles();
+	const contacts = useContactMessages();
+	const newMessages =
+		contacts.data?.filter((item) => item.status === "NEW").length ?? 0;
+	const inProgress =
+		contacts.data?.filter((item) => item.status === "IN_PROGRESS").length ?? 0;
 	const published =
 		data?.filter((article) => article.status === "PUBLISHED").length ?? 0;
 	const drafts =
@@ -51,6 +57,38 @@ export function DashboardPage() {
 								<div>
 									<Statistic title="Draft" value={drafts} />
 								</div>
+							</div>
+						)}
+					</Card>
+				</section>
+				<section aria-label="Pesan">
+					<Card title="Pesan" className="h-full border-t-4 border-t-signal">
+						{contacts.isLoading && !contacts.data && (
+							<div
+								role="status"
+								className="grid min-h-40 place-content-center gap-4 text-center"
+							>
+								<Spin size="large" />
+								<p>Memuat statistik pesan…</p>
+							</div>
+						)}
+						{contacts.error && (
+							<Alert
+								type="error"
+								showIcon
+								title="Gagal memuat statistik pesan"
+								description={contacts.error.message}
+								className={contacts.data ? "mb-6" : undefined}
+							/>
+						)}
+						{contacts.data && (
+							<div className="grid gap-6 sm:grid-cols-2">
+								<Statistic
+									title="Baru"
+									value={newMessages}
+									styles={{ content: { color: portfolioTheme.colors.primary } }}
+								/>
+								<Statistic title="Diproses" value={inProgress} />
 							</div>
 						)}
 					</Card>

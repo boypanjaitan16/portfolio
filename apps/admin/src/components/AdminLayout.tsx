@@ -18,6 +18,7 @@ function breadcrumbItems(pathname: string): { title: ReactNode }[] {
 			title: pathname === "/" ? "Dashboard" : <Link to="/">Dashboard</Link>,
 		},
 	];
+	if (pathname === "/contacts") return [...items, { title: "Pesan" }];
 	if (!pathname.startsWith("/articles")) return items;
 
 	items.push({
@@ -78,6 +79,14 @@ export function AdminLayout({ children }: { children: ReactNode }) {
 							}
 						>
 							Artikel
+						</NavLink>
+						<NavLink
+							to="/contacts"
+							className={({ isActive }) =>
+								isActive ? "text-signal" : "hover:text-signal"
+							}
+						>
+							Pesan
 						</NavLink>
 					</nav>
 					<Button

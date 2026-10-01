@@ -8,3 +8,4 @@ coverage/
 !.env.example
 
 *-debug.log
+gha-creds-*.json

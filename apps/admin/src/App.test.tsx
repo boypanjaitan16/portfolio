@@ -13,6 +13,11 @@ vi.mock("./hooks/useFirebaseSession", () => ({
 		error: null,
 	}),
 }));
+vi.mock("./hooks/useContactMessages", () => ({
+	useContactMessages: () => ({ data: [], isLoading: false, error: null }),
+	useUpdateContactMessage: () => ({ mutateAsync: vi.fn(), isPending: false }),
+	useDeleteContactMessage: () => ({ mutateAsync: vi.fn(), isPending: false }),
+}));
 vi.mock("./hooks/useArticles", () => ({
 	useArticles: () => ({ data: [], isLoading: false, error: null }),
 	useArticle: () => ({ data: null, isLoading: false, error: null }),
@@ -74,5 +79,29 @@ it("opens the private dashboard at the admin root and navigates to articles", as
 	);
 	expect(
 		await screen.findByRole("heading", { name: "Dashboard" }),
+	).toBeInTheDocument();
+});
+
+it("guards the contact inbox and opens it from admin navigation", async () => {
+	state.authenticated = true;
+	const user = userEvent.setup();
+	renderApp("/");
+	await user.click(
+		within(
+			screen.getByRole("navigation", { name: "Navigasi admin" }),
+		).getByRole("link", { name: "Pesan" }),
+	);
+	expect(
+		await screen.findByRole("heading", { name: "Pesan" }),
+	).toBeInTheDocument();
+	expect(
+		screen.getByRole("navigation", { name: "Breadcrumb admin" }),
+	).toHaveTextContent("Dashboard");
+});
+
+it("redirects a signed-out visitor from the contact inbox to login", async () => {
+	renderApp("/contacts");
+	expect(
+		await screen.findByRole("heading", { name: "Masuk" }),
 	).toBeInTheDocument();
 });

@@ -2,16 +2,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { createServer } from "node:http";
 import { extname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { initializeApp } from "firebase/app";
-import {
-	collection,
-	connectFirestoreEmulator,
-	getDocs,
-	getFirestore,
-	orderBy,
-	query,
-	where,
-} from "firebase/firestore/lite";
+import { Firestore } from "@google-cloud/firestore";
 import puppeteer from "puppeteer";
 
 const dist = resolve(fileURLToPath(new URL("../dist", import.meta.url)));
@@ -34,26 +25,30 @@ if (
 	throw new Error("Firebase config is required for the GitHub Pages build.");
 }
 
-const db = getFirestore(initializeApp(config));
-if (env.FIRESTORE_EMULATOR_HOST) {
-	const [host, port] = env.FIRESTORE_EMULATOR_HOST.split(":");
-	connectFirestoreEmulator(db, host, Number(port));
-}
-const fetchArticles = async (locale) => {
-	const snapshot = await getDocs(
-		query(
-			collection(db, "articles"),
-			where("status", "==", "PUBLISHED"),
-			where("locale", "==", locale),
-			orderBy("publishedAt", "desc"),
-		),
+if (!env.FIRESTORE_EMULATOR_HOST && !env.VITE_FIREBASE_APPCHECK_SITE_KEY) {
+	throw new Error(
+		"VITE_FIREBASE_APPCHECK_SITE_KEY is required for the GitHub Pages build.",
 	);
+}
+const db = new Firestore({ projectId: config.projectId });
+const fetchArticles = async (locale) => {
+	const snapshot = await db
+		.collection("articles")
+		.where("status", "==", "PUBLISHED")
+		.where("locale", "==", locale)
+		.orderBy("publishedAt", "desc")
+		.get();
 	return snapshot.docs.map((item) => item.data());
 };
-const articles = [
-	...(await fetchArticles("en")),
-	...(await fetchArticles("id")),
-];
+let articles;
+try {
+	articles = [...(await fetchArticles("en")), ...(await fetchArticles("id"))];
+} catch (error) {
+	throw new Error(
+		"Unable to fetch published articles for Pages prerender. Check Firestore server credentials and indexes.",
+		{ cause: error },
+	);
+}
 const articlePaths = articles.map((article) => `/notes/${article.slug}`);
 const paths = ["/", "/work", "/about", "/notes", ...articlePaths];
 const indexHtml = readFileSync(join(dist, "index.html"));
@@ -97,9 +92,14 @@ try {
 	for (const path of paths) {
 		const page = await browser.newPage();
 		try {
-			await page.evaluateOnNewDocument((publicOrigin) => {
-				window.__portfolioPrerenderOrigin = publicOrigin;
-			}, origin);
+			await page.evaluateOnNewDocument(
+				(publicOrigin, publishedArticles) => {
+					window.__portfolioPrerenderOrigin = publicOrigin;
+					window.__portfolioPrerenderArticles = publishedArticles;
+				},
+				origin,
+				articles,
+			);
 			await page.goto(baseUrl + path, { waitUntil: "domcontentloaded" });
 			if (path === "/" || path.startsWith("/notes")) {
 				await page.waitForFunction(

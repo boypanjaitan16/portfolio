@@ -6,13 +6,20 @@ import type {
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { act, render, screen, waitFor, within } from "@testing-library/react";
 import { beforeEach, expect, it, vi } from "vitest";
+import { contactKeys } from "../hooks/useContactMessages";
 import { articleKeys } from "../lib/queryKeys";
 import { DashboardPage } from "./DashboardPage";
 
-const state = vi.hoisted(() => ({ list: vi.fn() }));
+const state = vi.hoisted(() => ({ list: vi.fn(), contacts: vi.fn() }));
 vi.mock("../lib/articles", async (importOriginal) => ({
 	...(await importOriginal<typeof import("../lib/articles")>()),
 	listArticles: state.list,
+}));
+
+vi.mock("../lib/contactMessages", () => ({
+	listContactMessages: state.contacts,
+	updateContactMessage: vi.fn(),
+	deleteContactMessage: vi.fn(),
 }));
 
 function makeArticle(
@@ -65,6 +72,8 @@ function expectMetric(label: string, value: number) {
 
 beforeEach(() => {
 	state.list.mockReset();
+	state.contacts.mockReset();
+	state.contacts.mockResolvedValue([]);
 });
 
 it("shows one article card with published and draft counts across both languages", async () => {
@@ -77,7 +86,8 @@ it("shows one article card with published and draft counts across both languages
 	renderDashboard();
 	await waitFor(() => expectMetric("Terbit", 2));
 	expectMetric("Draft", 2);
-	expect(screen.getAllByRole("region")).toHaveLength(1);
+	expect(screen.getAllByRole("region")).toHaveLength(2);
+	expect(screen.getByRole("region", { name: "Pesan" })).toBeInTheDocument();
 	expect(screen.getByText("Ringkasan portal")).toBeInTheDocument();
 	expect(
 		screen.getByText("Lihat data yang dikelola di portal admin."),
@@ -130,4 +140,33 @@ it("refreshes the article card when the shared list cache is invalidated", async
 	});
 	await waitFor(() => expectMetric("Draft", 1));
 	expectMetric("Terbit", 1);
+});
+
+it("counts new and in-progress messages and refreshes after invalidation", async () => {
+	state.list.mockResolvedValue([]);
+	let messages = [
+		{ id: "one", status: "NEW" },
+		{ id: "two", status: "IN_PROGRESS" },
+		{ id: "three", status: "DONE" },
+	];
+	state.contacts.mockImplementation(async () => messages);
+	const client = renderDashboard();
+	const card = screen.getByRole("region", { name: "Pesan" });
+	await waitFor(() =>
+		expect(
+			within(card).getByText("Baru").closest(".ant-statistic"),
+		).toHaveTextContent("1"),
+	);
+	expect(
+		within(card).getByText("Diproses").closest(".ant-statistic"),
+	).toHaveTextContent("1");
+	messages = [...messages, { id: "four", status: "NEW" }];
+	await act(async () => {
+		await client.invalidateQueries({ queryKey: contactKeys.list() });
+	});
+	await waitFor(() =>
+		expect(
+			within(card).getByText("Baru").closest(".ant-statistic"),
+		).toHaveTextContent("2"),
+	);
 });
