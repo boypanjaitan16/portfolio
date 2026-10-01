@@ -1,7 +1,7 @@
-import { Breadcrumb, Button } from "antd";
+import { Alert, Breadcrumb, Button, Dropdown } from "antd";
 import { signOut } from "firebase/auth";
-import { LogOut } from "lucide-react";
-import type { ReactNode } from "react";
+import { ChevronDown, UserRound } from "lucide-react";
+import { type ReactNode, useState } from "react";
 import {
 	Link,
 	matchPath,
@@ -19,6 +19,9 @@ function breadcrumbItems(pathname: string): { title: ReactNode }[] {
 		},
 	];
 	if (pathname === "/contacts") return [...items, { title: "Pesan" }];
+	if (pathname === "/profile") return [...items, { title: "Ubah profil" }];
+	if (pathname === "/change-password")
+		return [...items, { title: "Ubah password" }];
 	if (!pathname.startsWith("/articles")) return items;
 
 	items.push({
@@ -37,13 +40,26 @@ function breadcrumbItems(pathname: string): { title: ReactNode }[] {
 	return items;
 }
 
-export function AdminLayout({ children }: { children: ReactNode }) {
+export function AdminLayout({
+	children,
+	accountName,
+}: {
+	children: ReactNode;
+	accountName: string | null;
+}) {
 	const navigate = useNavigate();
 	const { pathname } = useLocation();
+	const accountLabel = accountName?.trim() || "Akun";
+	const [signOutError, setSignOutError] = useState<string | null>(null);
 	const handleSignOut = async () => {
-		await signOut(getFirebaseAuth());
-		queryClient.clear();
-		navigate("/login", { replace: true });
+		setSignOutError(null);
+		try {
+			await signOut(getFirebaseAuth());
+			queryClient.clear();
+			navigate("/login", { replace: true });
+		} catch {
+			setSignOutError("Gagal keluar. Periksa koneksi lalu coba lagi.");
+		}
 	};
 
 	return (
@@ -89,15 +105,42 @@ export function AdminLayout({ children }: { children: ReactNode }) {
 							Pesan
 						</NavLink>
 					</nav>
-					<Button
-						type="text"
-						icon={<LogOut size={15} />}
-						onClick={() => void handleSignOut()}
+					<Dropdown
+						trigger={["click"]}
+						menu={{
+							items: [
+								{ key: "profile", label: "Ubah profil" },
+								{ key: "password", label: "Ubah password" },
+								{ type: "divider" },
+								{ key: "logout", label: "Keluar" },
+							],
+							onClick: ({ key }) => {
+								if (key === "profile") navigate("/profile");
+								else if (key === "password") navigate("/change-password");
+								else if (key === "logout") void handleSignOut();
+							},
+						}}
 					>
-						Keluar
-					</Button>
+						<Button type="text" icon={<UserRound size={16} />}>
+							<span
+								className="inline-block max-w-28 truncate align-middle sm:max-w-40 md:max-w-48"
+								title={accountLabel}
+							>
+								{accountLabel}
+							</span>
+							<ChevronDown size={14} aria-hidden="true" />
+						</Button>
+					</Dropdown>
 				</div>
 			</header>
+			{signOutError && (
+				<Alert
+					type="error"
+					showIcon
+					title={signOutError}
+					className="mx-5 mt-5 md:mx-10"
+				/>
+			)}
 			<div className="mx-auto max-w-[1440px] px-5 pt-6 md:px-10">
 				<Breadcrumb
 					aria-label="Breadcrumb admin"

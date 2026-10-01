@@ -1,8 +1,9 @@
 import { Alert, Spin } from "antd";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useState } from "react";
 import { Navigate, Outlet, Route, Routes, useLocation } from "react-router-dom";
 import { AdminLayout } from "./components/AdminLayout";
 import { useFirebaseSession } from "./hooks/useFirebaseSession";
+import type { AccountOutletContext } from "./lib/accountSession";
 
 const DashboardPage = lazy(() => import("./pages/DashboardPage"));
 const ArticleFormPage = lazy(() => import("./pages/articles/ArticleFormPage"));
@@ -11,12 +12,18 @@ const ArticlePreviewPage = lazy(
 );
 const ArticlesPage = lazy(() => import("./pages/articles/ArticlesPage"));
 const ContactsPage = lazy(() => import("./pages/contacts/ContactsPage"));
+const ProfilePage = lazy(() => import("./pages/ProfilePage"));
+const ChangePasswordPage = lazy(() => import("./pages/ChangePasswordPage"));
 
 import { LoginPage } from "./pages/LoginPage";
 
 function Guard() {
 	const location = useLocation();
 	const { user, checking, error } = useFirebaseSession();
+	const [nameOverride, setNameOverride] = useState<{
+		uid: string;
+		displayName: string;
+	} | null>(null);
 	if (checking)
 		return (
 			<div className="grid min-h-screen place-items-center">
@@ -26,9 +33,18 @@ function Guard() {
 	if (error)
 		return <Alert type="error" showIcon title={error} className="m-10" />;
 	if (!user) return <Navigate to="/login" state={{ from: location }} replace />;
+	const accountContext: AccountOutletContext = {
+		user,
+		onDisplayNameChange: (displayName) =>
+			setNameOverride({ uid: user.uid, displayName }),
+	};
+	const accountName =
+		nameOverride?.uid === user.uid
+			? nameOverride.displayName
+			: user.displayName;
 	return (
-		<AdminLayout>
-			<Outlet />
+		<AdminLayout accountName={accountName}>
+			<Outlet context={accountContext} />
 		</AdminLayout>
 	);
 }
@@ -48,6 +64,8 @@ export default function App() {
 					<Route path="/" element={<DashboardPage />} />
 					<Route path="/articles" element={<ArticlesPage />} />
 					<Route path="/contacts" element={<ContactsPage />} />
+					<Route path="/profile" element={<ProfilePage />} />
+					<Route path="/change-password" element={<ChangePasswordPage />} />
 					<Route path="/articles/new" element={<ArticleFormPage />} />
 					<Route
 						path="/articles/:articleId/edit"

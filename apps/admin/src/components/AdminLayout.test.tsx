@@ -39,7 +39,7 @@ const routes = [
 it.each(routes)("shows one breadcrumb for $path", ({ path, labels, links }) => {
 	const { container } = render(
 		<MemoryRouter initialEntries={[path]}>
-			<AdminLayout>
+			<AdminLayout accountName={null}>
 				<main>Halaman admin</main>
 			</AdminLayout>
 		</MemoryRouter>,
@@ -68,4 +68,21 @@ it.each(routes)("shows one breadcrumb for $path", ({ path, labels, links }) => {
 		"z-40",
 		"bg-paper",
 	);
+});
+
+it("uses the account name and constrains long labels in the header", () => {
+	render(
+		<MemoryRouter>
+			<AdminLayout accountName="  Nama Admin yang Sangat Panjang  ">
+				<main>Halaman admin</main>
+			</AdminLayout>
+		</MemoryRouter>,
+	);
+	const button = screen.getByRole("button", {
+		name: "Nama Admin yang Sangat Panjang",
+	});
+	expect(button).toBeInTheDocument();
+	expect(
+		within(button).getByText("Nama Admin yang Sangat Panjang"),
+	).toHaveClass("inline-block", "truncate", "max-w-28");
 });
