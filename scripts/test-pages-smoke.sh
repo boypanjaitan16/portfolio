@@ -37,6 +37,7 @@ for (const [pathname, expected] of [
 	["/admin/contacts", "/admin/?__redirect=%2Fadmin%2Fcontacts"],
 	["/tools/missing", "/tools/?__redirect=%2Ftools%2Fmissing"],
 	["/tools/pdf-editor", "/tools/?__redirect=%2Ftools%2Fpdf-editor"],
+	["/tools/color-picker", "/tools/?__redirect=%2Ftools%2Fcolor-picker"],
 	["/missing", "/?__redirect=%2Fmissing"],
 ]) {
 	let redirectedTo = "";

@@ -1,7 +1,8 @@
-import { ArrowUpRight, FilePenLine, Github } from "lucide-react";
+import { ArrowUpRight, FilePenLine, Github, Pipette } from "lucide-react";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useToolsLocale } from "../toolsLocale";
+import { colorPickerCard } from "./color-picker/locale";
 import { pdfToolCard } from "./pdf-editor/locale";
 
 const tools = [
@@ -9,6 +10,11 @@ const tools = [
 		path: "/pdf-editor",
 		icon: FilePenLine,
 		card: pdfToolCard,
+	},
+	{
+		path: "/color-picker",
+		icon: Pipette,
+		card: colorPickerCard,
 	},
 ] as const;
 

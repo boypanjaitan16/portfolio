@@ -74,3 +74,42 @@ it("opens the PDF editor directly with the saved locale and updates its copy", a
 	expect(screen.getByText("Add a PDF to start editing.")).toBeInTheDocument();
 	expect(window.localStorage.getItem("portfolio-locale")).toBe("en");
 });
+
+it("opens the color picker from its card and shows its local translations", async () => {
+	const user = userEvent.setup();
+	render(
+		<MemoryRouter initialEntries={["/"]}>
+			<App />
+		</MemoryRouter>,
+	);
+	const card = screen.getByRole("link", { name: /Color Picker/ });
+	expect(card).toHaveAttribute("href", "/color-picker");
+	await user.click(card);
+	expect(
+		screen.getByRole("heading", { name: "Color Picker" }),
+	).toBeInTheDocument();
+	expect(
+		screen.getByText("Add an image to start picking colors."),
+	).toBeInTheDocument();
+});
+
+it("opens the color picker directly with the saved locale and switches language", async () => {
+	window.localStorage.setItem("portfolio-locale", "id");
+	const user = userEvent.setup();
+	render(
+		<MemoryRouter initialEntries={["/color-picker"]}>
+			<App />
+		</MemoryRouter>,
+	);
+	expect(
+		screen.getByRole("heading", { name: "Pemilih Warna" }),
+	).toBeInTheDocument();
+	expect(
+		screen.getByText("Tambahkan gambar untuk mulai memilih warna."),
+	).toBeInTheDocument();
+	await user.click(screen.getByRole("button", { name: "EN" }));
+	expect(
+		screen.getByRole("heading", { name: "Color Picker" }),
+	).toBeInTheDocument();
+	expect(window.localStorage.getItem("portfolio-locale")).toBe("en");
+});
