@@ -51,6 +51,10 @@ For the full HTML, sitemap, fallback URL, and Pages artifact smoke test, run `pn
 
 The latest Firebase CLI requires JDK 21. If the machine still uses JDK 17, use `pnpm dlx firebase-tools@14.22.0` instead of `firebase` for that test command.
 
+## Public tools
+
+The tools landing page at `/tools/` lists available public tools in a responsive grid. The PDF editor at `/tools/pdf-editor` can combine, reorder, rotate, and remove PDF pages; zoom its preview; export all or selected pages; and add text, PNG/JPEG images, or drawn signatures. PDF input and output stay in the browser. The editor does not support encrypted PDFs, editing existing page text, OCR, or filling PDF forms. Its EN/ID setting uses the same `portfolio-locale` preference as home. Each tool keeps its own translations in its directory; `apps/tools/src/toolsLocale.tsx` holds shared copy and the locale preference.
+
 ## Articles and GitHub Pages
 
 The `/admin/` dashboard shows counts of published and draft articles and of new and in-progress messages. The article list is at `/admin/articles`, and the message inbox is at `/admin/contacts`. The account dropdown in the header shows the account name when available and provides `/admin/profile` to change the display name, `/admin/change-password` to change the password, and a sign-out action. The account email is shown only on the profile page. Admin supports drafts, publishing, editing, private previews, cover images, and images in article content. Each article is written in one language, EN or ID. Home shows the three most recent published articles in the active language; `/notes` shows all published articles in that language. The three old `planned` placeholders have been removed.
