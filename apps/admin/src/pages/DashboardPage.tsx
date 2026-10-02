@@ -17,28 +17,28 @@ export function DashboardPage() {
 
 	return (
 		<main className="mx-auto max-w-[1440px] px-5 pb-12 pt-8 md:px-10">
-			<p className="section-kicker text-signal">Ringkasan portal</p>
+			<p className="section-kicker text-signal">Portal overview</p>
 			<h1 className="mt-5 text-5xl font-semibold tracking-tight">Dashboard</h1>
 			<p className="mt-3 text-muted">
-				Lihat data yang dikelola di portal admin.
+				View the content and messages managed in the admin portal.
 			</p>
 			<div className="mt-8 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-				<section aria-label="Artikel">
-					<Card title="Artikel" className="h-full border-t-4 border-t-signal">
+				<section aria-label="Articles">
+					<Card title="Articles" className="h-full border-t-4 border-t-signal">
 						{isLoading && !data && (
 							<div
 								role="status"
 								className="grid min-h-40 place-content-center gap-4 text-center"
 							>
 								<Spin size="large" />
-								<p>Memuat statistik artikel…</p>
+								<p>Loading article statistics…</p>
 							</div>
 						)}
 						{error && (
 							<Alert
 								type="error"
 								showIcon
-								title="Gagal memuat statistik artikel"
+								title="Could not load article statistics"
 								description={error.message}
 								className={data ? "mb-6" : undefined}
 							/>
@@ -47,7 +47,7 @@ export function DashboardPage() {
 							<div className="grid gap-6 sm:grid-cols-2">
 								<div>
 									<Statistic
-										title="Terbit"
+										title="Published"
 										value={published}
 										styles={{
 											content: { color: portfolioTheme.colors.primary },
@@ -61,22 +61,22 @@ export function DashboardPage() {
 						)}
 					</Card>
 				</section>
-				<section aria-label="Pesan">
-					<Card title="Pesan" className="h-full border-t-4 border-t-signal">
+				<section aria-label="Messages">
+					<Card title="Messages" className="h-full border-t-4 border-t-signal">
 						{contacts.isLoading && !contacts.data && (
 							<div
 								role="status"
 								className="grid min-h-40 place-content-center gap-4 text-center"
 							>
 								<Spin size="large" />
-								<p>Memuat statistik pesan…</p>
+								<p>Loading message statistics…</p>
 							</div>
 						)}
 						{contacts.error && (
 							<Alert
 								type="error"
 								showIcon
-								title="Gagal memuat statistik pesan"
+								title="Could not load message statistics"
 								description={contacts.error.message}
 								className={contacts.data ? "mb-6" : undefined}
 							/>
@@ -84,11 +84,11 @@ export function DashboardPage() {
 						{contacts.data && (
 							<div className="grid gap-6 sm:grid-cols-2">
 								<Statistic
-									title="Baru"
+									title="New"
 									value={newMessages}
 									styles={{ content: { color: portfolioTheme.colors.primary } }}
 								/>
-								<Statistic title="Diproses" value={inProgress} />
+								<Statistic title="In progress" value={inProgress} />
 							</div>
 						)}
 					</Card>

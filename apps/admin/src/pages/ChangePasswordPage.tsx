@@ -14,13 +14,15 @@ import type { AccountOutletContext } from "../lib/accountSession";
 
 const passwordSchema = z
 	.object({
-		currentPassword: z.string().min(1, "Password saat ini wajib diisi."),
-		newPassword: z.string().min(6, "Password baru minimal 6 karakter."),
-		confirmPassword: z.string().min(1, "Konfirmasi password wajib diisi."),
+		currentPassword: z.string().min(1, "Current password is required."),
+		newPassword: z
+			.string()
+			.min(6, "New password must be at least 6 characters."),
+		confirmPassword: z.string().min(1, "Confirm your new password."),
 	})
 	.refine((values) => values.newPassword === values.confirmPassword, {
 		path: ["confirmPassword"],
-		message: "Konfirmasi password tidak cocok.",
+		message: "Passwords do not match.",
 	});
 type PasswordValues = z.infer<typeof passwordSchema>;
 
@@ -50,7 +52,7 @@ export function ChangePasswordPage() {
 			setFeedback({
 				type: "error",
 				message:
-					"Email akun tidak tersedia. Keluar dan masuk dengan akun email.",
+					"Account email is unavailable. Sign out and sign in with an email account.",
 			});
 			return;
 		}
@@ -64,7 +66,7 @@ export function ChangePasswordPage() {
 			action = "password";
 			await updatePassword(user, values.newPassword);
 			reset();
-			setFeedback({ type: "success", message: "Password berhasil diubah." });
+			setFeedback({ type: "success", message: "Password changed." });
 		} catch (reason) {
 			setFeedback({
 				type: "error",
@@ -75,12 +77,12 @@ export function ChangePasswordPage() {
 
 	return (
 		<main className="mx-auto max-w-[1440px] px-5 pb-12 pt-8 md:px-10">
-			<p className="section-kicker text-signal">Pengaturan akun</p>
+			<p className="section-kicker text-signal">Account settings</p>
 			<h1 className="mt-5 text-5xl font-semibold tracking-tight">
-				Ubah password
+				Change password
 			</h1>
 			<p className="mt-3 text-muted">
-				Konfirmasi password saat ini untuk menjaga keamanan akun.
+				Confirm your current password to keep your account secure.
 			</p>
 			<div className="mt-8">
 				{feedback && (
@@ -98,7 +100,7 @@ export function ChangePasswordPage() {
 					className="w-full"
 				>
 					<Form.Item
-						label="Password saat ini"
+						label="Current password"
 						htmlFor="currentPassword"
 						validateStatus={errors.currentPassword ? "error" : undefined}
 						help={errors.currentPassword?.message}
@@ -117,7 +119,7 @@ export function ChangePasswordPage() {
 						/>
 					</Form.Item>
 					<Form.Item
-						label="Password baru"
+						label="New password"
 						htmlFor="newPassword"
 						validateStatus={errors.newPassword ? "error" : undefined}
 						help={errors.newPassword?.message}
@@ -136,7 +138,7 @@ export function ChangePasswordPage() {
 						/>
 					</Form.Item>
 					<Form.Item
-						label="Konfirmasi password baru"
+						label="Confirm new password"
 						htmlFor="confirmPassword"
 						validateStatus={errors.confirmPassword ? "error" : undefined}
 						help={errors.confirmPassword?.message}
@@ -155,7 +157,7 @@ export function ChangePasswordPage() {
 						/>
 					</Form.Item>
 					<Button type="primary" htmlType="submit" loading={isSubmitting}>
-						Simpan password
+						Save password
 					</Button>
 				</Form>
 			</div>

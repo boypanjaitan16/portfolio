@@ -22,7 +22,7 @@ export function useFirebaseSession() {
 			);
 		} catch (reason) {
 			setError(
-				reason instanceof Error ? reason.message : "Firebase gagal dimuat.",
+				reason instanceof Error ? reason.message : "Could not load Firebase.",
 			);
 			setChecking(false);
 		}

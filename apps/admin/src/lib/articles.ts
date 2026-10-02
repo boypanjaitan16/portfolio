@@ -84,7 +84,7 @@ export async function saveArticle(
 			await runTransaction(db, async (transaction) => {
 				const document = doc(db, "articles", id);
 				const existing = await transaction.get(document);
-				if (existing.exists()) throw new Error("Slug sudah digunakan.");
+				if (existing.exists()) throw new Error("Slug is already in use.");
 				transaction.set(document, article);
 			});
 		}

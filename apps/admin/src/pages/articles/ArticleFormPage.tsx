@@ -72,7 +72,7 @@ export function ArticleFormPage() {
 	const submit = async (values: ArticleFormValues) => {
 		setMessage("");
 		if (isEditing && !article) {
-			setMessage("Artikel tidak ditemukan.");
+			setMessage("Article not found.");
 			return;
 		}
 		try {
@@ -84,27 +84,27 @@ export function ArticleFormPage() {
 				removeCover,
 			});
 			if (result.cleanupFailed) {
-				setMessage(
-					"Artikel tersimpan, tetapi sebagian media lama gagal dibersihkan.",
-				);
+				setMessage("Article saved, but some old media could not be removed.");
 				return;
 			}
 			navigate("/articles", { state: { saved: true } });
 		} catch (reason) {
 			setMessage(
-				reason instanceof Error ? reason.message : "Gagal menyimpan artikel.",
+				reason instanceof Error
+					? reason.message
+					: "Could not save the article.",
 			);
 		}
 	};
 
 	if (isEditing && (isLoading || (article && loadedArticleId !== article.id)))
-		return <Spin size="large" description="Memuat artikel…" fullscreen />;
+		return <Spin size="large" description="Loading article…" fullscreen />;
 	if (isEditing && !article)
 		return (
 			<Alert
 				type="error"
 				showIcon
-				title={loadError?.message ?? "Artikel tidak ditemukan."}
+				title={loadError?.message ?? "Article not found."}
 				className="m-10"
 			/>
 		);
@@ -115,7 +115,7 @@ export function ArticleFormPage() {
 			? [
 					{
 						uid: "current-cover",
-						name: "Cover saat ini",
+						name: "Current cover",
 						status: "done",
 						url: article.cover.url,
 					},
@@ -125,11 +125,11 @@ export function ArticleFormPage() {
 	return (
 		<main className="mx-auto max-w-[1440px] px-5 pb-12 pt-8 md:px-10">
 			<h1 className="text-5xl font-semibold tracking-tight">
-				{isEditing ? "Edit artikel" : "Artikel baru"}
+				{isEditing ? "Edit article" : "New article"}
 			</h1>
 			<p className="mt-3 text-muted">
-				Artikel terbit langsung terlihat di situs. Jalankan deploy Pages untuk
-				memperbarui HTML statis dan sitemap.
+				Published articles appear on the site immediately. Deploy Pages to
+				update static HTML and the sitemap.
 			</p>
 			{message && (
 				<Alert type="error" showIcon title={message} className="mt-6" />
@@ -142,7 +142,7 @@ export function ArticleFormPage() {
 			>
 				<div className="grid gap-x-6 md:grid-cols-2">
 					<Form.Item
-						label="Bahasa"
+						label="Language"
 						validateStatus={errors.locale ? "error" : undefined}
 						help={errors.locale?.message}
 					>
@@ -152,10 +152,10 @@ export function ArticleFormPage() {
 							render={({ field }) => (
 								<Select
 									{...field}
-									aria-label="Bahasa"
+									aria-label="Language"
 									options={[
 										{ value: "en", label: "English" },
-										{ value: "id", label: "Indonesia" },
+										{ value: "id", label: "Indonesian" },
 									]}
 								/>
 							)}
@@ -175,7 +175,7 @@ export function ArticleFormPage() {
 									aria-label="Status"
 									options={[
 										{ value: "DRAFT", label: "Draft" },
-										{ value: "PUBLISHED", label: "Terbit" },
+										{ value: "PUBLISHED", label: "Published" },
 									]}
 								/>
 							)}
@@ -183,7 +183,7 @@ export function ArticleFormPage() {
 					</Form.Item>
 				</div>
 				<Form.Item
-					label="Judul"
+					label="Title"
 					validateStatus={errors.title ? "error" : undefined}
 					help={errors.title?.message}
 				>
@@ -230,7 +230,7 @@ export function ArticleFormPage() {
 				</Form.Item>
 				<div className="grid gap-x-6 md:grid-cols-2">
 					<Form.Item
-						label="Ringkasan"
+						label="Summary"
 						validateStatus={errors.summary ? "error" : undefined}
 						help={errors.summary?.message}
 					>
@@ -248,7 +248,7 @@ export function ArticleFormPage() {
 						/>
 					</Form.Item>
 					<Form.Item
-						label="Topik"
+						label="Topic"
 						validateStatus={errors.topic ? "error" : undefined}
 						help={errors.topic?.message}
 					>
@@ -265,7 +265,7 @@ export function ArticleFormPage() {
 						/>
 					</Form.Item>
 				</div>
-				<Form.Item label="Gambar cover (opsional, maksimal 5 MB)">
+				<Form.Item label="Cover image (optional, up to 5 MB)">
 					<Upload.Dragger
 						accept="image/jpeg,image/png,image/webp,image/gif"
 						maxCount={1}
@@ -280,9 +280,7 @@ export function ArticleFormPage() {
 								return false;
 							} catch (reason) {
 								setMessage(
-									reason instanceof Error
-										? reason.message
-										: "Gambar tidak valid.",
+									reason instanceof Error ? reason.message : "Invalid image.",
 								);
 								return Upload.LIST_IGNORE;
 							}
@@ -294,15 +292,15 @@ export function ArticleFormPage() {
 						}}
 					>
 						<p className="text-sm font-medium text-ink">
-							Tarik gambar ke sini atau klik untuk memilih cover
+							Drag an image here or click to choose a cover
 						</p>
 						<p className="mt-2 text-xs text-muted">
-							JPEG, PNG, WebP, atau GIF · Maksimal 5 MB
+							JPEG, PNG, WebP, or GIF · Up to 5 MB
 						</p>
 					</Upload.Dragger>
 				</Form.Item>
 				<Form.Item
-					label="Isi artikel"
+					label="Article content"
 					validateStatus={errors.contentHtml ? "error" : undefined}
 					help={errors.contentHtml?.message}
 				>
@@ -328,7 +326,7 @@ export function ArticleFormPage() {
 						htmlType="submit"
 						loading={isSubmitting || save.isPending}
 					>
-						Simpan artikel
+						Save article
 					</Button>
 					{article && (
 						<Button onClick={() => navigate(`/articles/${article.id}/preview`)}>

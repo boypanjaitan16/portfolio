@@ -57,7 +57,7 @@ function renderDashboard() {
 }
 
 function articleCard() {
-	return screen.getByRole("region", { name: "Artikel" });
+	return screen.getByRole("region", { name: "Articles" });
 }
 
 function expectMetric(label: string, value: number) {
@@ -84,21 +84,23 @@ it("shows one article card with published and draft counts across both languages
 		makeArticle("id-draft", "DRAFT", "id"),
 	]);
 	renderDashboard();
-	await waitFor(() => expectMetric("Terbit", 2));
+	await waitFor(() => expectMetric("Published", 2));
 	expectMetric("Draft", 2);
 	expect(screen.getAllByRole("region")).toHaveLength(2);
-	expect(screen.getByRole("region", { name: "Pesan" })).toBeInTheDocument();
-	expect(screen.getByText("Ringkasan portal")).toBeInTheDocument();
+	expect(screen.getByRole("region", { name: "Messages" })).toBeInTheDocument();
+	expect(screen.getByText("Portal overview")).toBeInTheDocument();
 	expect(
-		screen.getByText("Lihat data yang dikelola di portal admin."),
+		screen.getByText(
+			"View the content and messages managed in the admin portal.",
+		),
 	).toBeInTheDocument();
-	expect(screen.queryByText("Total artikel")).not.toBeInTheDocument();
+	expect(screen.queryByText("Total articles")).not.toBeInTheDocument();
 });
 
 it("shows zero counts for an empty collection", async () => {
 	state.list.mockResolvedValue([]);
 	renderDashboard();
-	await waitFor(() => expectMetric("Terbit", 0));
+	await waitFor(() => expectMetric("Published", 0));
 	expectMetric("Draft", 0);
 });
 
@@ -114,24 +116,28 @@ it("keeps the article card visible during loading and query errors", async () =>
 		</QueryClientProvider>,
 	);
 	expect(within(articleCard()).getByRole("status")).toHaveTextContent(
-		"Memuat statistik artikel",
+		"Loading article statistics",
 	);
-	expect(within(articleCard()).queryByText("Terbit")).not.toBeInTheDocument();
+	expect(
+		within(articleCard()).queryByText("Published"),
+	).not.toBeInTheDocument();
 	unmount();
 
-	state.list.mockRejectedValue(new Error("Firestore tidak tersedia"));
+	state.list.mockRejectedValue(new Error("Firestore unavailable"));
 	renderDashboard();
 	expect(
-		await within(articleCard()).findByText("Firestore tidak tersedia"),
+		await within(articleCard()).findByText("Firestore unavailable"),
 	).toBeInTheDocument();
-	expect(within(articleCard()).queryByText("Terbit")).not.toBeInTheDocument();
+	expect(
+		within(articleCard()).queryByText("Published"),
+	).not.toBeInTheDocument();
 });
 
 it("refreshes the article card when the shared list cache is invalidated", async () => {
 	let articles = [makeArticle("first", "PUBLISHED", "en")];
 	state.list.mockImplementation(async () => articles);
 	const client = renderDashboard();
-	await waitFor(() => expectMetric("Terbit", 1));
+	await waitFor(() => expectMetric("Published", 1));
 	expectMetric("Draft", 0);
 
 	articles = [...articles, makeArticle("second", "DRAFT", "id")];
@@ -139,7 +145,7 @@ it("refreshes the article card when the shared list cache is invalidated", async
 		await client.invalidateQueries({ queryKey: articleKeys.list() });
 	});
 	await waitFor(() => expectMetric("Draft", 1));
-	expectMetric("Terbit", 1);
+	expectMetric("Published", 1);
 });
 
 it("counts new and in-progress messages and refreshes after invalidation", async () => {
@@ -151,14 +157,14 @@ it("counts new and in-progress messages and refreshes after invalidation", async
 	];
 	state.contacts.mockImplementation(async () => messages);
 	const client = renderDashboard();
-	const card = screen.getByRole("region", { name: "Pesan" });
+	const card = screen.getByRole("region", { name: "Messages" });
 	await waitFor(() =>
 		expect(
-			within(card).getByText("Baru").closest(".ant-statistic"),
+			within(card).getByText("New").closest(".ant-statistic"),
 		).toHaveTextContent("1"),
 	);
 	expect(
-		within(card).getByText("Diproses").closest(".ant-statistic"),
+		within(card).getByText("In progress").closest(".ant-statistic"),
 	).toHaveTextContent("1");
 	messages = [...messages, { id: "four", status: "NEW" }];
 	await act(async () => {
@@ -166,7 +172,7 @@ it("counts new and in-progress messages and refreshes after invalidation", async
 	});
 	await waitFor(() =>
 		expect(
-			within(card).getByText("Baru").closest(".ant-statistic"),
+			within(card).getByText("New").closest(".ant-statistic"),
 		).toHaveTextContent("2"),
 	);
 });

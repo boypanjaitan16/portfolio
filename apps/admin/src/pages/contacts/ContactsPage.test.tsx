@@ -68,17 +68,18 @@ it("filters the inbox and opens a private message with a reply link", async () =
 	expect(screen.getByText("Ada")).toBeInTheDocument();
 	expect(screen.getByText("Budi")).toBeInTheDocument();
 	await user.click(
-		screen.getByRole("radio", { name: "Baru" }).closest("label") as HTMLElement,
+		screen.getByRole("radio", { name: "New" }).closest("label") as HTMLElement,
 	);
 	expect(screen.getByText("Ada")).toBeInTheDocument();
 	expect(screen.queryByText("Budi")).toBeNull();
-	await user.click(screen.getByRole("button", { name: "Lihat" }));
-	const drawer = await screen.findByRole("dialog", { name: "Detail pesan" });
+	expect(screen.getByText("Oct 1, 2026, 9:00 AM")).toBeInTheDocument();
+	await user.click(screen.getByRole("button", { name: "View" }));
+	const drawer = await screen.findByRole("dialog", { name: "Message details" });
 	expect(
 		within(drawer).getByText("I would like to discuss a project."),
 	).toBeInTheDocument();
 	expect(
-		within(drawer).getByRole("link", { name: "Balas melalui email" }),
+		within(drawer).getByRole("link", { name: "Reply by email" }),
 	).toHaveAttribute("href", "mailto:ada@example.com");
 	expect(within(drawer).getByText(/\/work/)).toBeInTheDocument();
 });
@@ -86,22 +87,22 @@ it("filters the inbox and opens a private message with a reply link", async () =
 it("saves a private note and confirms deletion", async () => {
 	const user = userEvent.setup();
 	render(<ContactsPage />);
-	await user.click(screen.getAllByRole("button", { name: "Lihat" })[0]);
-	const drawer = await screen.findByRole("dialog", { name: "Detail pesan" });
+	await user.click(screen.getAllByRole("button", { name: "View" })[0]);
+	const drawer = await screen.findByRole("dialog", { name: "Message details" });
 	await user.click(within(drawer).getByRole("combobox", { name: "Status" }));
 	await user.click(
-		screen.getByText("Diproses", {
+		screen.getByText("In progress", {
 			selector: ".ant-select-item-option-content",
 		}),
 	);
 	fireEvent.change(
-		within(drawer).getByRole("textbox", { name: "Catatan privat" }),
+		within(drawer).getByRole("textbox", { name: "Private note" }),
 		{
 			target: { value: "Follow up tomorrow" },
 		},
 	);
 	await user.click(
-		within(drawer).getByRole("button", { name: "Simpan tindak lanjut" }),
+		within(drawer).getByRole("button", { name: "Save follow-up" }),
 	);
 	await waitFor(() =>
 		expect(state.update).toHaveBeenCalledWith({
@@ -110,7 +111,24 @@ it("saves a private note and confirms deletion", async () => {
 			adminNote: "Follow up tomorrow",
 		}),
 	);
-	await user.click(within(drawer).getByRole("button", { name: "Hapus pesan" }));
-	await user.click(screen.getByRole("button", { name: "Hapus" }));
+	expect(
+		within(drawer).getByText("Changes saved.").closest(".ant-alert"),
+	).toHaveClass("ant-alert-success");
+	state.update.mockRejectedValueOnce(new Error("offline"));
+	await user.click(
+		within(drawer).getByRole("button", { name: "Save follow-up" }),
+	);
+	expect(
+		await within(drawer).findByText("Could not save changes. Try again."),
+	).toBeInTheDocument();
+	expect(
+		within(drawer)
+			.getByText("Could not save changes. Try again.")
+			.closest(".ant-alert"),
+	).toHaveClass("ant-alert-error");
+	await user.click(
+		within(drawer).getByRole("button", { name: "Delete message" }),
+	);
+	await user.click(screen.getByRole("button", { name: "Delete" }));
 	await waitFor(() => expect(state.remove).toHaveBeenCalledWith("a"));
 });

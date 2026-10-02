@@ -101,7 +101,7 @@ describe("article writes", () => {
 				coverFile: null,
 				removeCover: false,
 			}),
-		).rejects.toThrow("Slug sudah digunakan.");
+		).rejects.toThrow("Slug is already in use.");
 		expect(mocks.deleteArticleImage).toHaveBeenCalledWith({
 			path: "articles/a-useful-article/body/new.jpg",
 			url: "new-url",

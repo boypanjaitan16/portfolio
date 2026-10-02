@@ -8,13 +8,13 @@ export function ArticlePreviewPage() {
 	const navigate = useNavigate();
 	const { data: article, isLoading, error } = useArticle(articleId);
 	if (isLoading)
-		return <Spin size="large" description="Memuat preview…" fullscreen />;
+		return <Spin size="large" description="Loading preview…" fullscreen />;
 	if (!article)
 		return (
 			<Alert
 				type="error"
 				showIcon
-				title={error?.message ?? "Artikel tidak ditemukan."}
+				title={error?.message ?? "Article not found."}
 				className="m-10"
 			/>
 		);
@@ -24,12 +24,12 @@ export function ArticlePreviewPage() {
 			<div className="flex flex-wrap items-center justify-between gap-4 border-b border-ink/20 pb-8">
 				<div className="flex items-center gap-2">
 					<Tag color={article.status === "PUBLISHED" ? "success" : "default"}>
-						{article.status === "PUBLISHED" ? "Terbit" : "Draft"}
+						{article.status === "PUBLISHED" ? "Published" : "Draft"}
 					</Tag>
 					<Tag>{article.locale.toUpperCase()}</Tag>
 				</div>
 				<Button onClick={() => navigate(`/articles/${article.id}/edit`)}>
-					Edit artikel
+					Edit article
 				</Button>
 			</div>
 			<article lang={article.locale}>

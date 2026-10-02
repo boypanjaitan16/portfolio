@@ -7,31 +7,31 @@ const routes = [
 	{ path: "/", labels: ["Dashboard"], links: [] },
 	{
 		path: "/articles",
-		labels: ["Dashboard", "Artikel"],
+		labels: ["Dashboard", "Articles"],
 		links: [{ label: "Dashboard", href: "/" }],
 	},
 	{
 		path: "/articles/new",
-		labels: ["Dashboard", "Artikel", "Artikel baru"],
+		labels: ["Dashboard", "Articles", "New article"],
 		links: [
 			{ label: "Dashboard", href: "/" },
-			{ label: "Artikel", href: "/articles" },
+			{ label: "Articles", href: "/articles" },
 		],
 	},
 	{
 		path: "/articles/example/edit",
-		labels: ["Dashboard", "Artikel", "Edit artikel"],
+		labels: ["Dashboard", "Articles", "Edit article"],
 		links: [
 			{ label: "Dashboard", href: "/" },
-			{ label: "Artikel", href: "/articles" },
+			{ label: "Articles", href: "/articles" },
 		],
 	},
 	{
 		path: "/articles/example/preview",
-		labels: ["Dashboard", "Artikel", "Preview artikel"],
+		labels: ["Dashboard", "Articles", "Article preview"],
 		links: [
 			{ label: "Dashboard", href: "/" },
-			{ label: "Artikel", href: "/articles" },
+			{ label: "Articles", href: "/articles" },
 		],
 	},
 ];
@@ -40,12 +40,12 @@ it.each(routes)("shows one breadcrumb for $path", ({ path, labels, links }) => {
 	const { container } = render(
 		<MemoryRouter initialEntries={[path]}>
 			<AdminLayout accountName={null}>
-				<main>Halaman admin</main>
+				<main>Admin page</main>
 			</AdminLayout>
 		</MemoryRouter>,
 	);
 	const breadcrumb = screen.getByRole("navigation", {
-		name: "Breadcrumb admin",
+		name: "Admin breadcrumb",
 	});
 	expect(breadcrumb.querySelectorAll(".ant-breadcrumb-link")).toHaveLength(
 		labels.length,
@@ -61,7 +61,7 @@ it.each(routes)("shows one breadcrumb for $path", ({ path, labels, links }) => {
 	expect(
 		within(breadcrumb).queryByRole("link", { name: labels.at(-1) }),
 	).not.toBeInTheDocument();
-	expect(screen.queryByText("Lihat situs")).not.toBeInTheDocument();
+	expect(screen.queryByText("View site")).not.toBeInTheDocument();
 	expect(container.querySelector("header")).toHaveClass(
 		"sticky",
 		"top-0",
@@ -74,7 +74,7 @@ it("uses the account name and constrains long labels in the header", () => {
 	render(
 		<MemoryRouter>
 			<AdminLayout accountName="  Nama Admin yang Sangat Panjang  ">
-				<main>Halaman admin</main>
+				<main>Admin page</main>
 			</AdminLayout>
 		</MemoryRouter>,
 	);

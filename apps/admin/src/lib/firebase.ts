@@ -20,7 +20,7 @@ let appCheckInitialized = false;
 
 export function getFirebaseApp() {
 	if (!config.apiKey || !config.projectId || !config.appId) {
-		throw new Error("Firebase belum dikonfigurasi.");
+		throw new Error("Firebase is not configured.");
 	}
 	const app = getApps()[0] ?? initializeApp(config);
 	const siteKey = import.meta.env.VITE_FIREBASE_APPCHECK_SITE_KEY;

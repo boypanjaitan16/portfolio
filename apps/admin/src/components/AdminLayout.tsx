@@ -18,25 +18,25 @@ function breadcrumbItems(pathname: string): { title: ReactNode }[] {
 			title: pathname === "/" ? "Dashboard" : <Link to="/">Dashboard</Link>,
 		},
 	];
-	if (pathname === "/contacts") return [...items, { title: "Pesan" }];
-	if (pathname === "/profile") return [...items, { title: "Ubah profil" }];
+	if (pathname === "/contacts") return [...items, { title: "Messages" }];
+	if (pathname === "/profile") return [...items, { title: "Edit profile" }];
 	if (pathname === "/change-password")
-		return [...items, { title: "Ubah password" }];
+		return [...items, { title: "Change password" }];
 	if (!pathname.startsWith("/articles")) return items;
 
 	items.push({
 		title:
 			pathname === "/articles" ? (
-				"Artikel"
+				"Articles"
 			) : (
-				<Link to="/articles">Artikel</Link>
+				<Link to="/articles">Articles</Link>
 			),
 	});
-	if (pathname === "/articles/new") items.push({ title: "Artikel baru" });
+	if (pathname === "/articles/new") items.push({ title: "New article" });
 	else if (matchPath("/articles/:articleId/edit", pathname))
-		items.push({ title: "Edit artikel" });
+		items.push({ title: "Edit article" });
 	else if (matchPath("/articles/:articleId/preview", pathname))
-		items.push({ title: "Preview artikel" });
+		items.push({ title: "Article preview" });
 	return items;
 }
 
@@ -49,7 +49,7 @@ export function AdminLayout({
 }) {
 	const navigate = useNavigate();
 	const { pathname } = useLocation();
-	const accountLabel = accountName?.trim() || "Akun";
+	const accountLabel = accountName?.trim() || "Account";
 	const [signOutError, setSignOutError] = useState<string | null>(null);
 	const handleSignOut = async () => {
 		setSignOutError(null);
@@ -58,7 +58,9 @@ export function AdminLayout({
 			queryClient.clear();
 			navigate("/login", { replace: true });
 		} catch {
-			setSignOutError("Gagal keluar. Periksa koneksi lalu coba lagi.");
+			setSignOutError(
+				"Could not sign out. Check your connection and try again.",
+			);
 		}
 	};
 
@@ -76,7 +78,7 @@ export function AdminLayout({
 						<span>Portfolio admin</span>
 					</Link>
 					<nav
-						aria-label="Navigasi admin"
+						aria-label="Admin navigation"
 						className="order-3 flex w-full gap-6 border-t border-ink/15 pt-3 font-mono text-xs font-semibold uppercase tracking-[0.12em] md:order-none md:w-auto md:border-0 md:pt-0"
 					>
 						<NavLink
@@ -94,7 +96,7 @@ export function AdminLayout({
 								isActive ? "text-signal" : "hover:text-signal"
 							}
 						>
-							Artikel
+							Articles
 						</NavLink>
 						<NavLink
 							to="/contacts"
@@ -102,17 +104,17 @@ export function AdminLayout({
 								isActive ? "text-signal" : "hover:text-signal"
 							}
 						>
-							Pesan
+							Messages
 						</NavLink>
 					</nav>
 					<Dropdown
 						trigger={["click"]}
 						menu={{
 							items: [
-								{ key: "profile", label: "Ubah profil" },
-								{ key: "password", label: "Ubah password" },
+								{ key: "profile", label: "Edit profile" },
+								{ key: "password", label: "Change password" },
 								{ type: "divider" },
-								{ key: "logout", label: "Keluar" },
+								{ key: "logout", label: "Sign out" },
 							],
 							onClick: ({ key }) => {
 								if (key === "profile") navigate("/profile");
@@ -143,7 +145,7 @@ export function AdminLayout({
 			)}
 			<div className="mx-auto max-w-[1440px] px-5 pt-6 md:px-10">
 				<Breadcrumb
-					aria-label="Breadcrumb admin"
+					aria-label="Admin breadcrumb"
 					items={breadcrumbItems(pathname)}
 				/>
 			</div>

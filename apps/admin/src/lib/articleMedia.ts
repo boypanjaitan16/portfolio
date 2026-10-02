@@ -22,9 +22,9 @@ const extensions: Record<string, string> = {
 
 export function validateImage(file: File): void {
 	if (!allowedTypes.has(file.type))
-		throw new Error("Format gambar tidak didukung.");
+		throw new Error("Unsupported image format.");
 	if (file.size > 5 * 1024 * 1024)
-		throw new Error("Ukuran gambar maksimal 5 MB.");
+		throw new Error("Images must be 5 MB or smaller.");
 }
 
 export async function uploadArticleImage(

@@ -72,7 +72,7 @@ it("keeps cover upload pending until the article is submitted", async () => {
 		target: { files: [file] },
 	});
 	expect(state.save).not.toHaveBeenCalled();
-	await user.click(screen.getByRole("button", { name: "Simpan artikel" }));
+	await user.click(screen.getByRole("button", { name: "Save article" }));
 	await waitFor(() => expect(state.save).toHaveBeenCalledOnce());
 	expect(state.save.mock.calls[0][0]).toMatchObject({
 		previous: article,
@@ -91,7 +91,7 @@ it("marks an existing cover for removal only when saving", async () => {
 	await screen.findByDisplayValue("Existing note");
 	await user.click(screen.getByRole("button", { name: "Remove file" }));
 	expect(state.save).not.toHaveBeenCalled();
-	await user.click(screen.getByRole("button", { name: "Simpan artikel" }));
+	await user.click(screen.getByRole("button", { name: "Save article" }));
 	await waitFor(() => expect(state.save).toHaveBeenCalledOnce());
 	expect(state.save.mock.calls[0][0]).toMatchObject({
 		coverFile: null,
@@ -116,10 +116,10 @@ it("accepts a dropped cover as a replacement and uploads it only on save", async
 		dataTransfer: { files: [file], items: [] },
 	});
 	expect(await screen.findByText("replacement.png")).toBeInTheDocument();
-	expect(screen.queryByText("Cover saat ini")).not.toBeInTheDocument();
+	expect(screen.queryByText("Current cover")).not.toBeInTheDocument();
 	expect(state.save).not.toHaveBeenCalled();
 
-	await user.click(screen.getByRole("button", { name: "Simpan artikel" }));
+	await user.click(screen.getByRole("button", { name: "Save article" }));
 	await waitFor(() => expect(state.save).toHaveBeenCalledOnce());
 	expect(state.save.mock.calls[0][0]).toMatchObject({
 		coverFile: file,
@@ -142,9 +142,9 @@ it("rejects an invalid cover without replacing the current cover", async () => {
 		},
 	});
 	expect(
-		await screen.findByText("Format gambar tidak didukung."),
+		await screen.findByText("Unsupported image format."),
 	).toBeInTheDocument();
-	expect(screen.getByText("Cover saat ini")).toBeInTheDocument();
+	expect(screen.getByText("Current cover")).toBeInTheDocument();
 	expect(screen.queryByText("invalid.txt")).not.toBeInTheDocument();
 	expect(state.save).not.toHaveBeenCalled();
 });

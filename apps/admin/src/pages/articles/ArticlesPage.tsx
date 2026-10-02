@@ -43,14 +43,16 @@ export function ArticlesPage() {
 				type: "success",
 				message:
 					nextStatus === "PUBLISHED"
-						? "Artikel diterbitkan. Jalankan deploy Pages untuk memperbarui HTML dan sitemap."
-						: "Artikel dijadikan draft. Jalankan deploy Pages untuk memperbarui HTML dan sitemap.",
+						? "Article published. Deploy Pages to update the HTML and sitemap."
+						: "Article moved to draft. Deploy Pages to update the HTML and sitemap.",
 			});
 		} catch (reason) {
 			setFeedback({
 				type: "error",
 				message:
-					reason instanceof Error ? reason.message : "Gagal mengubah status.",
+					reason instanceof Error
+						? reason.message
+						: "Could not change the article status.",
 			});
 		}
 	};
@@ -61,21 +63,23 @@ export function ArticlesPage() {
 			setFeedback({
 				type: result.cleanupFailed ? "error" : "success",
 				message: result.cleanupFailed
-					? "Artikel dihapus, tetapi sebagian media gagal dibersihkan."
-					: "Artikel dihapus. Jalankan deploy Pages untuk memperbarui HTML dan sitemap.",
+					? "Article deleted, but some media could not be removed."
+					: "Article deleted. Deploy Pages to update the HTML and sitemap.",
 			});
 		} catch (reason) {
 			setFeedback({
 				type: "error",
 				message:
-					reason instanceof Error ? reason.message : "Gagal menghapus artikel.",
+					reason instanceof Error
+						? reason.message
+						: "Could not delete the article.",
 			});
 		}
 	};
 
 	const columns: ColumnsType<Article> = [
 		{
-			title: "Artikel",
+			title: "Article",
 			key: "article",
 			width: 390,
 			render: (_, article) => (
@@ -88,7 +92,7 @@ export function ArticlesPage() {
 						/>
 					) : (
 						<div className="grid h-20 w-20 shrink-0 place-items-center bg-line text-center text-xs text-muted">
-							Tanpa cover
+							No cover
 						</div>
 					)}
 					<div>
@@ -101,7 +105,7 @@ export function ArticlesPage() {
 			),
 		},
 		{
-			title: "Bahasa / topik",
+			title: "Language / topic",
 			key: "locale",
 			width: 170,
 			render: (_, article) => (
@@ -116,19 +120,19 @@ export function ArticlesPage() {
 			width: 110,
 			render: (status: ArticleStatus) => (
 				<Tag color={status === "PUBLISHED" ? "success" : "default"}>
-					{status === "PUBLISHED" ? "Terbit" : "Draft"}
+					{status === "PUBLISHED" ? "Published" : "Draft"}
 				</Tag>
 			),
 		},
 		{
-			title: "Diperbarui",
+			title: "Updated",
 			dataIndex: "updatedAt",
 			width: 135,
 			render: (value: string) =>
-				value ? new Date(value).toLocaleDateString("id-ID") : "—",
+				value ? new Date(value).toLocaleDateString("en-US") : "—",
 		},
 		{
-			title: "Aksi",
+			title: "Actions",
 			key: "actions",
 			width: 285,
 			render: (_, article) => (
@@ -150,22 +154,22 @@ export function ArticlesPage() {
 						loading={save.isPending}
 						onClick={() => void toggle(article)}
 					>
-						{article.status === "PUBLISHED" ? "Jadikan draft" : "Terbitkan"}
+						{article.status === "PUBLISHED" ? "Move to draft" : "Publish"}
 					</Button>
 					<Popconfirm
-						title={`Hapus artikel ${article.title}?`}
-						okText="Hapus"
-						cancelText="Batal"
+						title={`Delete article ${article.title}?`}
+						okText="Delete"
+						cancelText="Cancel"
 						okButtonProps={{ danger: true, loading: remove.isPending }}
 						onConfirm={() => void handleDelete(article)}
 					>
 						<Button
 							type="link"
 							danger
-							aria-label={`Hapus ${article.title}`}
+							aria-label={`Delete ${article.title}`}
 							disabled={remove.isPending}
 						>
-							Hapus
+							Delete
 						</Button>
 					</Popconfirm>
 				</div>
@@ -177,12 +181,12 @@ export function ArticlesPage() {
 		<main className="mx-auto max-w-[1440px] px-5 pb-12 pt-8 md:px-10">
 			<div className="flex flex-wrap items-end justify-between gap-5 border-b border-ink pb-8">
 				<div>
-					<p className="section-kicker text-signal">Konten</p>
+					<p className="section-kicker text-signal">Content</p>
 					<h1 className="mt-5 text-5xl font-semibold tracking-tight">
-						Artikel
+						Articles
 					</h1>
 					<p className="mt-3 text-muted">
-						Tulis, pratinjau, dan terbitkan artikel.
+						Write, preview, and publish articles.
 					</p>
 				</div>
 				<Button
@@ -190,18 +194,18 @@ export function ArticlesPage() {
 					icon={<Plus size={18} />}
 					onClick={() => navigate("/articles/new")}
 				>
-					Artikel baru
+					New article
 				</Button>
 			</div>
 			<div className="mt-6">
 				<Segmented
-					aria-label="Filter status artikel"
+					aria-label="Filter article status"
 					value={filter}
 					onChange={(value) => setFilter(value as Filter)}
 					options={[
-						{ value: "ALL", label: "Semua" },
+						{ value: "ALL", label: "All" },
 						{ value: "DRAFT", label: "Draft" },
-						{ value: "PUBLISHED", label: "Terbit" },
+						{ value: "PUBLISHED", label: "Published" },
 					]}
 				/>
 			</div>
@@ -226,7 +230,7 @@ export function ArticlesPage() {
 					loading={isLoading}
 					pagination={{ pageSize: 10, showSizeChanger: false }}
 					scroll={{ x: 1090 }}
-					locale={{ emptyText: "Belum ada artikel." }}
+					locale={{ emptyText: "No articles yet." }}
 				/>
 			</div>
 		</main>

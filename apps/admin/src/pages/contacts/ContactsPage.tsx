@@ -24,15 +24,16 @@ import {
 } from "../../hooks/useContactMessages";
 
 type Filter = "ALL" | ContactStatus;
+type Feedback = { message: string; type: "success" | "error" };
 const labels: Record<ContactStatus, string> = {
-	NEW: "Baru",
-	IN_PROGRESS: "Diproses",
-	DONE: "Selesai",
+	NEW: "New",
+	IN_PROGRESS: "In progress",
+	DONE: "Done",
 };
 
 function formatDate(value: string) {
 	if (!value) return "—";
-	return new Intl.DateTimeFormat("id-ID", {
+	return new Intl.DateTimeFormat("en-US", {
 		dateStyle: "medium",
 		timeStyle: "short",
 		timeZone: "Asia/Makassar",
@@ -47,7 +48,7 @@ export function ContactsPage() {
 	const [selectedId, setSelectedId] = useState<string | null>(null);
 	const [status, setStatus] = useState<ContactStatus>("NEW");
 	const [adminNote, setAdminNote] = useState("");
-	const [feedback, setFeedback] = useState<string | null>(null);
+	const [feedback, setFeedback] = useState<Feedback | null>(null);
 	const selected = data.find((item) => item.id === selectedId) ?? null;
 
 	useEffect(() => {
@@ -69,9 +70,12 @@ export function ContactsPage() {
 				status,
 				adminNote: adminNote.trim(),
 			});
-			setFeedback("Perubahan tersimpan.");
+			setFeedback({ type: "success", message: "Changes saved." });
 		} catch {
-			setFeedback("Perubahan gagal disimpan. Coba lagi.");
+			setFeedback({
+				type: "error",
+				message: "Could not save changes. Try again.",
+			});
 		}
 	};
 	const deleteSelected = async () => {
@@ -81,12 +85,15 @@ export function ContactsPage() {
 			setSelectedId(null);
 			setFeedback(null);
 		} catch {
-			setFeedback("Pesan gagal dihapus. Coba lagi.");
+			setFeedback({
+				type: "error",
+				message: "Could not delete the message. Try again.",
+			});
 		}
 	};
 	const columns: ColumnsType<ContactMessage> = [
 		{
-			title: "Pengirim",
+			title: "Sender",
 			key: "sender",
 			width: 230,
 			render: (_, item) => (
@@ -97,7 +104,7 @@ export function ContactsPage() {
 			),
 		},
 		{
-			title: "Pesan",
+			title: "Message",
 			dataIndex: "message",
 			key: "message",
 			render: (value: string) => <p className="max-w-lg truncate">{value}</p>,
@@ -121,18 +128,18 @@ export function ContactsPage() {
 			),
 		},
 		{
-			title: "Diterima",
+			title: "Received",
 			dataIndex: "createdAt",
 			width: 175,
 			render: formatDate,
 		},
 		{
-			title: "Aksi",
+			title: "Actions",
 			key: "actions",
 			width: 110,
 			render: (_, item) => (
 				<Button type="link" onClick={() => open(item)}>
-					Lihat
+					View
 				</Button>
 			),
 		},
@@ -140,18 +147,18 @@ export function ContactsPage() {
 
 	return (
 		<main className="mx-auto max-w-[1440px] px-5 pb-12 pt-8 md:px-10">
-			<p className="section-kicker text-signal">Komunikasi</p>
-			<h1 className="mt-5 text-5xl font-semibold tracking-tight">Pesan</h1>
+			<p className="section-kicker text-signal">Communication</p>
+			<h1 className="mt-5 text-5xl font-semibold tracking-tight">Messages</h1>
 			<p className="mt-3 text-muted">
-				Tinjau pesan masuk dan catat tindak lanjut.
+				Review incoming messages and track follow-up actions.
 			</p>
 			<Segmented
 				className="mt-8"
-				aria-label="Filter status pesan"
+				aria-label="Filter message status"
 				value={filter}
 				onChange={(value) => setFilter(value as Filter)}
 				options={[
-					{ value: "ALL", label: "Semua" },
+					{ value: "ALL", label: "All" },
 					...Object.entries(labels).map(([value, label]) => ({ value, label })),
 				]}
 			/>
@@ -159,7 +166,7 @@ export function ContactsPage() {
 				<Alert
 					type="error"
 					showIcon
-					title="Gagal memuat pesan"
+					title="Could not load messages"
 					description={error.message}
 					className="mt-5"
 				/>
@@ -174,10 +181,10 @@ export function ContactsPage() {
 				loading={isLoading}
 				pagination={{ pageSize: 10, showSizeChanger: false }}
 				scroll={{ x: 900 }}
-				locale={{ emptyText: "Belum ada pesan." }}
+				locale={{ emptyText: "No messages yet." }}
 			/>
 			<Drawer
-				title="Detail pesan"
+				title="Message details"
 				open={Boolean(selected)}
 				onClose={() => setSelectedId(null)}
 				size="min(100vw, 560px)"
@@ -197,7 +204,7 @@ export function ContactsPage() {
 							{selected.message}
 						</div>
 						<Button href={`mailto:${selected.email}`} type="primary">
-							Balas melalui email
+							Reply by email
 						</Button>
 						<Form layout="vertical" onFinish={() => void save()}>
 							<Form.Item label="Status">
@@ -211,9 +218,9 @@ export function ContactsPage() {
 									}))}
 								/>
 							</Form.Item>
-							<Form.Item label="Catatan privat">
+							<Form.Item label="Private note">
 								<Input.TextArea
-									aria-label="Catatan privat"
+									aria-label="Private note"
 									value={adminNote}
 									onChange={(event) => setAdminNote(event.target.value)}
 									maxLength={contactLimits.adminNote}
@@ -223,11 +230,9 @@ export function ContactsPage() {
 							</Form.Item>
 							{feedback && (
 								<Alert
-									type={
-										feedback === "Perubahan tersimpan." ? "success" : "error"
-									}
+									type={feedback.type}
 									showIcon
-									title={feedback}
+									title={feedback.message}
 									className="mb-4"
 								/>
 							)}
@@ -237,18 +242,18 @@ export function ContactsPage() {
 									htmlType="submit"
 									loading={update.isPending}
 								>
-									Simpan tindak lanjut
+									Save follow-up
 								</Button>
 								<Popconfirm
-									title="Hapus pesan ini?"
-									description="Pesan dan catatan akan dihapus permanen."
-									okText="Hapus"
-									cancelText="Batal"
+									title="Delete this message?"
+									description="The message and its note will be permanently deleted."
+									okText="Delete"
+									cancelText="Cancel"
 									okButtonProps={{ danger: true, loading: remove.isPending }}
 									onConfirm={() => void deleteSelected()}
 								>
 									<Button danger disabled={remove.isPending}>
-										Hapus pesan
+										Delete message
 									</Button>
 								</Popconfirm>
 							</div>

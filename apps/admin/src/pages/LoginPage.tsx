@@ -7,8 +7,8 @@ import { z } from "zod";
 import { getFirebaseAuth } from "../lib/firebase";
 
 const loginSchema = z.object({
-	email: z.email("Email tidak valid."),
-	password: z.string().min(1, "Password wajib diisi."),
+	email: z.email("Enter a valid email address."),
+	password: z.string().min(1, "Password is required."),
 });
 type LoginValues = z.infer<typeof loginSchema>;
 
@@ -40,7 +40,7 @@ export function LoginPage() {
 		} catch {
 			setError("email", {
 				message:
-					"Login gagal. Periksa email dan password atau konfigurasi Firebase.",
+					"Sign in failed. Check your email, password, or Firebase configuration.",
 			});
 		}
 	};
@@ -49,11 +49,11 @@ export function LoginPage() {
 		<main className="grid min-h-screen place-items-center bg-paper px-5">
 			<section className="w-full max-w-md border border-ink bg-white p-8 shadow-soft">
 				<p className="section-kicker text-signal">Portfolio admin</p>
-				<h1 className="mt-5 text-4xl font-semibold tracking-tight">Masuk</h1>
+				<h1 className="mt-5 text-4xl font-semibold tracking-tight">Sign in</h1>
 				<p className="mt-3 text-muted">
-					Gunakan akun yang dibuat di Firebase Authentication.
+					Use an account created in Firebase Authentication.
 				</p>
-				{errors.email?.message?.startsWith("Login gagal") && (
+				{errors.email?.message?.startsWith("Sign in failed") && (
 					<Alert
 						type="error"
 						showIcon
@@ -72,7 +72,7 @@ export function LoginPage() {
 						htmlFor="email"
 						validateStatus={errors.email ? "error" : undefined}
 						help={
-							errors.email?.message?.startsWith("Login gagal")
+							errors.email?.message?.startsWith("Sign in failed")
 								? undefined
 								: errors.email?.message
 						}
@@ -111,7 +111,7 @@ export function LoginPage() {
 						/>
 					</Form.Item>
 					<Button type="primary" htmlType="submit" loading={isSubmitting} block>
-						Masuk
+						Sign in
 					</Button>
 				</Form>
 			</section>

@@ -74,12 +74,12 @@ it("shows the account email and requires a nonblank display name", async () => {
 	const user = userEvent.setup();
 	renderPage("/profile");
 	expect(screen.getByText("editor@example.com")).toBeInTheDocument();
-	const name = screen.getByRole("textbox", { name: "Nama tampilan" });
+	const name = screen.getByRole("textbox", { name: "Display name" });
 	await user.clear(name);
 	await user.type(name, "   ");
-	await user.click(screen.getByRole("button", { name: "Simpan profil" }));
+	await user.click(screen.getByRole("button", { name: "Save profile" }));
 	expect(
-		await screen.findByText("Nama tampilan wajib diisi."),
+		await screen.findByText("Display name is required."),
 	).toBeInTheDocument();
 	expect(auth.updateProfile).not.toHaveBeenCalled();
 });
@@ -87,13 +87,11 @@ it("shows the account email and requires a nonblank display name", async () => {
 it("saves a trimmed display name and reports Firebase failures", async () => {
 	const user = userEvent.setup();
 	renderPage("/profile");
-	const name = screen.getByRole("textbox", { name: "Nama tampilan" });
+	const name = screen.getByRole("textbox", { name: "Display name" });
 	await user.clear(name);
 	await user.type(name, "  Nama Baru  ");
-	await user.click(screen.getByRole("button", { name: "Simpan profil" }));
-	expect(
-		await screen.findByText("Profil berhasil diperbarui."),
-	).toBeInTheDocument();
+	await user.click(screen.getByRole("button", { name: "Save profile" }));
+	expect(await screen.findByText("Profile updated.")).toBeInTheDocument();
 	expect(auth.updateProfile).toHaveBeenCalledWith(currentUser, {
 		displayName: "Nama Baru",
 	});
@@ -105,10 +103,10 @@ it("saves a trimmed display name and reports Firebase failures", async () => {
 	});
 	await user.clear(name);
 	await user.type(name, "Nama Lain");
-	await user.click(screen.getByRole("button", { name: "Simpan profil" }));
+	await user.click(screen.getByRole("button", { name: "Save profile" }));
 	expect(
 		await screen.findByText(
-			"Koneksi bermasalah. Periksa internet lalu coba lagi.",
+			"Connection problem. Check your internet connection and try again.",
 		),
 	).toBeInTheDocument();
 	expect(onDisplayNameChange).toHaveBeenCalledTimes(1);
@@ -120,27 +118,22 @@ async function fillPasswords(
 	next: string,
 	confirmation: string,
 ) {
-	await user.type(screen.getByLabelText("Password saat ini"), current);
-	await user.type(screen.getByLabelText("Password baru"), next);
-	await user.type(
-		screen.getByLabelText("Konfirmasi password baru"),
-		confirmation,
-	);
+	await user.type(screen.getByLabelText("Current password"), current);
+	await user.type(screen.getByLabelText("New password"), next);
+	await user.type(screen.getByLabelText("Confirm new password"), confirmation);
 }
 
 it("validates required, minimum-length, and matching passwords", async () => {
 	const user = userEvent.setup();
 	renderPage("/change-password");
-	await user.click(screen.getByRole("button", { name: "Simpan password" }));
+	await user.click(screen.getByRole("button", { name: "Save password" }));
 	expect(
-		await screen.findByText("Password saat ini wajib diisi."),
+		await screen.findByText("Current password is required."),
 	).toBeInTheDocument();
 	expect(
-		screen.getByText("Password baru minimal 6 karakter."),
+		screen.getByText("New password must be at least 6 characters."),
 	).toBeInTheDocument();
-	expect(
-		screen.getByText("Konfirmasi password wajib diisi."),
-	).toBeInTheDocument();
+	expect(screen.getByText("Confirm your new password.")).toBeInTheDocument();
 	expect(auth.reauthenticate).not.toHaveBeenCalled();
 
 	await fillPasswords(
@@ -149,9 +142,9 @@ it("validates required, minimum-length, and matching passwords", async () => {
 		"new-password",
 		"different-password",
 	);
-	await user.click(screen.getByRole("button", { name: "Simpan password" }));
+	await user.click(screen.getByRole("button", { name: "Save password" }));
 	expect(
-		await screen.findByText("Konfirmasi password tidak cocok."),
+		await screen.findByText("Passwords do not match."),
 	).toBeInTheDocument();
 	expect(auth.reauthenticate).not.toHaveBeenCalled();
 });
@@ -160,10 +153,8 @@ it("reauthenticates before changing the password and clears the form", async () 
 	const user = userEvent.setup();
 	renderPage("/change-password");
 	await fillPasswords(user, "old-password", "new-password", "new-password");
-	await user.click(screen.getByRole("button", { name: "Simpan password" }));
-	expect(
-		await screen.findByText("Password berhasil diubah."),
-	).toBeInTheDocument();
+	await user.click(screen.getByRole("button", { name: "Save password" }));
+	expect(await screen.findByText("Password changed.")).toBeInTheDocument();
 	expect(auth.credential).toHaveBeenCalledWith(
 		"editor@example.com",
 		"old-password",
@@ -175,8 +166,8 @@ it("reauthenticates before changing the password and clears the form", async () 
 	expect(auth.reauthenticate.mock.invocationCallOrder[0]).toBeLessThan(
 		auth.updatePassword.mock.invocationCallOrder[0],
 	);
-	expect(screen.getByLabelText("Password saat ini")).toHaveValue("");
-	expect(screen.getByLabelText("Password baru")).toHaveValue("");
+	expect(screen.getByLabelText("Current password")).toHaveValue("");
+	expect(screen.getByLabelText("New password")).toHaveValue("");
 });
 
 it("reports a wrong current password without changing it or exposing the input", async () => {
@@ -186,9 +177,11 @@ it("reports a wrong current password without changing it or exposing the input",
 	const user = userEvent.setup();
 	renderPage("/change-password");
 	await fillPasswords(user, "secret-current", "new-password", "new-password");
-	await user.click(screen.getByRole("button", { name: "Simpan password" }));
+	await user.click(screen.getByRole("button", { name: "Save password" }));
 	expect(
-		await screen.findByText("Password saat ini salah. Periksa lalu coba lagi."),
+		await screen.findByText(
+			"Current password is incorrect. Check it and try again.",
+		),
 	).toBeInTheDocument();
 	expect(auth.updatePassword).not.toHaveBeenCalled();
 	expect(screen.queryByText("secret-current")).not.toBeInTheDocument();
@@ -199,10 +192,10 @@ it("shows a useful error when Firebase rejects the new password", async () => {
 	const user = userEvent.setup();
 	renderPage("/change-password");
 	await fillPasswords(user, "old-password", "new-password", "new-password");
-	await user.click(screen.getByRole("button", { name: "Simpan password" }));
+	await user.click(screen.getByRole("button", { name: "Save password" }));
 	expect(
 		await screen.findByText(
-			"Password baru terlalu lemah. Gunakan password yang lebih kuat.",
+			"New password is too weak. Choose a stronger password.",
 		),
 	).toBeInTheDocument();
 });

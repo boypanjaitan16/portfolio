@@ -63,17 +63,17 @@ function renderApp(route: string) {
 
 it("redirects a signed-out visitor to login", () => {
 	renderApp("/");
-	expect(screen.getByRole("heading", { name: "Masuk" })).toBeInTheDocument();
+	expect(screen.getByRole("heading", { name: "Sign in" })).toBeInTheDocument();
 });
 
 it("shows article management to an authenticated user", async () => {
 	state.authenticated = true;
 	renderApp("/articles");
 	expect(
-		await screen.findByRole("heading", { name: "Artikel" }),
+		await screen.findByRole("heading", { name: "Articles" }),
 	).toBeInTheDocument();
 	expect(
-		screen.getByRole("button", { name: /Artikel baru/ }),
+		screen.getByRole("button", { name: /New article/ }),
 	).toBeInTheDocument();
 });
 
@@ -84,18 +84,18 @@ it("opens the private dashboard at the admin root and navigates to articles", as
 	expect(
 		await screen.findByRole("heading", { name: "Dashboard" }),
 	).toBeInTheDocument();
-	expect(screen.getByRole("region", { name: "Artikel" })).toBeInTheDocument();
+	expect(screen.getByRole("region", { name: "Articles" })).toBeInTheDocument();
 	expect(screen.getByRole("link", { name: /Portfolio admin/ })).toHaveAttribute(
 		"href",
 		"/",
 	);
-	await user.click(screen.getByRole("link", { name: /^Artikel$/ }));
+	await user.click(screen.getByRole("link", { name: /^Articles$/ }));
 	expect(
-		await screen.findByRole("heading", { name: "Artikel" }),
+		await screen.findByRole("heading", { name: "Articles" }),
 	).toBeInTheDocument();
 	await user.click(
 		within(
-			screen.getByRole("navigation", { name: "Navigasi admin" }),
+			screen.getByRole("navigation", { name: "Admin navigation" }),
 		).getByRole("link", { name: "Dashboard" }),
 	);
 	expect(
@@ -109,21 +109,21 @@ it("guards the contact inbox and opens it from admin navigation", async () => {
 	renderApp("/");
 	await user.click(
 		within(
-			screen.getByRole("navigation", { name: "Navigasi admin" }),
-		).getByRole("link", { name: "Pesan" }),
+			screen.getByRole("navigation", { name: "Admin navigation" }),
+		).getByRole("link", { name: "Messages" }),
 	);
 	expect(
-		await screen.findByRole("heading", { name: "Pesan" }),
+		await screen.findByRole("heading", { name: "Messages" }),
 	).toBeInTheDocument();
 	expect(
-		screen.getByRole("navigation", { name: "Breadcrumb admin" }),
+		screen.getByRole("navigation", { name: "Admin breadcrumb" }),
 	).toHaveTextContent("Dashboard");
 });
 
 it("redirects a signed-out visitor from the contact inbox to login", async () => {
 	renderApp("/contacts");
 	expect(
-		await screen.findByRole("heading", { name: "Masuk" }),
+		await screen.findByRole("heading", { name: "Sign in" }),
 	).toBeInTheDocument();
 });
 
@@ -132,14 +132,14 @@ it.each(["/profile", "/change-password"])(
 	async (path) => {
 		renderApp(path);
 		expect(
-			await screen.findByRole("heading", { name: "Masuk" }),
+			await screen.findByRole("heading", { name: "Sign in" }),
 		).toBeInTheDocument();
 	},
 );
 
 it.each([
-	{ path: "/profile", heading: "Ubah profil" },
-	{ path: "/change-password", heading: "Ubah password" },
+	{ path: "/profile", heading: "Edit profile" },
+	{ path: "/change-password", heading: "Change password" },
 ])("opens $path for an authenticated user", async ({ path, heading }) => {
 	state.authenticated = true;
 	renderApp(path);
@@ -148,7 +148,7 @@ it.each([
 	).toBeInTheDocument();
 	expect(
 		within(
-			screen.getByRole("navigation", { name: "Breadcrumb admin" }),
+			screen.getByRole("navigation", { name: "Admin breadcrumb" }),
 		).getByText(heading),
 	).toBeInTheDocument();
 });
@@ -160,55 +160,53 @@ it("opens both account pages from the dropdown and signs out", async () => {
 	renderApp("/");
 	await screen.findByRole("heading", { name: "Dashboard" });
 	expect(
-		screen.queryByRole("button", { name: "Keluar" }),
+		screen.queryByRole("button", { name: "Sign out" }),
 	).not.toBeInTheDocument();
 
 	await user.click(screen.getByRole("button", { name: "Editor" }));
 	await user.click(
-		await screen.findByRole("menuitem", { name: "Ubah profil" }),
+		await screen.findByRole("menuitem", { name: "Edit profile" }),
 	);
 	expect(
-		await screen.findByRole("heading", { name: "Ubah profil" }),
+		await screen.findByRole("heading", { name: "Edit profile" }),
 	).toBeInTheDocument();
 
 	await user.click(screen.getByRole("button", { name: "Editor" }));
 	await user.click(
-		await screen.findByRole("menuitem", { name: "Ubah password" }),
+		await screen.findByRole("menuitem", { name: "Change password" }),
 	);
 	expect(
-		await screen.findByRole("heading", { name: "Ubah password" }),
+		await screen.findByRole("heading", { name: "Change password" }),
 	).toBeInTheDocument();
 
 	await user.click(screen.getByRole("button", { name: "Editor" }));
-	await user.click(await screen.findByRole("menuitem", { name: "Keluar" }));
+	await user.click(await screen.findByRole("menuitem", { name: "Sign out" }));
 	expect(state.signOut).toHaveBeenCalledOnce();
 	expect(
-		await screen.findByRole("heading", { name: "Masuk" }),
+		await screen.findByRole("heading", { name: "Sign in" }),
 	).toBeInTheDocument();
 	expect(queryClient.getQueryData(["signout-test"])).toBeUndefined();
 });
 
-it.each([null, "   "])("shows Akun when the name is %s", async (name) => {
+it.each([null, "   "])("shows Account when the name is %s", async (name) => {
 	state.authenticated = true;
 	state.displayName = name;
 	renderApp("/");
 	await screen.findByRole("heading", { name: "Dashboard" });
-	expect(screen.getByRole("button", { name: "Akun" })).toBeInTheDocument();
+	expect(screen.getByRole("button", { name: "Account" })).toBeInTheDocument();
 });
 
 it("updates the header after saving a profile and retains it after a failed save", async () => {
 	state.authenticated = true;
 	const user = userEvent.setup();
 	renderApp("/profile");
-	await screen.findByRole("heading", { name: "Ubah profil" });
+	await screen.findByRole("heading", { name: "Edit profile" });
 	expect(screen.getByRole("button", { name: "Editor" })).toBeInTheDocument();
-	const name = screen.getByRole("textbox", { name: "Nama tampilan" });
+	const name = screen.getByRole("textbox", { name: "Display name" });
 	await user.clear(name);
 	await user.type(name, "  Nama Baru  ");
-	await user.click(screen.getByRole("button", { name: "Simpan profil" }));
-	expect(
-		await screen.findByText("Profil berhasil diperbarui."),
-	).toBeInTheDocument();
+	await user.click(screen.getByRole("button", { name: "Save profile" }));
+	expect(await screen.findByText("Profile updated.")).toBeInTheDocument();
 	expect(screen.getByRole("button", { name: "Nama Baru" })).toBeInTheDocument();
 
 	state.updateProfile.mockRejectedValueOnce({
@@ -216,10 +214,10 @@ it("updates the header after saving a profile and retains it after a failed save
 	});
 	await user.clear(name);
 	await user.type(name, "Nama Gagal");
-	await user.click(screen.getByRole("button", { name: "Simpan profil" }));
+	await user.click(screen.getByRole("button", { name: "Save profile" }));
 	expect(
 		await screen.findByText(
-			"Koneksi bermasalah. Periksa internet lalu coba lagi.",
+			"Connection problem. Check your internet connection and try again.",
 		),
 	).toBeInTheDocument();
 	expect(screen.getByRole("button", { name: "Nama Baru" })).toBeInTheDocument();

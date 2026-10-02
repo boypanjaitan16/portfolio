@@ -2,23 +2,23 @@ import { z } from "zod";
 
 export const articleSchema = z.object({
 	locale: z.enum(["en", "id"]),
-	title: z.string().trim().min(1, "Judul wajib diisi."),
+	title: z.string().trim().min(1, "Title is required."),
 	slug: z
 		.string()
 		.trim()
 		.regex(
 			/^[a-z0-9]+(?:-[a-z0-9]+)*$/,
-			"Slug hanya huruf kecil, angka, dan tanda hubung.",
+			"Slug may contain only lowercase letters, numbers, and hyphens.",
 		),
-	summary: z.string().trim().min(1, "Ringkasan wajib diisi."),
-	topic: z.string().trim().min(1, "Topik wajib diisi."),
+	summary: z.string().trim().min(1, "Summary is required."),
+	topic: z.string().trim().min(1, "Topic is required."),
 	contentHtml: z.string().refine((html) => {
 		const text = html
 			.replace(/<[^>]*>/g, "")
 			.replace(/&nbsp;/g, " ")
 			.trim();
 		return text.length > 0;
-	}, "Isi artikel wajib diisi."),
+	}, "Article content is required."),
 	status: z.enum(["DRAFT", "PUBLISHED"]),
 });
 

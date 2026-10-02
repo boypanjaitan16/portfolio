@@ -9,7 +9,7 @@ import { accountErrorMessage } from "../lib/accountErrors";
 import type { AccountOutletContext } from "../lib/accountSession";
 
 const profileSchema = z.object({
-	displayName: z.string().trim().min(1, "Nama tampilan wajib diisi."),
+	displayName: z.string().trim().min(1, "Display name is required."),
 });
 type ProfileValues = z.infer<typeof profileSchema>;
 
@@ -36,7 +36,7 @@ export function ProfilePage() {
 			await updateProfile(user, { displayName });
 			onDisplayNameChange(displayName);
 			reset({ displayName });
-			setFeedback({ type: "success", message: "Profil berhasil diperbarui." });
+			setFeedback({ type: "success", message: "Profile updated." });
 		} catch (reason) {
 			setFeedback({
 				type: "error",
@@ -47,17 +47,17 @@ export function ProfilePage() {
 
 	return (
 		<main className="mx-auto max-w-[1440px] px-5 pb-12 pt-8 md:px-10">
-			<p className="section-kicker text-signal">Pengaturan akun</p>
+			<p className="section-kicker text-signal">Account settings</p>
 			<h1 className="mt-5 text-5xl font-semibold tracking-tight">
-				Ubah profil
+				Edit profile
 			</h1>
 			<p className="mt-3 text-muted">
-				Perbarui nama yang tertera pada akun admin.
+				Update the name shown on your admin account.
 			</p>
 			<div className="mt-8">
 				<div>
-					<p className="mb-2 font-medium">Email akun</p>
-					<p className="text-muted">{user.email ?? "Email tidak tersedia."}</p>
+					<p className="mb-2 font-medium">Account email</p>
+					<p className="text-muted">{user.email ?? "Email unavailable."}</p>
 				</div>
 				{feedback && (
 					<Alert
@@ -74,7 +74,7 @@ export function ProfilePage() {
 					className="mt-6 w-full"
 				>
 					<Form.Item
-						label="Nama tampilan"
+						label="Display name"
 						htmlFor="displayName"
 						validateStatus={errors.displayName ? "error" : undefined}
 						help={errors.displayName?.message}
@@ -93,7 +93,7 @@ export function ProfilePage() {
 						/>
 					</Form.Item>
 					<Button type="primary" htmlType="submit" loading={isSubmitting}>
-						Simpan profil
+						Save profile
 					</Button>
 				</Form>
 			</div>

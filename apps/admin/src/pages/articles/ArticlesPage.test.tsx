@@ -47,17 +47,19 @@ it("filters articles by publication status", async () => {
 	expect(screen.getByText("Admin fixture")).toBeInTheDocument();
 	await user.click(screen.getByText("Draft"));
 	expect(screen.queryByText("Admin fixture")).not.toBeInTheDocument();
-	expect(screen.getByText("Belum ada artikel.")).toBeInTheDocument();
+	expect(screen.getByText("No articles yet.")).toBeInTheDocument();
 });
 
 it("changes status and asks before deleting an article", async () => {
 	const user = userEvent.setup();
 	renderList();
-	await user.click(screen.getByRole("button", { name: "Jadikan draft" }));
+	await user.click(screen.getByRole("button", { name: "Move to draft" }));
 	await waitFor(() => expect(state.save).toHaveBeenCalledOnce());
 	expect(state.save.mock.calls[0][0].values.status).toBe("DRAFT");
-	await user.click(screen.getByRole("button", { name: "Hapus Admin fixture" }));
+	await user.click(
+		screen.getByRole("button", { name: "Delete Admin fixture" }),
+	);
 	expect(state.remove).not.toHaveBeenCalled();
-	await user.click(screen.getByRole("button", { name: /^Hapus$/ }));
+	await user.click(screen.getByRole("button", { name: /^Delete$/ }));
 	await waitFor(() => expect(state.remove).toHaveBeenCalledWith(article));
 }, 10_000);

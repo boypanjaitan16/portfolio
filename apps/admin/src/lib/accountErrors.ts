@@ -10,23 +10,23 @@ export function accountErrorMessage(
 			: undefined;
 
 	if (code === "auth/network-request-failed")
-		return "Koneksi bermasalah. Periksa internet lalu coba lagi.";
+		return "Connection problem. Check your internet connection and try again.";
 	if (code === "auth/too-many-requests")
-		return "Terlalu banyak percobaan. Tunggu sebentar lalu coba lagi.";
+		return "Too many attempts. Wait a moment and try again.";
 	if (
 		code === "auth/user-token-expired" ||
 		code === "auth/requires-recent-login"
 	)
-		return "Sesi perlu diperbarui. Keluar, masuk lagi, lalu coba lagi.";
+		return "Your session has expired. Sign out, sign in again, and retry.";
 	if (
 		action === "reauthenticate" &&
 		(code === "auth/wrong-password" || code === "auth/invalid-credential")
 	)
-		return "Password saat ini salah. Periksa lalu coba lagi.";
+		return "Current password is incorrect. Check it and try again.";
 	if (action === "password" && code === "auth/weak-password")
-		return "Password baru terlalu lemah. Gunakan password yang lebih kuat.";
+		return "New password is too weak. Choose a stronger password.";
 
 	return action === "profile"
-		? "Gagal menyimpan profil. Coba lagi."
-		: "Gagal mengubah password. Coba lagi.";
+		? "Could not save your profile. Try again."
+		: "Could not change your password. Try again.";
 }

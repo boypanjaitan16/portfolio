@@ -19,9 +19,11 @@ it("shows validation feedback before trying to sign in", async () => {
 			<LoginPage />
 		</MemoryRouter>,
 	);
-	await user.click(screen.getByRole("button", { name: "Masuk" }));
-	expect(await screen.findByText("Email tidak valid.")).toBeInTheDocument();
-	expect(screen.getByText("Password wajib diisi.")).toBeInTheDocument();
+	await user.click(screen.getByRole("button", { name: "Sign in" }));
+	expect(
+		await screen.findByText("Enter a valid email address."),
+	).toBeInTheDocument();
+	expect(screen.getByText("Password is required.")).toBeInTheDocument();
 });
 
 it("opens the dashboard after a direct login", async () => {
@@ -30,15 +32,15 @@ it("opens the dashboard after a direct login", async () => {
 		<MemoryRouter initialEntries={["/login"]}>
 			<Routes>
 				<Route path="/login" element={<LoginPage />} />
-				<Route path="/" element={<h1>Dashboard tujuan</h1>} />
+				<Route path="/" element={<h1>Target dashboard</h1>} />
 			</Routes>
 		</MemoryRouter>,
 	);
 	await user.type(screen.getByLabelText("Email"), "editor@example.com");
 	await user.type(screen.getByLabelText("Password"), "password123");
-	await user.click(screen.getByRole("button", { name: "Masuk" }));
+	await user.click(screen.getByRole("button", { name: "Sign in" }));
 	expect(
-		await screen.findByRole("heading", { name: "Dashboard tujuan" }),
+		await screen.findByRole("heading", { name: "Target dashboard" }),
 	).toBeInTheDocument();
 	expect(auth.signIn).toHaveBeenCalledWith(
 		expect.anything(),

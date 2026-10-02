@@ -2,7 +2,7 @@ import { StyleProvider } from "@ant-design/cssinjs";
 import { adminAntdTheme, applyPortfolioTheme } from "@portfolio/config";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ConfigProvider } from "antd";
-import idID from "antd/locale/id_ID";
+import enUS from "antd/locale/en_US";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
@@ -27,7 +27,7 @@ createRoot(root).render(
 	<StrictMode>
 		<QueryClientProvider client={queryClient}>
 			<StyleProvider layer>
-				<ConfigProvider theme={adminAntdTheme} locale={idID}>
+				<ConfigProvider theme={adminAntdTheme} locale={enUS}>
 					<BrowserRouter basename="/admin">
 						<App />
 					</BrowserRouter>

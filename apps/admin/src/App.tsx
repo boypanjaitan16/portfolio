@@ -27,7 +27,7 @@ function Guard() {
 	if (checking)
 		return (
 			<div className="grid min-h-screen place-items-center">
-				<Spin size="large" aria-label="Memeriksa sesi" />
+				<Spin size="large" aria-label="Checking session" />
 			</div>
 		);
 	if (error)
@@ -54,7 +54,7 @@ export default function App() {
 		<Suspense
 			fallback={
 				<div className="grid min-h-screen place-items-center">
-					<Spin size="large" aria-label="Memuat halaman" />
+					<Spin size="large" aria-label="Loading page" />
 				</div>
 			}
 		>
@@ -78,7 +78,7 @@ export default function App() {
 				</Route>
 				<Route
 					path="*"
-					element={<p className="p-10">Halaman admin tidak ditemukan.</p>}
+					element={<p className="p-10">Admin page not found.</p>}
 				/>
 			</Routes>
 		</Suspense>

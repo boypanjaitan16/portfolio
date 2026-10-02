@@ -47,20 +47,20 @@ export function ArticleEditor({
 			editor.chain().focus().setImage({ src: url, alt: file.name }).run();
 		} catch (reason) {
 			onError(
-				reason instanceof Error ? reason.message : "Gagal menambahkan gambar.",
+				reason instanceof Error ? reason.message : "Could not add the image.",
 			);
 		}
 	};
 
 	const addLink = () => {
-		const value = window.prompt("URL tautan", "");
+		const value = window.prompt("Link URL", "");
 		if (value === null) return;
 		if (value === "") {
 			editor.chain().focus().unsetLink().run();
 			return;
 		}
 		if (!/^https?:\/\//i.test(value)) {
-			onError("Tautan harus memakai http:// atau https://.");
+			onError("Links must start with http:// or https://.");
 			return;
 		}
 		editor.chain().focus().setLink({ href: value }).run();
@@ -68,12 +68,12 @@ export function ArticleEditor({
 
 	const buttons = [
 		{
-			label: "Tebal",
+			label: "Bold",
 			icon: <Bold size={16} />,
 			action: () => editor.chain().focus().toggleBold().run(),
 		},
 		{
-			label: "Miring",
+			label: "Italic",
 			icon: <Italic size={16} />,
 			action: () => editor.chain().focus().toggleItalic().run(),
 		},
@@ -88,23 +88,23 @@ export function ArticleEditor({
 			action: () => editor.chain().focus().toggleHeading({ level: 2 }).run(),
 		},
 		{
-			label: "Daftar",
+			label: "Bulleted list",
 			icon: <List size={16} />,
 			action: () => editor.chain().focus().toggleBulletList().run(),
 		},
 		{
-			label: "Daftar angka",
+			label: "Numbered list",
 			icon: <ListOrdered size={16} />,
 			action: () => editor.chain().focus().toggleOrderedList().run(),
 		},
 		{
-			label: "Kutipan",
+			label: "Quote",
 			icon: <Quote size={16} />,
 			action: () => editor.chain().focus().toggleBlockquote().run(),
 		},
-		{ label: "Tautan", icon: <Link2 size={16} />, action: addLink },
+		{ label: "Link", icon: <Link2 size={16} />, action: addLink },
 		{
-			label: "Gambar",
+			label: "Image",
 			icon: <ImagePlus size={16} />,
 			action: () => fileInput.current?.click(),
 		},
