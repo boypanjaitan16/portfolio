@@ -1,25 +1,25 @@
 # Portfolio
 
-Monorepo pnpm + Turborepo untuk portfolio Boy Boni Panjaitan.
+pnpm + Turborepo monorepo for Boy Boni Panjaitan's portfolio.
 
 ## Apps
 
-- `apps/home` — situs publik di `https://boypanjaitan.com/`
-- `apps/tools` — tools di `https://boypanjaitan.com/tools/`
-- `apps/admin` — portal artikel dan pesan di `https://boypanjaitan.com/admin/`
+- `apps/home` — public site at `https://boypanjaitan.com/`
+- `apps/tools` — tools at `https://boypanjaitan.com/tools/`
+- `apps/admin` — article and contact portal at `https://boypanjaitan.com/admin/`
 
-Ketiganya memakai React, TypeScript, Vite, Tailwind CSS, Biome, Vitest, React Router, dan TanStack Query. Token warna, font, bayangan, dan preset Tailwind bersama berada di `packages/config`; ketiga app memakai palet portfolio yang sama. Admin memakai Ant Design v6 untuk kontrol dan interaksi utama, sedangkan home memakai Tailwind dan CSS kustom tanpa Ant Design. Home dan admin memakai satu proyek Firebase portfolio. Kontrak artikel bersama berada di `packages/articles`, sedangkan kontrak pesan kontak di `packages/contact`.
+All three apps use React, TypeScript, Vite, Tailwind CSS, Biome, Vitest, React Router, and TanStack Query. Shared color, font, shadow, and Tailwind tokens live in `packages/config`; all three apps use the same portfolio palette. Admin uses Ant Design v6 for its main controls and interactions, while home uses Tailwind and custom CSS without Ant Design. Home and admin share one portfolio Firebase project. Shared article contracts live in `packages/articles`, and contact message contracts live in `packages/contact`.
 
 ## Development
 
-Gunakan Node.js 22 dan pnpm 10.11.0.
+Use Node.js 22 and pnpm 10.11.0.
 
 ```bash
 pnpm install
 pnpm dev
 ```
 
-Untuk menjalankan satu app:
+To run one app:
 
 ```bash
 pnpm --filter @portfolio/home dev
@@ -27,38 +27,38 @@ pnpm --filter @portfolio/admin dev
 pnpm --filter @portfolio/tools dev
 ```
 
-Gate repo: `pnpm format:check`, `pnpm lint`, `pnpm test`, dan `pnpm build`. Build dan test biasa tidak memerlukan Firebase aktif.
+Repository gates are `pnpm format:check`, `pnpm lint`, `pnpm test`, and `pnpm build`. Standard builds and tests do not require an active Firebase project.
 
-## Firebase portfolio
+## Portfolio Firebase
 
-1. Gunakan proyek Firebase khusus portfolio (terpisah dari TheBuilder). Aktifkan Authentication dengan provider **Email/Password**, Firestore, dan Storage. Buat akun editor secara manual di Firebase Console; portal tidak menyediakan registrasi.
-2. Salin `apps/home/.env.example` dan `apps/admin/.env.example` menjadi `.env.local` di masing-masing app. Isi kedua file dengan konfigurasi web dari proyek Firebase yang sama serta `VITE_FIREBASE_APPCHECK_SITE_KEY` dari reCAPTCHA Enterprise. Variabel `VITE_*` tersedia di browser dan bukan kredensial administrator.
-3. Deploy `firestore.rules`, `storage.rules`, dan `firestore.indexes.json` sebelum memakai portal:
+1. Use a dedicated Firebase project for the portfolio (separate from TheBuilder). Enable Authentication with the **Email/Password** provider, Firestore, and Storage. Create editor accounts manually in the Firebase Console; the portal has no registration flow.
+2. Copy `apps/home/.env.example` and `apps/admin/.env.example` to `.env.local` in their respective apps. Fill both files with web configuration from the same Firebase project and `VITE_FIREBASE_APPCHECK_SITE_KEY` from reCAPTCHA Enterprise. `VITE_*` variables are available in the browser and are not administrator credentials.
+3. Deploy `firestore.rules`, `storage.rules`, and `firestore.indexes.json` before using the portal:
 
 ```bash
 firebase deploy --project YOUR_PROJECT_ID --only firestore:rules,firestore:indexes,storage
 ```
 
-Semua akun Authentication dalam proyek tersebut boleh menulis artikel dan menangani pesan kontak. Pengunjung tanpa login hanya dapat membaca artikel `PUBLISHED` dan membuat pesan kontak yang valid; mereka tidak dapat membaca pesan. Gambar dapat dibaca publik jika URL-nya diketahui. Artikel memakai slug global yang unik dan tidak berubah setelah dibuat.
+Every Authentication account in this project can write articles and manage contact messages. Visitors who are not signed in can only read `PUBLISHED` articles and create valid contact messages; they cannot read messages. Images can be read publicly if their URLs are known. Article slugs are globally unique and do not change after creation.
 
-Untuk menguji aturan dengan emulator:
+To test the rules with the emulator:
 
 ```bash
 firebase emulators:exec --project demo-portfolio --only firestore,storage 'pnpm --filter @portfolio/admin test:rules'
 ```
 
-Untuk smoke test lengkap HTML, sitemap, fallback URL, dan artefak Pages, jalankan `pnpm --filter @portfolio/home exec puppeteer browsers install chrome` lalu `pnpm test:pages:smoke`.
+For the full HTML, sitemap, fallback URL, and Pages artifact smoke test, run `pnpm --filter @portfolio/home exec puppeteer browsers install chrome` followed by `pnpm test:pages:smoke`.
 
-Firebase CLI terbaru memerlukan JDK 21. Jika mesin masih memakai JDK 17, gunakan `pnpm dlx firebase-tools@14.22.0` sebagai pengganti `firebase` pada perintah test tersebut.
+The latest Firebase CLI requires JDK 21. If the machine still uses JDK 17, use `pnpm dlx firebase-tools@14.22.0` instead of `firebase` for that test command.
 
-## Artikel dan GitHub Pages
+## Articles and GitHub Pages
 
-Dashboard `/admin/` menampilkan jumlah artikel terbit/draft dan pesan baru/diproses; daftar artikel ada di `/admin/articles`, sedangkan inbox pesan ada di `/admin/contacts`. Dropdown akun di header menampilkan nama akun jika tersedia dan membuka `/admin/profile` untuk mengubah nama tampilan, `/admin/change-password` untuk mengubah password, serta aksi keluar. Email akun hanya ditampilkan di halaman profil. Admin menyediakan draft, publikasi, edit, preview privat, cover, dan gambar di isi artikel. Tiap artikel ditulis dalam satu bahasa, EN atau ID. Home menampilkan tiga artikel terbit terbaru pada bahasa aktif; `/notes` menampilkan seluruh artikel terbit pada bahasa itu. Tiga placeholder `planned` lama telah dihapus.
+The `/admin/` dashboard shows counts of published and draft articles and of new and in-progress messages. The article list is at `/admin/articles`, and the message inbox is at `/admin/contacts`. The account dropdown in the header shows the account name when available and provides `/admin/profile` to change the display name, `/admin/change-password` to change the password, and a sign-out action. The account email is shown only on the profile page. Admin supports drafts, publishing, editing, private previews, cover images, and images in article content. Each article is written in one language, EN or ID. Home shows the three most recent published articles in the active language; `/notes` shows all published articles in that language. The three old `planned` placeholders have been removed.
 
-Simpan enam konfigurasi web Firebase dan `VITE_FIREBASE_APPCHECK_SITE_KEY` sebagai repository Actions secrets dengan nama yang sama seperti di `.env.example`. Untuk pembacaan artikel saat build, siapkan Google Cloud Workload Identity Federation yang dibatasi ke repository ini, lalu beri service account izin baca Firestore (`roles/datastore.viewer`). Isi repository variables `GCP_WORKLOAD_IDENTITY_PROVIDER` dengan nama provider lengkap dan `GCP_PAGES_SERVICE_ACCOUNT` dengan alamat service account. Workflow **Deploy GitHub Pages** tetap dijalankan manual. Prerender memakai library Firestore server dengan kredensial sementara GitHub OIDC; browser prerender menerima hanya data artikel terbit. Build Pages gagal bila konfigurasi Firebase/App Check, akses Firestore server, atau pengambilan artikel gagal.
+Store the six Firebase web configuration values and `VITE_FIREBASE_APPCHECK_SITE_KEY` as repository Actions secrets with the same names as in `.env.example`. To read articles during the build, set up Google Cloud Workload Identity Federation restricted to this repository, then grant the service account Firestore read access (`roles/datastore.viewer`). Set the `GCP_WORKLOAD_IDENTITY_PROVIDER` repository variable to the full provider name and `GCP_PAGES_SERVICE_ACCOUNT` to the service account email. The **Deploy GitHub Pages** workflow still runs manually. Prerendering uses the server Firestore library with temporary GitHub OIDC credentials; the prerendered browser receives only published article data. The Pages build fails if Firebase/App Check configuration, server Firestore access, or article retrieval fails.
 
-Daftarkan web app portfolio di Firebase App Check dengan reCAPTCHA Enterprise dan domain produksi. Deploy Pages dengan konfigurasi ini, periksa pembacaan artikel, login admin, dan kirim pesan; pantau metrik App Check sebelum mengaktifkan **Enforce** untuk Cloud Firestore. Penegakan berlaku untuk semua pembacaan dan penulisan Firestore oleh browser home dan admin. Untuk development lokal setelah penegakan, gunakan emulator atau [debug provider App Check](https://firebase.google.com/docs/app-check/web/debug-provider). App Check mengurangi permintaan dari klien tidak sah, tetapi tidak membatasi jumlah kiriman per pengguna.
+Register the portfolio web app in Firebase App Check with reCAPTCHA Enterprise and the production domain. Deploy Pages with this configuration, check article reads, admin login, and message submission, and monitor App Check metrics before enabling **Enforce** for Cloud Firestore. Enforcement applies to all browser Firestore reads and writes from home and admin. For local development after enforcement, use the emulator or the [App Check debug provider](https://firebase.google.com/docs/app-check/web/debug-provider). App Check reduces requests from unauthorized clients, but does not limit how many messages a user can submit.
 
-Perubahan artikel terbit terlihat oleh browser yang membaca Firestore tanpa deploy ulang. HTML statis dan sitemap diperbarui pada deploy Pages berikutnya. Setelah menerbitkan, mengubah, menarik, atau menghapus artikel, jalankan workflow tersebut agar hasil yang dibaca crawler selaras dengan data Firestore.
+Changes to published articles are visible to browsers reading Firestore without a redeploy. Static HTML and the sitemap are updated on the next Pages deployment. After publishing, editing, unpublishing, or deleting an article, run that workflow so crawler-visible output matches Firestore data.
 
-GitHub Pages memakai satu `404.html` untuk URL SPA yang belum memiliki berkas statis. Fallback mengarahkan URL admin bertingkat ke app admin dan memulihkan alamat semula. Halaman artikel terbit yang dibuat saat deploy tersedia sebagai `/notes/:slug/index.html`.
+GitHub Pages uses one `404.html` for SPA URLs without a static file. The fallback directs nested admin URLs to the admin app and restores the original address. Published article pages generated during deployment are available at `/notes/:slug/index.html`.
