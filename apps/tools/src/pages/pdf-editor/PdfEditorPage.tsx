@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { useToolsLocale } from "../toolsLocale";
+import { useToolsLocale } from "../../toolsLocale";
 import { usePdfTranslations } from "./locale";
 import { PdfCanvas } from "./PdfCanvas";
 import {

@@ -4,7 +4,7 @@
 
 @font-face {
 	font-family: "DejaVu PDF";
-	src: url("./pdf/assets/DejaVuSans.ttf") format("truetype");
+	src: url("./pages/pdf-editor/assets/DejaVuSans.ttf") format("truetype");
 	font-style: normal;
 	font-weight: 400;
 	font-display: swap;

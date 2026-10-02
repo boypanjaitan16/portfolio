@@ -2,7 +2,7 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
-import { LocaleProvider, useToolsLocale } from "../toolsLocale";
+import { LocaleProvider, useToolsLocale } from "../../toolsLocale";
 import { PdfEditorPage } from "./PdfEditorPage";
 import type { EditorPage, SourceDocument } from "./pdfModel";
 import { downloadPdf, exportPdf, openPdf } from "./pdfService";

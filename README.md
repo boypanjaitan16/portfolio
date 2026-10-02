@@ -53,7 +53,7 @@ The latest Firebase CLI requires JDK 21. If the machine still uses JDK 17, use `
 
 ## Public tools
 
-The tools landing page at `/tools/` lists available public tools in a responsive grid. The PDF editor at `/tools/pdf-editor` can combine, reorder, rotate, and remove PDF pages; zoom its preview; export all or selected pages; and add text, PNG/JPEG images, or drawn signatures. PDF input and output stay in the browser. The editor does not support encrypted PDFs, editing existing page text, OCR, or filling PDF forms. Its EN/ID setting uses the same `portfolio-locale` preference as home. Each tool keeps its own translations in its directory; `apps/tools/src/toolsLocale.tsx` holds shared copy and the locale preference.
+The tools landing page at `/tools/` lists public tools in a responsive grid. See the [tools app README](apps/tools/README.md) for its structure, development conventions, and current tool behavior.
 
 ## Articles and GitHub Pages
 

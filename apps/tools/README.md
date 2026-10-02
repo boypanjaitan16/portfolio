@@ -1,0 +1,34 @@
+# Tools app
+
+The public tools app is served at `/tools/`. For monorepo setup and GitHub Pages prerequisites, see the [root README](../../README.md).
+
+## Structure and adding a tool
+
+- `src/App.tsx` wires the locale provider and routes. `src/components/ToolsLayout.tsx` owns the shared header and route outlet. `src/pages/ToolsPage.tsx` owns the responsive tool grid and landing page footer; `src/pages/NotFoundPage.tsx` handles unknown routes.
+- Put each tool's page, translations, model, services, assets, and tests in `src/pages/<route-slug>/`. The PDF Editor is the example at `src/pages/pdf-editor/`.
+- To add a tool, create its folder, register its route in `App.tsx`, and add a card in `ToolsPage.tsx`. Keep the card's name and description in that tool's translation module. Cover navigation, direct access, and both languages in tests.
+
+## Shared contracts
+
+- Keep EN/ID tool copy in the tool's own translation module, with matching keys checked by TypeScript. `src/toolsLocale.tsx` owns the shared navigation, landing page, and not-found copy and the `portfolio-locale` preference shared with home.
+- Preserve the `/tools/` Vite base path and React Router basename. GitHub Pages redirects direct tool URLs through the root `404.html`; `src/main.tsx` restores the URL before routing. Check the fallback when changing routes or asset paths.
+- Keep the shared header sticky above page content. Align its inner content and the landing page footer to the same `max-w-7xl` width and horizontal padding; keep dialogs above the header.
+
+## PDF Editor
+
+`/tools/pdf-editor` combines PDFs and lets users reorder, rotate, select, or remove pages. Users can add text, PNG/JPEG images, and drawn signatures, then position or resize them. Exporting all pages or selected pages downloads one PDF. Signatures are page images, not certified digital signatures.
+
+PDF.js renders previews and pdf-lib creates the download; files are processed in the browser. Preview zoom starts at 100% of the fit-to-preview size, ranges from 50% to 300% in 25% steps, and persists when switching pages. Annotation coordinates stay in the original PDF page space so the export matches the preview. The editor does not open encrypted PDFs or support editing existing text, filling forms, or OCR.
+
+## Verification
+
+Run these workspace checks from the repository root after changing tools code:
+
+```bash
+pnpm --filter @portfolio/tools format:check
+pnpm --filter @portfolio/tools lint
+pnpm --filter @portfolio/tools test
+pnpm --filter @portfolio/tools build
+```
+
+When changing routes, the base path, built asset paths, or the Pages fallback, run `pnpm test:pages:smoke` as described in the root README. For PDF preview or export changes, verify an uploaded PDF and the downloaded result in a production build, including annotation placement and font loading.

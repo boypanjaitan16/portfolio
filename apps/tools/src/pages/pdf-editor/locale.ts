@@ -1,4 +1,4 @@
-import { type Locale, useToolsLocale } from "../toolsLocale";
+import { type Locale, useToolsLocale } from "../../toolsLocale";
 
 const en = {
 	cardDescription:
