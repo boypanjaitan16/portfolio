@@ -1,3 +1,4 @@
+import type { ToolSeoCopy } from "../../toolSeo";
 import { type Locale, useToolsLocale } from "../../toolsLocale";
 
 const en = {
@@ -154,3 +155,93 @@ export const pdfToolCard = {
 export function usePdfTranslations() {
 	return pdfTranslations[useToolsLocale().locale];
 }
+
+export const pdfToolSeo = {
+	en: {
+		metaTitle: "Free Online PDF Editor – Merge, Reorder & Sign PDFs",
+		metaDescription:
+			"Merge PDFs, reorder, rotate, or remove pages, and add text, images, or a drawn signature. Free, no sign-up, and your files never leave your browser.",
+		about: [
+			"The PDF Editor combines one or more PDFs into a single document you can rearrange page by page. Rotate, select, reorder, or remove pages, then place text, PNG or JPEG images, and a hand-drawn signature anywhere on a page.",
+			"Everything runs in your browser with PDF.js and pdf-lib, so your documents are never uploaded to a server. Export every page or only the pages you select as one PDF.",
+		],
+		features: [
+			"Combine several PDFs into one document",
+			"Reorder, rotate, select, and remove pages",
+			"Add text, PNG/JPEG images, and drawn signatures",
+			"Move and resize annotations on a zoomable preview (50%–300%)",
+			"Download all pages or only the selected pages",
+			"Private by design: files stay on your device",
+		],
+		steps: [
+			"Add one or more PDF files.",
+			"Arrange the pages and add text, images, or a signature.",
+			"Download all pages or your selected pages as one PDF.",
+		],
+		faq: [
+			{
+				question: "Are my PDFs uploaded anywhere?",
+				answer:
+					"No. Files are read, previewed, and exported in your browser. Nothing is sent to a server.",
+			},
+			{
+				question: "Is the signature a certified digital signature?",
+				answer:
+					"No. A drawn signature is added to the page as an image. It is not a certified or cryptographic digital signature.",
+			},
+			{
+				question: "Can I edit existing text or fill in forms?",
+				answer:
+					"No. The editor does not edit existing text, fill forms, run OCR, or open encrypted PDFs.",
+			},
+			{
+				question: "Does it cost anything?",
+				answer: "No. The PDF Editor is free and needs no account.",
+			},
+		],
+	},
+	id: {
+		metaTitle: "Editor PDF Online Gratis – Gabung, Atur & Tanda Tangani PDF",
+		metaDescription:
+			"Gabungkan PDF, atur ulang, putar, atau hapus halaman, lalu tambahkan teks, gambar, atau tanda tangan. Gratis, tanpa daftar, dan file tetap di browser Anda.",
+		about: [
+			"Editor PDF menggabungkan satu atau beberapa PDF menjadi satu dokumen yang dapat Anda atur per halaman. Putar, pilih, urutkan ulang, atau hapus halaman, lalu letakkan teks, gambar PNG atau JPEG, dan tanda tangan yang digambar di mana saja.",
+			"Semua proses berjalan di browser Anda dengan PDF.js dan pdf-lib, sehingga dokumen tidak pernah diunggah ke server. Ekspor semua halaman atau hanya halaman yang dipilih sebagai satu PDF.",
+		],
+		features: [
+			"Gabungkan beberapa PDF menjadi satu dokumen",
+			"Urutkan ulang, putar, pilih, dan hapus halaman",
+			"Tambahkan teks, gambar PNG/JPEG, dan tanda tangan",
+			"Pindahkan dan ubah ukuran anotasi pada pratinjau yang dapat diperbesar (50%–300%)",
+			"Unduh semua halaman atau hanya halaman terpilih",
+			"Privat: file tetap di perangkat Anda",
+		],
+		steps: [
+			"Tambahkan satu atau beberapa file PDF.",
+			"Atur halaman, lalu tambahkan teks, gambar, atau tanda tangan.",
+			"Unduh semua halaman atau halaman terpilih sebagai satu PDF.",
+		],
+		faq: [
+			{
+				question: "Apakah PDF saya diunggah ke suatu tempat?",
+				answer:
+					"Tidak. File dibaca, ditampilkan, dan diekspor di browser Anda. Tidak ada yang dikirim ke server.",
+			},
+			{
+				question: "Apakah tanda tangannya tanda tangan digital tersertifikasi?",
+				answer:
+					"Tidak. Tanda tangan yang digambar ditambahkan ke halaman sebagai gambar, bukan tanda tangan digital tersertifikasi atau kriptografis.",
+			},
+			{
+				question:
+					"Bisakah saya mengedit teks yang sudah ada atau mengisi formulir?",
+				answer:
+					"Tidak. Editor ini tidak mengedit teks yang sudah ada, mengisi formulir, menjalankan OCR, atau membuka PDF terenkripsi.",
+			},
+			{
+				question: "Apakah berbayar?",
+				answer: "Tidak. Editor PDF gratis dan tidak memerlukan akun.",
+			},
+		],
+	},
+} satisfies ToolSeoCopy;

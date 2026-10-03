@@ -1,76 +1,41 @@
-import {
-	ArrowUpRight,
-	Braces,
-	CircleDashed,
-	Crop,
-	FilePenLine,
-	Images,
-	Minimize2,
-	Pipette,
-	QrCode,
-} from "lucide-react";
-import { useEffect } from "react";
+import { ArrowUpRight } from "lucide-react";
+import { useMemo } from "react";
 import { Link } from "react-router-dom";
+import { canonicalUrl, ogImageUrl, PageMeta } from "../components/PageMeta";
+import { tools } from "../toolCatalog";
 import { useToolsLocale } from "../toolsLocale";
-import { colorPickerCard } from "./color-picker/locale";
-import { dataFormatterCard } from "./data-formatter/locale";
-import { imageCompressorCard } from "./image-compressor/locale";
-import { imageEditorCard } from "./image-editor/locale";
-import { imageToPdfCard } from "./image-to-pdf/locale";
-import { pdfToolCard } from "./pdf-editor/locale";
-import { qrCodeCard } from "./qr-code-generator/locale";
-import { spinningWheelCard } from "./spinning-wheel/locale";
-
-const tools = [
-	{
-		path: "/pdf-editor",
-		icon: FilePenLine,
-		card: pdfToolCard,
-	},
-	{
-		path: "/image-to-pdf",
-		icon: Images,
-		card: imageToPdfCard,
-	},
-	{
-		path: "/color-picker",
-		icon: Pipette,
-		card: colorPickerCard,
-	},
-	{
-		path: "/qr-code-generator",
-		icon: QrCode,
-		card: qrCodeCard,
-	},
-	{
-		path: "/spinning-wheel",
-		icon: CircleDashed,
-		card: spinningWheelCard,
-	},
-	{
-		path: "/image-editor",
-		icon: Crop,
-		card: imageEditorCard,
-	},
-	{
-		path: "/image-compressor",
-		icon: Minimize2,
-		card: imageCompressorCard,
-	},
-	{
-		path: "/data-formatter",
-		icon: Braces,
-		card: dataFormatterCard,
-	},
-] as const;
 
 export function ToolsPage() {
 	const { locale, t } = useToolsLocale();
-	useEffect(() => {
-		document.title = "Tools | Boy Boni Panjaitan";
-	}, []);
+	const jsonLd = useMemo(
+		() => ({
+			"@context": "https://schema.org",
+			"@type": "CollectionPage",
+			name: t.metaTitle,
+			description: t.metaDescription,
+			url: canonicalUrl("/"),
+			inLanguage: locale,
+			mainEntity: {
+				"@type": "ItemList",
+				itemListElement: tools.map((tool, index) => ({
+					"@type": "ListItem",
+					position: index + 1,
+					name: tool.card[locale].name,
+					url: canonicalUrl(`/${tool.slug}`),
+				})),
+			},
+		}),
+		[locale, t.metaDescription, t.metaTitle],
+	);
 	return (
 		<main className="mx-auto max-w-7xl px-5 pb-24 pt-16 md:px-10 md:pt-24">
+			<PageMeta
+				title={`${t.metaTitle} | Boy Boni Panjaitan`}
+				description={t.metaDescription}
+				image={ogImageUrl("tools")}
+				imageAlt={t.homeTitle}
+				jsonLd={jsonLd}
+			/>
 			<h1 className="mt-5 max-w-3xl font-display text-5xl font-semibold leading-tight tracking-tight md:text-7xl">
 				{t.homeTitle}
 			</h1>
@@ -86,8 +51,10 @@ export function ToolsPage() {
 					const Icon = tool.icon;
 					return (
 						<Link
-							key={tool.path}
-							to={tool.path}
+							key={tool.slug}
+							to={`/${tool.slug}`}
+							onPointerEnter={() => void tool.page.preload().catch(() => {})}
+							onFocus={() => void tool.page.preload().catch(() => {})}
 							className="group flex min-h-72 flex-col border border-ink/20 bg-white p-6 transition hover:-translate-y-1 hover:border-primary hover:shadow-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
 						>
 							<div className="flex items-start justify-between">

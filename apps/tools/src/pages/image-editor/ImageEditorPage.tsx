@@ -204,9 +204,6 @@ export function ImageEditorPage() {
 				)
 			: null;
 
-	useEffect(() => {
-		document.title = `${t.title} | Boy Boni Panjaitan`;
-	}, [t.title]);
 	useEffect(
 		() => () => {
 			loadingIdRef.current += 1;

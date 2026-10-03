@@ -63,9 +63,6 @@ function fileToDataUrl(file: File): Promise<string> {
 export function PdfEditorPage() {
 	const { t: common } = useToolsLocale();
 	const t = usePdfTranslations();
-	useEffect(() => {
-		document.title = `${t.pdfTitle} | Boy Boni Panjaitan`;
-	}, [t.pdfTitle]);
 	const [sources, setSources] = useState<SourceDocument[]>([]);
 	const sourcesRef = useRef<SourceDocument[]>([]);
 	const [pages, setPages] = useState<EditorPage[]>([]);

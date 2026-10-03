@@ -75,10 +75,6 @@ export function QrCodeGeneratorPage() {
 	};
 
 	useEffect(() => {
-		document.title = `${t.title} | Boy Boni Panjaitan`;
-	}, [t.title]);
-
-	useEffect(() => {
 		if (!design || !canvasRef.current) return;
 		setPreviewError(false);
 		try {

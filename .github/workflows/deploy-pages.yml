@@ -34,7 +34,9 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Install Chrome for prerendering
-        run: pnpm --filter @portfolio/home exec puppeteer browsers install chrome
+        run: |
+          pnpm --filter @portfolio/home exec puppeteer browsers install chrome
+          pnpm --filter @portfolio/tools exec puppeteer browsers install chrome
 
       - name: Authenticate for Pages prerender
         uses: google-github-actions/auth@v3
@@ -52,7 +54,7 @@ jobs:
           VITE_FIREBASE_APP_ID: ${{ secrets.VITE_FIREBASE_APP_ID }}
           VITE_FIREBASE_APPCHECK_SITE_KEY: ${{ secrets.VITE_FIREBASE_APPCHECK_SITE_KEY }}
         run: |
-          pnpm --filter @portfolio/tools build
+          pnpm --filter @portfolio/tools build:pages
           pnpm --filter @portfolio/admin build
           pnpm --filter @portfolio/home build:pages
 
@@ -65,6 +67,9 @@ jobs:
           test -f site/index.html
           test -f site/404.html
           test -f site/tools/index.html
+          test -f site/tools/pdf-editor.html
+          test -f site/tools/og/pdf-editor.png
+          test -f site/tools/sitemap.xml
           test -f site/admin/index.html
           test -f site/notes/index.html
           test -f site/sitemap.xml

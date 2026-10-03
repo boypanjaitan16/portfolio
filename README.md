@@ -47,13 +47,15 @@ To test the rules with the emulator:
 firebase emulators:exec --project demo-portfolio --only firestore,storage 'pnpm --filter @portfolio/admin test:rules'
 ```
 
-For the full HTML, sitemap, fallback URL, and Pages artifact smoke test, run `pnpm --filter @portfolio/home exec puppeteer browsers install chrome` followed by `pnpm test:pages:smoke`.
+For the full HTML, sitemap, fallback URL, and Pages artifact smoke test, run `pnpm --filter @portfolio/home exec puppeteer browsers install chrome` (the tools app uses the same Puppeteer Chrome) followed by `pnpm test:pages:smoke`.
 
 The latest Firebase CLI requires JDK 21. If the machine still uses JDK 17, use `pnpm dlx firebase-tools@14.22.0` instead of `firebase` for that test command.
 
 ## Public tools
 
 The tools landing page at `/tools/` lists public tools in a responsive grid. See the [tools app README](apps/tools/README.md) for its structure, development conventions, and current tool behavior.
+
+The Pages workflow builds tools with `pnpm --filter @portfolio/tools build:pages`, which prerenders the landing, tool, and legal pages to `apps/tools/dist/<slug>.html`, generates Open Graph images in `dist/og/`, and writes `/tools/sitemap.xml`. GitHub Pages serves `/tools/<slug>` from `<slug>.html` without a trailing-slash redirect. Unknown `/tools/` URLs still use the root `404.html` fallback. `robots.txt` lists both sitemaps.
 
 ## Articles and GitHub Pages
 

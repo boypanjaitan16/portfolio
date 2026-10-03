@@ -1,3 +1,4 @@
+import type { ToolSeoCopy } from "../../toolSeo";
 import { type Locale, useToolsLocale } from "../../toolsLocale";
 
 const en = {
@@ -86,3 +87,79 @@ export const colorPickerCard = {
 export function useColorPickerTranslations() {
 	return colorPickerTranslations[useToolsLocale().locale];
 }
+
+export const colorPickerSeo = {
+	en: {
+		metaTitle: "Image Color Picker – Get HEX & RGB Colors from an Image",
+		metaDescription:
+			"Upload a PNG, JPEG, or WebP image and pick any pixel to get its HEX, RGB, and opacity values. Free, instant, and your image stays in your browser.",
+		about: [
+			"The Image Color Picker reads the exact color of any pixel in an image. Hover or move your finger over the image to preview a color, then click or release to select it and copy its HEX or RGB value.",
+			"The image is opened locally in your browser and never uploaded. Fully transparent pixels show their opacity without a HEX or RGB value.",
+		],
+		features: [
+			"Pick colors from PNG, JPEG, and WebP images",
+			"Live preview while hovering or touching",
+			"Copy HEX and RGB values in one click",
+			"Shows pixel opacity for transparent images",
+			"Works with mouse and touch",
+			"No upload: the image stays on your device",
+		],
+		steps: [
+			"Open an image.",
+			"Hover over or touch the image to preview colors.",
+			"Click to select a color and copy its HEX or RGB value.",
+		],
+		faq: [
+			{
+				question: "Can it pick colors from elsewhere on my screen?",
+				answer: "No. It reads pixels only from the image you open in the tool.",
+			},
+			{
+				question: "Does it extract a color palette?",
+				answer: "No. It selects one pixel at a time.",
+			},
+			{
+				question: "Is my image uploaded?",
+				answer: "No. The image is read in your browser only.",
+			},
+		],
+	},
+	id: {
+		metaTitle: "Pemilih Warna Gambar – Ambil Warna HEX & RGB dari Gambar",
+		metaDescription:
+			"Unggah gambar PNG, JPEG, atau WebP lalu pilih piksel mana pun untuk mendapatkan nilai HEX, RGB, dan opasitas. Gratis, instan, dan gambar tetap di browser.",
+		about: [
+			"Pemilih Warna Gambar membaca warna tepat dari piksel mana pun pada gambar. Arahkan kursor atau jari di atas gambar untuk melihat pratinjau warna, lalu klik atau lepaskan untuk memilihnya dan menyalin nilai HEX atau RGB.",
+			"Gambar dibuka secara lokal di browser dan tidak pernah diunggah. Piksel yang sepenuhnya transparan hanya menampilkan opasitasnya tanpa nilai HEX atau RGB.",
+		],
+		features: [
+			"Ambil warna dari gambar PNG, JPEG, dan WebP",
+			"Pratinjau langsung saat diarahkan atau disentuh",
+			"Salin nilai HEX dan RGB dengan satu klik",
+			"Menampilkan opasitas piksel pada gambar transparan",
+			"Mendukung mouse dan layar sentuh",
+			"Tanpa unggah: gambar tetap di perangkat Anda",
+		],
+		steps: [
+			"Buka sebuah gambar.",
+			"Arahkan kursor atau sentuh gambar untuk melihat warna.",
+			"Klik untuk memilih warna lalu salin nilai HEX atau RGB.",
+		],
+		faq: [
+			{
+				question: "Bisakah mengambil warna dari bagian lain layar?",
+				answer:
+					"Tidak. Tool ini hanya membaca piksel dari gambar yang Anda buka.",
+			},
+			{
+				question: "Apakah tool ini membuat palet warna?",
+				answer: "Tidak. Tool ini memilih satu piksel setiap kali.",
+			},
+			{
+				question: "Apakah gambar saya diunggah?",
+				answer: "Tidak. Gambar hanya dibaca di browser Anda.",
+			},
+		],
+	},
+} satisfies ToolSeoCopy;

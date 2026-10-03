@@ -1,3 +1,4 @@
+import type { ToolSeoCopy } from "../../toolSeo";
 import { type Locale, useToolsLocale } from "../../toolsLocale";
 
 const en = {
@@ -100,3 +101,83 @@ export const qrCodeCard = {
 export function useQrCodeTranslations() {
 	return qrCodeTranslations[useToolsLocale().locale];
 }
+
+export const qrCodeSeo = {
+	en: {
+		metaTitle: "Free QR Code Generator with Logo – PNG & SVG Download",
+		metaDescription:
+			"Create a QR code from text or a URL, choose colors and dot styles, add a center logo, and download PNG or SVG. Free, no sign-up, made in your browser.",
+		about: [
+			"The QR Code Generator turns any text or URL into a QR code that updates as you type. Choose the foreground and background colors, pick square, rounded, or dot modules, and download a PNG from 256 to 2048 px or a scalable SVG.",
+			"You can add a PNG, JPEG, or WebP logo to the center. The tool raises error correction when a logo is added, warns about low-contrast colors, and blocks downloads when the content no longer fits.",
+		],
+		features: [
+			"Text or URL encoded exactly as typed",
+			"Custom colors and square, rounded, or dot styles",
+			"Optional center logo sized from 10% to 25%",
+			"PNG (256–2048 px) and self-contained SVG downloads",
+			"Contrast warning for hard-to-scan colors",
+			"Generated locally with no upload",
+		],
+		steps: [
+			"Enter text or paste a URL.",
+			"Choose colors, a style, and an optional logo.",
+			"Download the QR code as PNG or SVG and test it before sharing.",
+		],
+		faq: [
+			{
+				question: "Do the QR codes expire?",
+				answer:
+					"No. The QR code contains your content directly, with no redirect service, so it works as long as the content is valid.",
+			},
+			{
+				question: "Will a logo affect scanning?",
+				answer:
+					"It can. The tool uses high error correction with a logo and keeps the functional patterns square, but test decorative codes before sharing them.",
+			},
+			{
+				question: "Is my content sent to a server?",
+				answer:
+					"No. The QR code and its downloads are created in your browser.",
+			},
+		],
+	},
+	id: {
+		metaTitle: "Pembuat Kode QR Gratis dengan Logo – Unduh PNG & SVG",
+		metaDescription:
+			"Buat kode QR dari teks atau URL, pilih warna dan gaya titik, tambahkan logo di tengah, lalu unduh PNG atau SVG. Gratis, tanpa daftar, dibuat di browser.",
+		about: [
+			"Pembuat Kode QR mengubah teks atau URL apa pun menjadi kode QR yang langsung diperbarui saat Anda mengetik. Pilih warna depan dan latar, gaya modul kotak, membulat, atau titik, lalu unduh PNG 256 hingga 2048 px atau SVG.",
+			"Anda dapat menambahkan logo PNG, JPEG, atau WebP di tengah. Tool ini menaikkan koreksi kesalahan saat logo ditambahkan, memperingatkan warna dengan kontras rendah, dan menolak unduhan jika konten tidak lagi muat.",
+		],
+		features: [
+			"Teks atau URL disimpan persis seperti yang diketik",
+			"Warna khusus serta gaya kotak, membulat, atau titik",
+			"Logo tengah opsional berukuran 10% hingga 25%",
+			"Unduh PNG (256–2048 px) dan SVG mandiri",
+			"Peringatan kontras untuk warna yang sulit dipindai",
+			"Dibuat secara lokal tanpa unggah",
+		],
+		steps: [
+			"Masukkan teks atau tempel URL.",
+			"Pilih warna, gaya, dan logo opsional.",
+			"Unduh kode QR sebagai PNG atau SVG dan uji sebelum dibagikan.",
+		],
+		faq: [
+			{
+				question: "Apakah kode QR bisa kedaluwarsa?",
+				answer:
+					"Tidak. Kode QR berisi konten Anda secara langsung tanpa layanan pengalihan, sehingga tetap berfungsi selama kontennya valid.",
+			},
+			{
+				question: "Apakah logo memengaruhi pemindaian?",
+				answer:
+					"Bisa. Tool ini memakai koreksi kesalahan tinggi saat ada logo dan menjaga pola fungsional tetap kotak, tetapi uji kode QR dekoratif sebelum dibagikan.",
+			},
+			{
+				question: "Apakah konten saya dikirim ke server?",
+				answer: "Tidak. Kode QR dan unduhannya dibuat di browser Anda.",
+			},
+		],
+	},
+} satisfies ToolSeoCopy;

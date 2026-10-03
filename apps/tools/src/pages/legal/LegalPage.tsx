@@ -1,5 +1,6 @@
-import { type ReactNode, useEffect } from "react";
+import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
+import { ogImageUrl, PageMeta } from "../../components/PageMeta";
 import { useToolsLocale } from "../../toolsLocale";
 import { legalCopy } from "./locale";
 
@@ -34,12 +35,13 @@ export function LegalPage({ kind }: { kind: LegalKind }) {
 	const { locale } = useToolsLocale();
 	const copy = legalCopy[locale];
 	const page = copy[kind];
-	useEffect(() => {
-		document.title = `${page.title} | Boy's Tools`;
-	}, [page.title]);
-
 	return (
 		<main className="mx-auto w-full max-w-7xl px-5 pb-20 pt-12 md:px-10 md:pb-28 md:pt-20">
+			<PageMeta
+				title={`${page.title} | Boy's Tools`}
+				description={page.intro}
+				image={ogImageUrl("tools")}
+			/>
 			<div className="max-w-3xl">
 				<h1 className="mt-4 font-display text-5xl font-semibold leading-tight tracking-tight sm:text-6xl">
 					{page.title}

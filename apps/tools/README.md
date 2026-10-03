@@ -2,13 +2,38 @@
 
 The public tools app is served at `/tools/`. For monorepo setup and GitHub Pages prerequisites, see the [root README](../../README.md).
 
-## Structure and adding a tool
+## Structure
 
 - `src/App.tsx` wires the locale provider and routes. `src/components/ToolsLayout.tsx` owns the shared header, route outlet, and footer. `src/pages/ToolsPage.tsx` owns the responsive tool grid; `src/pages/NotFoundPage.tsx` handles unknown routes.
+- `src/toolCatalog.ts` is the single list of tools. Each entry has the route slug, the lucide icon shown on its landing card, card copy, SEO copy, and a lazy page loader. Routes, landing cards, About sections, meta tags, prerendered HTML, OG images, and the tools sitemap are all generated from it.
+- Every tool page is lazy-loaded through `lazyPage` (`src/lazyPage.ts`). Only the landing, legal, and not-found pages are bundled eagerly. `src/main.tsx` preloads the current tool before the first render so prerendered HTML is not replaced by the loading fallback. The landing cards preload a tool on hover or focus. The test setup preloads every tool so tests can render routes synchronously.
+- `src/components/ToolRoute.tsx` renders a tool page with `PageMeta` (title, description, canonical, Open Graph/Twitter tags, and `WebApplication` + `FAQPage` JSON-LD) and `ToolAbout` (the visible About, features, how-to, and FAQ section below the tool). Canonical URLs always use `https://boypanjaitan.com/tools`, without a trailing slash.
 - Put each tool's page, translations, model, services, assets, and tests in `src/pages/<route-slug>/`. The PDF Editor is the example at `src/pages/pdf-editor/`.
 - `src/shared/imageFiles.ts` holds image helpers used by more than one tool: accepted types and limits, output formats and names, Canvas encoding with unsupported-format detection, and downloads. `src/components/NumberField.tsx` is the shared number input. `src/shared/clipboard.ts` and `src/shared/download.ts` hold the copy and download helpers. Move code there only when a second tool needs it.
-- Tools with large dependencies are lazy-loaded with `React.lazy` in `App.tsx` so they stay out of the main chunk; the Data Formatter is the example.
-- To add a tool, create its folder, register its route in `App.tsx`, and add a card in `ToolsPage.tsx`. Keep the card's name and description in that tool's translation module. Cover navigation, direct access, and both languages in tests.
+
+## Adding a tool
+
+Every new tool must complete all of these steps:
+
+1. Create `src/pages/<slug>/` with the page component, `locale.ts`, and tests. Do not set `document.title` in the page; `ToolRoute` owns the meta tags.
+2. In `locale.ts`, export `<tool>Card` (`name`, `description`) and `<tool>Seo` (`satisfies ToolSeoCopy` from `src/toolSeo.ts`) in EN and ID. Write the SEO copy from the tool's real behavior and limits. Do not claim features the tool does not have.
+   - `metaTitle`: a search-friendly title with the main keywords, without the site suffix.
+   - `metaDescription`: 110–170 characters. `src/toolCatalog.test.tsx` enforces this range.
+   - `about`: 1–2 paragraphs. `features`: at least 4 bullets. `steps`: exactly 3. `faq`: at least 3 Q&A pairs covering privacy, limits, and supported formats.
+3. Register the tool in `src/toolCatalog.ts` with its slug, the lucide icon for its landing card (the OG image uses the same icon), card, SEO copy, and `lazyPage(() => import("./pages/<slug>/<Page>"), "<Page>")`. Never import a tool page statically.
+4. In `scripts/test-pages-smoke.sh`, add the slug to the 404 redirect cases and to the prerender loop.
+5. Add a section for the tool to this README. Cover navigation, direct access, and both languages in tests; `src/toolCatalog.test.tsx` covers the About section and meta tags for every catalog entry automatically.
+6. Run `pnpm --filter @portfolio/tools build:pages`. Check `dist/<slug>.html` for the content and meta tags, and view `dist/og/<slug>.png`.
+
+## Prerender and Open Graph images
+
+`pnpm --filter @portfolio/tools build:pages` runs the normal build and then `scripts/prerender.mjs`. The script loads `src/toolCatalog.ts` through Vite, so it never duplicates the tool list. It then:
+
+- renders each tool's card icon with `react-dom/server` and screenshots a 1200×630 template (icon tile, English name and card description, theme colors, and fonts from `@portfolio/config` and Fontsource) to `dist/og/<slug>.png`, plus `dist/og/tools.png` for the landing page. The build fails if a title or description overflows the image.
+- serves `dist` at `/tools/`, opens each page in Chrome with the English locale, and waits for `main h1`, the About section on tool pages, and the expected canonical link. It writes `dist/index.html` for the landing page and `dist/<slug>.html` for the others.
+- writes `dist/sitemap.xml` with every prerendered URL.
+
+The script needs Chrome from Puppeteer: `pnpm --filter @portfolio/tools exec puppeteer browsers install chrome`. Plain `build` does not prerender, so CI checks do not need Chrome.
 
 ## Shared contracts
 
@@ -58,7 +83,7 @@ Compression runs only when the user presses Compress, one image at a time; chang
 
 ## Data Formatter & Converter
 
-`/tools/data-formatter` has two tabs whose input is kept while switching. Both use CodeMirror 6 editors with line numbers, folding, search, and error markers; Tab is left to the browser so keyboard users can leave an editor. The page is lazy-loaded, so CodeMirror and the `yaml` package download only when the tool opens. Text can be pasted, opened from a file up to 5 MB, or dropped on an editor. Nothing is saved.
+`/tools/data-formatter` has two tabs whose input is kept while switching. Both use CodeMirror 6 editors with line numbers, folding, search, and error markers; Tab is left to the browser so keyboard users can leave an editor. Like every tool, the page is lazy-loaded, so CodeMirror and the `yaml` package download only when the tool opens. Text can be pasted, opened from a file up to 5 MB, or dropped on an editor. Nothing is saved.
 
 **Format & validate** tidies and checks data without changing its format. It auto-detects JSON, YAML, or XML from the file extension or first character, or uses the chosen format, and validates 300 ms after typing stops. Errors show the line and column in the status and editor.
 - JSON uses the tool's own strict RFC 8259 scanner (`jsonFormat.ts`), so its errors are localized and identical in every browser. Format and Minify re-print tokens, keeping number literals, escapes, key order, and duplicate keys exactly. Duplicate keys are listed as notes. Sort keys parses the value and warns when numbers would be rounded or become null; so do conversions.
@@ -82,4 +107,4 @@ pnpm --filter @portfolio/tools test
 pnpm --filter @portfolio/tools build
 ```
 
-When changing routes, the base path, built asset paths, or the Pages fallback, run `pnpm test:pages:smoke` as described in the root README. For PDF preview or export changes, verify an uploaded PDF and the downloaded result in a production build, including annotation placement and font loading.
+When changing routes, the base path, built asset paths, the Pages fallback, SEO copy, or `scripts/prerender.mjs`, also run `pnpm --filter @portfolio/tools build:pages` and `pnpm test:pages:smoke` as described in the root README. For PDF preview or export changes, verify an uploaded PDF and the downloaded result in a production build, including annotation placement and font loading.

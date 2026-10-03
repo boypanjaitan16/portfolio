@@ -60,9 +60,6 @@ export function ImageToPdfPage() {
 	const nextIdRef = useRef(1);
 	itemsRef.current = items;
 
-	useEffect(() => {
-		document.title = `${t.title} | Boy Boni Panjaitan`;
-	}, [t.title]);
 	useEffect(
 		() => () => {
 			runIdRef.current += 1;

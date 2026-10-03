@@ -1,3 +1,4 @@
+import type { ToolSeoCopy } from "../../toolSeo";
 import { type Locale, useToolsLocale } from "../../toolsLocale";
 
 const en = {
@@ -158,3 +159,84 @@ export const imageCompressorCard = {
 export function useImageCompressorTranslations() {
 	return imageCompressorTranslations[useToolsLocale().locale];
 }
+
+export const imageCompressorSeo = {
+	en: {
+		metaTitle: "Image Compressor & Converter – Compress, Resize & Convert",
+		metaDescription:
+			"Compress, resize, and convert up to 30 PNG, JPEG, or WebP images, set a target size in KB, and download them as a ZIP. Free, private, and in your browser.",
+		about: [
+			"The Image Compressor & Converter shrinks up to 30 images with one set of settings. Keep the original format or convert to PNG, JPEG, or WebP, adjust quality, and resize by percentage, width and height, or longest side.",
+			"Set a maximum file size in KB for JPEG and WebP, and the tool searches for the best quality that fits. Each row compares the original and new sizes, and you can download images one by one or as a single ZIP.",
+		],
+		features: [
+			"Batch process up to 30 images at once",
+			"Convert between PNG, JPEG, and WebP",
+			"Resize by percentage, dimensions, or longest side",
+			"Target file size in KB for JPEG and WebP",
+			"Before and after size comparison",
+			"Download individually or as one ZIP",
+		],
+		steps: [
+			"Add your PNG, JPEG, or WebP images.",
+			"Choose the format, quality, size, and optional KB limit.",
+			"Press Compress and download the results.",
+		],
+		faq: [
+			{
+				question: "Are my images uploaded to a server?",
+				answer:
+					"No. Images are compressed one at a time in your browser and are not kept after the page closes.",
+			},
+			{
+				question: "Why is my PNG still large?",
+				answer:
+					"PNG compression is lossless, so only resizing makes it smaller. Convert to JPEG or WebP for smaller files.",
+			},
+			{
+				question: "Does compression remove metadata?",
+				answer:
+					"Yes. Results are drawn from decoded pixels, so EXIF and other metadata are not included.",
+			},
+		],
+	},
+	id: {
+		metaTitle: "Kompres & Konversi Gambar – Perkecil, Ubah Ukuran & Format",
+		metaDescription:
+			"Kompres, ubah ukuran, dan konversi hingga 30 gambar PNG, JPEG, atau WebP, atur target ukuran KB, lalu unduh sebagai ZIP. Gratis, privat, dan di browser.",
+		about: [
+			"Kompres & Konversi Gambar memperkecil hingga 30 gambar dengan satu pengaturan. Pertahankan format asli atau ubah ke PNG, JPEG, atau WebP, atur kualitas, dan ubah ukuran berdasarkan persentase, lebar dan tinggi, atau sisi terpanjang.",
+			"Tetapkan ukuran file maksimum dalam KB untuk JPEG dan WebP, lalu tool mencari kualitas terbaik yang muat. Setiap baris membandingkan ukuran asli dan hasil, dan Anda dapat mengunduh satu per satu atau sebagai satu ZIP.",
+		],
+		features: [
+			"Proses hingga 30 gambar sekaligus",
+			"Konversi antara PNG, JPEG, dan WebP",
+			"Ubah ukuran berdasarkan persentase, dimensi, atau sisi terpanjang",
+			"Target ukuran file dalam KB untuk JPEG dan WebP",
+			"Perbandingan ukuran sebelum dan sesudah",
+			"Unduh satu per satu atau sebagai satu ZIP",
+		],
+		steps: [
+			"Tambahkan gambar PNG, JPEG, atau WebP.",
+			"Pilih format, kualitas, ukuran, dan batas KB opsional.",
+			"Tekan Kompres lalu unduh hasilnya.",
+		],
+		faq: [
+			{
+				question: "Apakah gambar saya diunggah ke server?",
+				answer:
+					"Tidak. Gambar dikompres satu per satu di browser Anda dan tidak disimpan setelah halaman ditutup.",
+			},
+			{
+				question: "Mengapa PNG saya masih besar?",
+				answer:
+					"PNG bersifat lossless, jadi hanya perubahan ukuran yang membuatnya lebih kecil. Ubah ke JPEG atau WebP untuk file yang lebih kecil.",
+			},
+			{
+				question: "Apakah kompresi menghapus metadata?",
+				answer:
+					"Ya. Hasil digambar dari piksel yang sudah dibaca, sehingga EXIF dan metadata lain tidak disertakan.",
+			},
+		],
+	},
+} satisfies ToolSeoCopy;

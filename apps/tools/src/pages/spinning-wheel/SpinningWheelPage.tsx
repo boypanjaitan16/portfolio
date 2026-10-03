@@ -275,10 +275,6 @@ export function SpinningWheelPage() {
 	const restoreFocus = useRef(false);
 
 	useEffect(() => {
-		document.title = `${t.title} | Boy Boni Panjaitan`;
-	}, [t.title]);
-
-	useEffect(() => {
 		try {
 			window.localStorage.setItem(wheelStorageKey, JSON.stringify(items));
 		} catch {

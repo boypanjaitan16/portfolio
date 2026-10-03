@@ -1,3 +1,4 @@
+import type { ToolSeoCopy } from "../../toolSeo";
 import { type Locale, useToolsLocale } from "../../toolsLocale";
 
 const en = {
@@ -177,3 +178,84 @@ export const dataFormatterCard = {
 export function useDataFormatterTranslations() {
 	return dataFormatterTranslations[useToolsLocale().locale];
 }
+
+export const dataFormatterSeo = {
+	en: {
+		metaTitle: "JSON, YAML & XML Formatter and CSV ↔ JSON Converter",
+		metaDescription:
+			"Format, validate, and minify JSON, YAML, and XML with line-precise errors, and convert CSV to JSON, JSON to CSV, or JSON to YAML. Free and in your browser.",
+		about: [
+			"The Data Formatter & Converter tidies and checks JSON, YAML, and XML in a code editor with line numbers, folding, and search. Format type is detected automatically, and errors point to the exact line and column.",
+			"The Convert tab turns CSV into JSON, JSON into CSV, JSON into YAML, and YAML into JSON as you type. Paste text, open a file up to 5 MB, or drop it on the editor. Nothing is saved or uploaded.",
+		],
+		features: [
+			"Format, minify, and validate JSON, YAML, and XML",
+			"Errors with exact line and column",
+			"JSON key sorting and duplicate-key notes",
+			"CSV ↔ JSON with delimiter and type detection",
+			"JSON ↔ YAML conversion, including multi-document YAML",
+			"Runs locally with no upload",
+		],
+		steps: [
+			"Paste your data, open a file, or drop it on the editor.",
+			"Format, minify, or choose a conversion direction.",
+			"Copy or download the result.",
+		],
+		faq: [
+			{
+				question: "Is my data sent to a server?",
+				answer:
+					"No. Formatting, validation, and conversion run in your browser, and nothing is saved.",
+			},
+			{
+				question: "Can it convert XML to JSON?",
+				answer:
+					"No. XML can be formatted and validated, but there is no single standard mapping from XML to other formats.",
+			},
+			{
+				question: "Will large numbers lose precision?",
+				answer:
+					"Formatting and minifying keep number literals exactly. Sorting keys and conversions warn you when a number would be rounded.",
+			},
+		],
+	},
+	id: {
+		metaTitle: "Formatter JSON, YAML & XML serta Konverter CSV ↔ JSON",
+		metaDescription:
+			"Rapikan, validasi, dan perkecil JSON, YAML, serta XML dengan galat per baris, dan ubah CSV ke JSON, JSON ke CSV, atau JSON ke YAML. Gratis dan di browser.",
+		about: [
+			"Format & Konversi Data merapikan dan memeriksa JSON, YAML, dan XML di editor kode dengan nomor baris, lipatan, dan pencarian. Jenis format terdeteksi otomatis, dan galat menunjukkan baris serta kolom yang tepat.",
+			"Tab Konversi mengubah CSV ke JSON, JSON ke CSV, JSON ke YAML, dan YAML ke JSON saat Anda mengetik. Tempel teks, buka file hingga 5 MB, atau seret ke editor. Tidak ada yang disimpan atau diunggah.",
+		],
+		features: [
+			"Rapikan, perkecil, dan validasi JSON, YAML, dan XML",
+			"Galat dengan baris dan kolom yang tepat",
+			"Pengurutan kunci JSON dan catatan kunci ganda",
+			"CSV ↔ JSON dengan deteksi pemisah dan tipe data",
+			"Konversi JSON ↔ YAML, termasuk YAML multi-dokumen",
+			"Berjalan lokal tanpa unggah",
+		],
+		steps: [
+			"Tempel data, buka file, atau seret ke editor.",
+			"Rapikan, perkecil, atau pilih arah konversi.",
+			"Salin atau unduh hasilnya.",
+		],
+		faq: [
+			{
+				question: "Apakah data saya dikirim ke server?",
+				answer:
+					"Tidak. Perapian, validasi, dan konversi berjalan di browser Anda, dan tidak ada yang disimpan.",
+			},
+			{
+				question: "Bisakah mengubah XML ke JSON?",
+				answer:
+					"Tidak. XML dapat dirapikan dan divalidasi, tetapi tidak ada satu pemetaan standar dari XML ke format lain.",
+			},
+			{
+				question: "Apakah angka besar kehilangan presisi?",
+				answer:
+					"Perapian dan perkecilan mempertahankan angka persis. Pengurutan kunci dan konversi memberi peringatan jika angka akan dibulatkan.",
+			},
+		],
+	},
+} satisfies ToolSeoCopy;

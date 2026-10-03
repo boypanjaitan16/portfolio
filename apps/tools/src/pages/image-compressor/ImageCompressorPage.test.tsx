@@ -133,10 +133,14 @@ it("adds valid images and lists the skipped files", () => {
 	expect(screen.getByRole("alert")).toHaveTextContent(
 		"Skipped c.gif, huge.png.",
 	);
-	expect(screen.getAllByRole("listitem")).toHaveLength(2);
+	expect(
+		within(screen.getByRole("main")).getAllByRole("listitem"),
+	).toHaveLength(2);
 	expect(screen.getByText("2 of 30")).toBeInTheDocument();
 	fireEvent.click(screen.getByRole("button", { name: "Remove b.png" }));
-	expect(screen.getAllByRole("listitem")).toHaveLength(1);
+	expect(
+		within(screen.getByRole("main")).getAllByRole("listitem"),
+	).toHaveLength(1);
 });
 
 it("compresses every image, downloads each one, and zips them", async () => {

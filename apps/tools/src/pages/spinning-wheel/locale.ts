@@ -1,3 +1,4 @@
+import type { ToolSeoCopy } from "../../toolSeo";
 import { type Locale, useToolsLocale } from "../../toolsLocale";
 
 const en = {
@@ -90,3 +91,84 @@ export const spinningWheelCard = {
 export function useSpinningWheelTranslations() {
 	return spinningWheelTranslations[useToolsLocale().locale];
 }
+
+export const spinningWheelSeo = {
+	en: {
+		metaTitle: "Spinning Wheel – Random Name Picker Online",
+		metaDescription:
+			"Spin a wheel to pick a random name or item. Add items one by one or in bulk, choose colors, and remove winners. Free, no account, saved in your browser.",
+		about: [
+			"The Spinning Wheel picks one item at a time from your own list. Every item gets an equal slice, so each spin is fair. The winner appears in a confetti dialog, and you decide whether to remove it before the next spin.",
+			"Add items individually or paste one per line, rename them, and choose each slice's color. Your list is saved in this browser's local storage, with no account or server involved.",
+		],
+		features: [
+			"Equal-sized slices for a fair random draw",
+			"Add items one by one or one per line",
+			"Edit names and choose each slice's color",
+			"Confetti result with optional winner removal",
+			"List saved in your browser between visits",
+			"No sign-up and no server",
+		],
+		steps: [
+			"Add the names or items you want to draw from.",
+			"Spin the wheel.",
+			"Keep or remove the winner and spin again.",
+		],
+		faq: [
+			{
+				question: "Is the result random?",
+				answer:
+					"Yes. Every remaining item has one equal-sized slice and the same chance of being picked.",
+			},
+			{
+				question: "Is my list saved?",
+				answer:
+					"Yes, in this browser's local storage only. It is not sent anywhere, and winner history is not kept.",
+			},
+			{
+				question: "Can two items have the same name?",
+				answer:
+					"No. Names must be unique, ignoring extra spaces and letter case.",
+			},
+		],
+	},
+	id: {
+		metaTitle: "Roda Undian – Pengundi Nama Acak Online",
+		metaDescription:
+			"Putar roda untuk memilih nama atau item secara acak. Tambahkan item satu per satu atau sekaligus, pilih warna, dan hapus pemenang. Gratis, tersimpan di browser.",
+		about: [
+			"Roda Undian memilih satu item setiap kali dari daftar Anda sendiri. Setiap item mendapat potongan yang sama besar, sehingga setiap putaran adil. Pemenang tampil dalam dialog konfeti, dan Anda memutuskan apakah item itu dihapus sebelum putaran berikutnya.",
+			"Tambahkan item satu per satu atau tempel satu item per baris, ubah namanya, dan pilih warna setiap potongan. Daftar disimpan di penyimpanan lokal browser ini, tanpa akun atau server.",
+		],
+		features: [
+			"Potongan berukuran sama untuk undian yang adil",
+			"Tambahkan item satu per satu atau satu per baris",
+			"Ubah nama dan pilih warna setiap potongan",
+			"Hasil dengan konfeti dan opsi menghapus pemenang",
+			"Daftar tersimpan di browser untuk kunjungan berikutnya",
+			"Tanpa daftar akun dan tanpa server",
+		],
+		steps: [
+			"Tambahkan nama atau item yang ingin diundi.",
+			"Putar rodanya.",
+			"Simpan atau hapus pemenang, lalu putar lagi.",
+		],
+		faq: [
+			{
+				question: "Apakah hasilnya acak?",
+				answer:
+					"Ya. Setiap item yang tersisa memiliki satu potongan berukuran sama dan peluang yang sama untuk terpilih.",
+			},
+			{
+				question: "Apakah daftar saya disimpan?",
+				answer:
+					"Ya, hanya di penyimpanan lokal browser ini. Daftar tidak dikirim ke mana pun dan riwayat pemenang tidak disimpan.",
+			},
+			{
+				question: "Bisakah dua item memiliki nama yang sama?",
+				answer:
+					"Tidak. Nama harus unik, tanpa memperhatikan spasi tambahan dan huruf besar-kecil.",
+			},
+		],
+	},
+} satisfies ToolSeoCopy;

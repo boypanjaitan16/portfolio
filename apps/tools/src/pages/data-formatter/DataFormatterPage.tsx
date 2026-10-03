@@ -1,5 +1,5 @@
 import { ArrowLeft } from "lucide-react";
-import { type KeyboardEvent, useEffect, useRef, useState } from "react";
+import { type KeyboardEvent, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useToolsLocale } from "../../toolsLocale";
 import { ConvertPanel } from "./ConvertPanel";
@@ -22,10 +22,6 @@ export function DataFormatterPage() {
 		format: t.tabFormat,
 		convert: t.tabConvert,
 	};
-
-	useEffect(() => {
-		document.title = `${t.title} | Boy Boni Panjaitan`;
-	}, [t.title]);
 
 	function handleTabKey(event: KeyboardEvent<HTMLButtonElement>) {
 		const index = tabs.indexOf(tab);

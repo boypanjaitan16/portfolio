@@ -24,6 +24,13 @@ const en = {
 	footerNavigation: "Legal pages",
 	privacyPolicy: "Privacy Policy",
 	termsOfService: "Terms of Service",
+	metaTitle: "Free Online Tools for PDFs, Images & Data",
+	metaDescription:
+		"Free browser-based tools for PDFs, images, QR codes, colors, and data. No sign-up and no upload: your files stay on your device.",
+	aboutTool: "About {name}",
+	toolFeatures: "Features",
+	howToUse: "How to use",
+	faq: "Frequently asked questions",
 };
 
 const id = {
@@ -41,9 +48,16 @@ const id = {
 	footerNavigation: "Halaman kebijakan",
 	privacyPolicy: "Kebijakan Privasi",
 	termsOfService: "Ketentuan Layanan",
+	metaTitle: "Tools Online Gratis untuk PDF, Gambar & Data",
+	metaDescription:
+		"Tools gratis berbasis browser untuk PDF, gambar, kode QR, warna, dan data. Tanpa daftar dan tanpa unggah: file tetap di perangkat Anda.",
+	aboutTool: "Tentang {name}",
+	toolFeatures: "Fitur",
+	howToUse: "Cara menggunakan",
+	faq: "Pertanyaan yang sering diajukan",
 } satisfies Record<keyof typeof en, string>;
 
-const translations = { en, id } satisfies Record<
+export const toolsTranslations = { en, id } satisfies Record<
 	Locale,
 	Record<keyof typeof en, string>
 >;
@@ -51,7 +65,7 @@ const translations = { en, id } satisfies Record<
 type LocaleContextValue = {
 	locale: Locale;
 	setLocale: (locale: Locale) => void;
-	t: (typeof translations)[Locale];
+	t: (typeof toolsTranslations)[Locale];
 };
 const LocaleContext = createContext<LocaleContextValue | null>(null);
 
@@ -78,7 +92,7 @@ export function LocaleProvider({ children }: { children: ReactNode }) {
 	}, [locale]);
 	return (
 		<LocaleContext.Provider
-			value={{ locale, setLocale, t: translations[locale] }}
+			value={{ locale, setLocale, t: toolsTranslations[locale] }}
 		>
 			{children}
 		</LocaleContext.Provider>

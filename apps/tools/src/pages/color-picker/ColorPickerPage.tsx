@@ -141,9 +141,6 @@ export function ColorPickerPage() {
 	const selectedRef = useRef<Pixel | null>(null);
 	const hoveredRef = useRef<Pixel | null>(null);
 
-	useEffect(() => {
-		document.title = `${t.title} | Boy Boni Panjaitan`;
-	}, [t.title]);
 	useEffect(
 		() => () => {
 			loadingIdRef.current += 1;

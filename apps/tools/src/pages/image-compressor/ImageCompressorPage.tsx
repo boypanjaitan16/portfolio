@@ -125,9 +125,6 @@ export function ImageCompressorPage() {
 		(item) => item.status === "done" || item.status === "error",
 	).length;
 
-	useEffect(() => {
-		document.title = `${t.title} | Boy Boni Panjaitan`;
-	}, [t.title]);
 	useEffect(
 		() => () => {
 			runIdRef.current += 1;

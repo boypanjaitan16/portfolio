@@ -1,3 +1,4 @@
+import type { ToolSeoCopy } from "../../toolSeo";
 import { type Locale, useToolsLocale } from "../../toolsLocale";
 
 const en = {
@@ -170,3 +171,84 @@ export const imageEditorCard = {
 export function useImageEditorTranslations() {
 	return imageEditorTranslations[useToolsLocale().locale];
 }
+
+export const imageEditorSeo = {
+	en: {
+		metaTitle: "Online Image Editor – Crop, Rotate, Flip & Remove Metadata",
+		metaDescription:
+			"Crop, rotate, flip, and straighten PNG, JPEG, or WebP images, view EXIF and GPS metadata, and download a clean copy. Free and private in your browser.",
+		about: [
+			"The Image Editor crops, rotates, flips, and straightens a PNG, JPEG, or WebP image. Drag or resize the crop, set it in pixels, or lock it to Free, Original, 1:1, 4:3, 3:2, or 16:9.",
+			"It also shows the metadata hidden in your image, such as camera, date, and GPS location. Downloads are redrawn from pixels, so they contain no identifying metadata, and the tool confirms this after export.",
+		],
+		features: [
+			"Rotate in 90° steps and straighten from -45° to 45°",
+			"Flip horizontally or vertically",
+			"Crop with handles, arrow keys, pixels, or fixed ratios",
+			"Inspect EXIF, GPS, XMP, IPTC, and ICC metadata",
+			"Export PNG, JPEG, or WebP with adjustable quality",
+			"Downloads are stripped of identifying metadata",
+		],
+		steps: [
+			"Open a PNG, JPEG, or WebP image.",
+			"Rotate, flip, straighten, and crop it.",
+			"Choose a format and quality, then download.",
+		],
+		faq: [
+			{
+				question: "Does the editor remove location data?",
+				answer:
+					"Yes. Exported images are redrawn from pixels, so EXIF data, including GPS location, is not copied, and the page checks the downloaded file.",
+			},
+			{
+				question: "Which files can I open?",
+				answer:
+					"PNG, JPEG, and WebP images up to 50 MB and 50 megapixels. HEIC and other formats are not supported.",
+			},
+			{
+				question: "Can it resize or apply filters?",
+				answer:
+					"No. Use the Image Compressor & Converter to resize. The editor focuses on cropping, rotation, and metadata.",
+			},
+		],
+	},
+	id: {
+		metaTitle: "Editor Gambar Online – Potong, Putar, Balik & Hapus Metadata",
+		metaDescription:
+			"Potong, putar, balik, dan luruskan gambar PNG, JPEG, atau WebP, lihat metadata EXIF dan GPS, lalu unduh salinan bersih. Gratis dan privat di browser.",
+		about: [
+			"Editor Gambar memotong, memutar, membalik, dan meluruskan gambar PNG, JPEG, atau WebP. Seret atau ubah ukuran area potong, atur dalam piksel, atau kunci ke rasio Bebas, Asli, 1:1, 4:3, 3:2, atau 16:9.",
+			"Tool ini juga menampilkan metadata tersembunyi di gambar, seperti kamera, tanggal, dan lokasi GPS. Unduhan digambar ulang dari piksel sehingga tidak berisi metadata identitas, dan tool memastikannya setelah ekspor.",
+		],
+		features: [
+			"Putar per 90° dan luruskan dari -45° hingga 45°",
+			"Balik secara horizontal atau vertikal",
+			"Potong dengan pegangan, tombol panah, piksel, atau rasio tetap",
+			"Periksa metadata EXIF, GPS, XMP, IPTC, dan ICC",
+			"Ekspor PNG, JPEG, atau WebP dengan kualitas yang dapat diatur",
+			"Unduhan bebas dari metadata identitas",
+		],
+		steps: [
+			"Buka gambar PNG, JPEG, atau WebP.",
+			"Putar, balik, luruskan, dan potong gambar.",
+			"Pilih format dan kualitas, lalu unduh.",
+		],
+		faq: [
+			{
+				question: "Apakah editor ini menghapus data lokasi?",
+				answer:
+					"Ya. Gambar hasil ekspor digambar ulang dari piksel, sehingga data EXIF termasuk lokasi GPS tidak ikut, dan halaman memeriksa file yang diunduh.",
+			},
+			{
+				question: "File apa saja yang bisa dibuka?",
+				answer:
+					"Gambar PNG, JPEG, dan WebP hingga 50 MB dan 50 megapiksel. HEIC dan format lain tidak didukung.",
+			},
+			{
+				question: "Bisakah mengubah ukuran atau menambahkan filter?",
+				answer:
+					"Tidak. Gunakan Kompres & Konversi Gambar untuk mengubah ukuran. Editor ini berfokus pada pemotongan, rotasi, dan metadata.",
+			},
+		],
+	},
+} satisfies ToolSeoCopy;
