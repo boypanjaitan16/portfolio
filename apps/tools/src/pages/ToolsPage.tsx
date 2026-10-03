@@ -3,6 +3,7 @@ import {
 	CircleDashed,
 	Crop,
 	FilePenLine,
+	Minimize2,
 	Pipette,
 	QrCode,
 } from "lucide-react";
@@ -10,6 +11,7 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useToolsLocale } from "../toolsLocale";
 import { colorPickerCard } from "./color-picker/locale";
+import { imageCompressorCard } from "./image-compressor/locale";
 import { imageEditorCard } from "./image-editor/locale";
 import { pdfToolCard } from "./pdf-editor/locale";
 import { qrCodeCard } from "./qr-code-generator/locale";
@@ -40,6 +42,11 @@ const tools = [
 		path: "/image-editor",
 		icon: Crop,
 		card: imageEditorCard,
+	},
+	{
+		path: "/image-compressor",
+		icon: Minimize2,
+		card: imageCompressorCard,
 	},
 ] as const;
 

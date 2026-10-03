@@ -1,9 +1,5 @@
-import {
-	ExportError,
-	exportFileName,
-	exportImage,
-	formatForFile,
-} from "./imageExport";
+import { ExportError } from "../../shared/imageFiles";
+import { exportImage } from "./imageExport";
 import { identityTransform } from "./imageTransformModel";
 
 let context: Record<string, unknown>;
@@ -79,14 +75,4 @@ it("rejects when the browser falls back to another format", async () => {
 			92,
 		),
 	).rejects.toEqual(new ExportError("formatUnsupported"));
-});
-
-it("chooses the default format and a download name", () => {
-	expect(formatForFile({ type: "image/webp", name: "a" })).toBe("image/webp");
-	expect(formatForFile({ type: "", name: "photo.JPEG" })).toBe("image/jpeg");
-	expect(formatForFile({ type: "", name: "scan" })).toBe("image/png");
-	expect(exportFileName("holiday.photo.jpeg", "image/jpeg")).toBe(
-		"holiday.photo-edited.jpg",
-	);
-	expect(exportFileName(".png", "image/webp")).toBe("image-edited.webp");
 });

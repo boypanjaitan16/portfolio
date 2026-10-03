@@ -194,6 +194,33 @@ it("opens the image editor from its card and directly with the saved locale", as
 	).toBeInTheDocument();
 });
 
+it("opens the image compressor from its card and directly with the saved locale", async () => {
+	const user = userEvent.setup();
+	const { unmount } = render(
+		<MemoryRouter initialEntries={["/"]}>
+			<App />
+		</MemoryRouter>,
+	);
+	const card = screen.getByRole("link", {
+		name: /Image Compressor & Converter/,
+	});
+	expect(card).toHaveAttribute("href", "/image-compressor");
+	await user.click(card);
+	expect(
+		screen.getByRole("heading", { name: "Image Compressor & Converter" }),
+	).toBeInTheDocument();
+	unmount();
+	window.localStorage.setItem("portfolio-locale", "id");
+	render(
+		<MemoryRouter initialEntries={["/image-compressor"]}>
+			<App />
+		</MemoryRouter>,
+	);
+	expect(
+		screen.getByRole("heading", { name: "Kompres & Konversi Gambar" }),
+	).toBeInTheDocument();
+});
+
 it("shows the legal links in the shared footer and navigates between both pages", async () => {
 	const user = userEvent.setup();
 	render(

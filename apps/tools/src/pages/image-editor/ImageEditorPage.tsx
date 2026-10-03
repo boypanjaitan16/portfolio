@@ -19,20 +19,26 @@ import {
 	useState,
 } from "react";
 import { Link } from "react-router-dom";
-import { useToolsLocale } from "../../toolsLocale";
-import { CropOverlay } from "./CropOverlay";
+import { NumberField } from "../../components/NumberField";
 import {
+	acceptsImage,
 	defaultQuality,
 	downloadBlob,
 	ExportError,
 	type ExportErrorCode,
 	type ExportFormat,
-	exportFileName,
 	exportFormats,
-	exportImage,
 	formatForFile,
+	formatLabels,
 	hasQuality,
-} from "./imageExport";
+	imageAccept,
+	maxImageFileBytes,
+	maxImagePixels,
+	outputFileName,
+} from "../../shared/imageFiles";
+import { useToolsLocale } from "../../toolsLocale";
+import { CropOverlay } from "./CropOverlay";
+import { exportImage } from "./imageExport";
 import {
 	type ImageMetadata,
 	identifyingBlocks,
@@ -70,25 +76,12 @@ type ErrorCode = "invalidFile" | "invalidImage" | "tooLarge" | ExportErrorCode;
 type DownloadStatus = { name: string; blocks: MetadataBlock[] };
 type ImageEditorText = ReturnType<typeof useImageEditorTranslations>;
 
-const acceptedTypes = new Set(["image/png", "image/jpeg", "image/webp"]);
-const maxFileBytes = 50 * 1024 * 1024;
-const maxPixels = 50_000_000;
-const formatLabels: Record<ExportFormat, string> = {
-	"image/png": "PNG",
-	"image/jpeg": "JPEG",
-	"image/webp": "WebP",
-};
 const cropFields: { field: CropField; label: keyof ImageEditorText }[] = [
 	{ field: "x", label: "cropX" },
 	{ field: "y", label: "cropY" },
 	{ field: "width", label: "cropWidth" },
 	{ field: "height", label: "cropHeight" },
 ];
-
-function acceptsImage(file: File): boolean {
-	if (file.type) return acceptedTypes.has(file.type);
-	return /\.(png|jpe?g|webp)$/i.test(file.name);
-}
 
 function fill(template: string, values: Record<string, string | number>) {
 	return template.replace(/\{(\w+)\}/g, (match, key: string) =>
@@ -100,45 +93,6 @@ function aspectLabel(preset: AspectPreset, t: ImageEditorText): string {
 	if (preset === "free") return t.aspect_free;
 	if (preset === "original") return t.aspect_original;
 	return preset;
-}
-
-/** A number input that lets users clear and retype without snapping back. */
-function NumberField({
-	label,
-	value,
-	min,
-	max,
-	step,
-	onCommit,
-}: {
-	label: string;
-	value: number;
-	min?: number;
-	max?: number;
-	step?: number;
-	onCommit: (value: number) => void;
-}) {
-	const [draft, setDraft] = useState<string | null>(null);
-	return (
-		<label className="tool-label">
-			{label}
-			<input
-				type="number"
-				inputMode="decimal"
-				className="tool-input font-mono"
-				value={draft ?? String(value)}
-				min={min}
-				max={max}
-				step={step}
-				onChange={(event) => {
-					setDraft(event.target.value);
-					const next = Number.parseFloat(event.target.value);
-					if (Number.isFinite(next)) onCommit(next);
-				}}
-				onBlur={() => setDraft(null)}
-			/>
-		</label>
-	);
 }
 
 function Panel({
@@ -320,7 +274,7 @@ export function ImageEditorPage() {
 			setError("invalidFile");
 			return;
 		}
-		if (file.size > maxFileBytes) {
+		if (file.size > maxImageFileBytes) {
 			setLoading(false);
 			setError("tooLarge");
 			return;
@@ -334,7 +288,7 @@ export function ImageEditorPage() {
 			});
 			if (loadingId !== loadingIdRef.current) return;
 			if (bitmap.width < 1 || bitmap.height < 1) throw new Error("size");
-			if (bitmap.width * bitmap.height > maxPixels) {
+			if (bitmap.width * bitmap.height > maxImagePixels) {
 				setError("tooLarge");
 				return;
 			}
@@ -403,7 +357,7 @@ export function ImageEditorPage() {
 				format,
 				quality,
 			);
-			const name = exportFileName(image.name, format);
+			const name = outputFileName(image.name, "edited", format);
 			downloadBlob(blob, name);
 			const check = readImageMetadata(await blob.arrayBuffer());
 			setStatus({
@@ -461,7 +415,7 @@ export function ImageEditorPage() {
 			<input
 				ref={inputRef}
 				type="file"
-				accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp"
+				accept={imageAccept}
 				aria-label={t.chooseImage}
 				className="sr-only"
 				onChange={(event) => {

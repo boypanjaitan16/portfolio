@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import { ToolsLayout } from "./components/ToolsLayout";
 import { ColorPickerPage } from "./pages/color-picker/ColorPickerPage";
+import { ImageCompressorPage } from "./pages/image-compressor/ImageCompressorPage";
 import { ImageEditorPage } from "./pages/image-editor/ImageEditorPage";
 import { LegalPage } from "./pages/legal/LegalPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
@@ -21,6 +22,7 @@ export default function App() {
 					<Route path="/qr-code-generator" element={<QrCodeGeneratorPage />} />
 					<Route path="/spinning-wheel" element={<SpinningWheelPage />} />
 					<Route path="/image-editor" element={<ImageEditorPage />} />
+					<Route path="/image-compressor" element={<ImageCompressorPage />} />
 					<Route
 						path="/privacy-policy"
 						element={<LegalPage kind="privacy" />}
