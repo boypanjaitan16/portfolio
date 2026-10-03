@@ -42,6 +42,7 @@ for (const [pathname, expected] of [
 	["/tools/spinning-wheel", "/tools/?__redirect=%2Ftools%2Fspinning-wheel"],
 	["/tools/image-editor", "/tools/?__redirect=%2Ftools%2Fimage-editor"],
 	["/tools/image-compressor", "/tools/?__redirect=%2Ftools%2Fimage-compressor"],
+	["/tools/data-formatter", "/tools/?__redirect=%2Ftools%2Fdata-formatter"],
 	["/tools/privacy-policy", "/tools/?__redirect=%2Ftools%2Fprivacy-policy"],
 	["/tools/terms-of-service", "/tools/?__redirect=%2Ftools%2Fterms-of-service"],
 	["/missing", "/?__redirect=%2Fmissing"],

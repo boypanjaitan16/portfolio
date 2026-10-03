@@ -11,10 +11,10 @@ import {
 import { type DragEvent, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { NumberField } from "../../components/NumberField";
+import { downloadBlob } from "../../shared/download";
 import {
 	acceptsImage,
 	defaultQuality,
-	downloadBlob,
 	exportFormats,
 	formatLabels,
 	hasQuality,

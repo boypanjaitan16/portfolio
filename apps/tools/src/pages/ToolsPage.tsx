@@ -1,5 +1,6 @@
 import {
 	ArrowUpRight,
+	Braces,
 	CircleDashed,
 	Crop,
 	FilePenLine,
@@ -11,6 +12,7 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useToolsLocale } from "../toolsLocale";
 import { colorPickerCard } from "./color-picker/locale";
+import { dataFormatterCard } from "./data-formatter/locale";
 import { imageCompressorCard } from "./image-compressor/locale";
 import { imageEditorCard } from "./image-editor/locale";
 import { pdfToolCard } from "./pdf-editor/locale";
@@ -47,6 +49,11 @@ const tools = [
 		path: "/image-compressor",
 		icon: Minimize2,
 		card: imageCompressorCard,
+	},
+	{
+		path: "/data-formatter",
+		icon: Braces,
+		card: dataFormatterCard,
 	},
 ] as const;
 

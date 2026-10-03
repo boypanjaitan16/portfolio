@@ -6,7 +6,8 @@ The public tools app is served at `/tools/`. For monorepo setup and GitHub Pages
 
 - `src/App.tsx` wires the locale provider and routes. `src/components/ToolsLayout.tsx` owns the shared header, route outlet, and footer. `src/pages/ToolsPage.tsx` owns the responsive tool grid; `src/pages/NotFoundPage.tsx` handles unknown routes.
 - Put each tool's page, translations, model, services, assets, and tests in `src/pages/<route-slug>/`. The PDF Editor is the example at `src/pages/pdf-editor/`.
-- `src/shared/imageFiles.ts` holds image helpers used by more than one tool: accepted types and limits, output formats and names, Canvas encoding with unsupported-format detection, and downloads. `src/components/NumberField.tsx` is the shared number input. Move code there only when a second tool needs it.
+- `src/shared/imageFiles.ts` holds image helpers used by more than one tool: accepted types and limits, output formats and names, Canvas encoding with unsupported-format detection, and downloads. `src/components/NumberField.tsx` is the shared number input. `src/shared/clipboard.ts` and `src/shared/download.ts` hold the copy and download helpers. Move code there only when a second tool needs it.
+- Tools with large dependencies are lazy-loaded with `React.lazy` in `App.tsx` so they stay out of the main chunk; the Data Formatter is the example.
 - To add a tool, create its folder, register its route in `App.tsx`, and add a card in `ToolsPage.tsx`. Keep the card's name and description in that tool's translation module. Cover navigation, direct access, and both languages in tests.
 
 ## Shared contracts
@@ -48,6 +49,17 @@ The image is decoded with its EXIF orientation applied, so the preview starts up
 An optional maximum size in KB applies to JPEG and WebP. The encoder binary-searches quality between 10% and the chosen quality, then shrinks dimensions by 15% per step, up to six times, if the lowest quality is still too large. When nothing fits, the smallest result is kept and marked. PNG is lossless, so only resizing makes it smaller. JPEG fills transparent areas with white.
 
 Compression runs only when the user presses Compress, one image at a time; changed settings mark existing results as outdated. Each row shows the original and result sizes and flags results larger than the original. Users can download each image or, with two or more results, one ZIP. `zipWriter.ts` is a dependency-free store-only ZIP writer with UTF-8 names and deduplicated file names. Like the Image Editor, results are drawn from decoded pixels with EXIF orientation applied, so metadata is not included. The tool does not open HEIC, AVIF, or GIF files, apply per-image settings, or keep files after the page closes.
+
+## Data Formatter & Converter
+
+`/tools/data-formatter` has two tabs whose input is kept while switching. Both use CodeMirror 6 editors with line numbers, folding, search, and error markers; Tab is left to the browser so keyboard users can leave an editor. The page is lazy-loaded, so CodeMirror and the `yaml` package download only when the tool opens. Text can be pasted, opened from a file up to 5 MB, or dropped on an editor. Nothing is saved.
+
+**Format & validate** tidies and checks data without changing its format. It auto-detects JSON, YAML, or XML from the file extension or first character, or uses the chosen format, and validates 300 ms after typing stops. Errors show the line and column in the status and editor.
+- JSON uses the tool's own strict RFC 8259 scanner (`jsonFormat.ts`), so its errors are localized and identical in every browser. Format and Minify re-print tokens, keeping number literals, escapes, key order, and duplicate keys exactly. Duplicate keys are listed as notes. Sort keys parses the value and warns when numbers would be rounded or become null; so do conversions.
+- YAML uses `yaml` with all documents in a stream. Formatting keeps comments and writes numbers, booleans, and nulls from their source text (for example `0x1F`, `1e3`, `~`). YAML cannot be indented with tabs, so tab indentation uses 2 spaces.
+- XML is validated by the browser's `DOMParser`; its error text differs by engine and is parsed for Chrome/Safari, Firefox, and jsdom. The formatter keeps text-only content, mixed content, and `xml:space="preserve"` verbatim, and Minify only removes whitespace between tags. XML is not converted to other formats because there is no single standard mapping.
+
+**Convert** converts live in four directions: CSV → JSON, JSON → CSV, JSON → YAML, and YAML → JSON. Opening a file picks the direction from its extension (`.csv`/`.tsv`, `.yaml`/`.yml`, or `.json`, which keeps a JSON-input direction). Swap moves the output into the input and reverses the direction. CSV → JSON uses an RFC 4180 parser (`csv.ts`) with quoted fields, line breaks inside quotes, BOM removal, and delimiter detection among comma, semicolon, tab, and pipe. A header row becomes object keys; blank or repeated headers are renamed. Optional type detection converts plain numbers that JavaScript can store exactly, `true`/`false`, and `null`, while values such as `007` stay text. Rows with a different field count are listed as notes. JSON → CSV accepts an array of objects (columns in first-seen order), an array of arrays, an array of values, or one object; nested values are flattened to `a.b`/`a.0` or written as JSON text. YAML → JSON returns an array for multi-document streams and refuses excessive alias expansion; JSON → YAML offers only space indentation.
 
 ## Legal pages
 

@@ -20,10 +20,10 @@ import {
 } from "react";
 import { Link } from "react-router-dom";
 import { NumberField } from "../../components/NumberField";
+import { downloadBlob } from "../../shared/download";
 import {
 	acceptsImage,
 	defaultQuality,
-	downloadBlob,
 	ExportError,
 	type ExportErrorCode,
 	type ExportFormat,

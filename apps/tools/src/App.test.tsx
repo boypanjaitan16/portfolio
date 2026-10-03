@@ -221,6 +221,31 @@ it("opens the image compressor from its card and directly with the saved locale"
 	).toBeInTheDocument();
 });
 
+it("lazy-loads the data formatter from its card and directly with the saved locale", async () => {
+	const user = userEvent.setup();
+	const { unmount } = render(
+		<MemoryRouter initialEntries={["/"]}>
+			<App />
+		</MemoryRouter>,
+	);
+	const card = screen.getByRole("link", { name: /Data Formatter & Converter/ });
+	expect(card).toHaveAttribute("href", "/data-formatter");
+	await user.click(card);
+	expect(
+		await screen.findByRole("heading", { name: "Data Formatter & Converter" }),
+	).toBeInTheDocument();
+	unmount();
+	window.localStorage.setItem("portfolio-locale", "id");
+	render(
+		<MemoryRouter initialEntries={["/data-formatter"]}>
+			<App />
+		</MemoryRouter>,
+	);
+	expect(
+		await screen.findByRole("heading", { name: "Format & Konversi Data" }),
+	).toBeInTheDocument();
+});
+
 it("shows the legal links in the shared footer and navigates between both pages", async () => {
 	const user = userEvent.setup();
 	render(

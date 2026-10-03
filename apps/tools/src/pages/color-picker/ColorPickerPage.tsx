@@ -8,6 +8,7 @@ import {
 	useState,
 } from "react";
 import { Link } from "react-router-dom";
+import { copyText } from "../../shared/clipboard";
 import { useToolsLocale } from "../../toolsLocale";
 import {
 	colorHex,
@@ -29,36 +30,6 @@ const acceptedTypes = new Set(["image/png", "image/jpeg", "image/webp"]);
 function acceptsImage(file: File): boolean {
 	if (file.type) return acceptedTypes.has(file.type);
 	return /\.(png|jpe?g|webp)$/i.test(file.name);
-}
-
-async function copyText(value: string): Promise<void> {
-	try {
-		if (navigator.clipboard?.writeText) {
-			await navigator.clipboard.writeText(value);
-			return;
-		}
-	} catch {
-		// A browser can deny Clipboard API access even after a user action.
-	}
-	const previouslyFocused =
-		document.activeElement instanceof HTMLElement
-			? document.activeElement
-			: null;
-	const input = document.createElement("textarea");
-	input.value = value;
-	input.readOnly = true;
-	input.style.position = "fixed";
-	input.style.left = "-9999px";
-	document.body.append(input);
-	let copied = false;
-	try {
-		input.select();
-		copied = document.execCommand?.("copy") ?? false;
-	} finally {
-		input.remove();
-		previouslyFocused?.focus();
-	}
-	if (!copied) throw new Error("copy");
 }
 
 function ColorReadout({

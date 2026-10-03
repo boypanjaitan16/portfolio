@@ -1,6 +1,7 @@
 import { ArrowLeft, Download, QrCode, Trash2, Upload } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { downloadBlob } from "../../shared/download";
 import { useToolsLocale } from "../../toolsLocale";
 import { useQrCodeTranslations } from "./locale";
 import {
@@ -26,20 +27,6 @@ function canvasBlob(canvas: HTMLCanvasElement): Promise<Blob> {
 			else reject(new Error("PNG encoding failed"));
 		}, "image/png");
 	});
-}
-
-function downloadBlob(blob: Blob, filename: string): void {
-	const url = URL.createObjectURL(blob);
-	const link = document.createElement("a");
-	link.href = url;
-	link.download = filename;
-	document.body.append(link);
-	try {
-		link.click();
-	} finally {
-		link.remove();
-		window.setTimeout(() => URL.revokeObjectURL(url), 1000);
-	}
 }
 
 export function QrCodeGeneratorPage() {
