@@ -4,6 +4,7 @@ import {
 	CircleDashed,
 	Crop,
 	FilePenLine,
+	Images,
 	Minimize2,
 	Pipette,
 	QrCode,
@@ -15,6 +16,7 @@ import { colorPickerCard } from "./color-picker/locale";
 import { dataFormatterCard } from "./data-formatter/locale";
 import { imageCompressorCard } from "./image-compressor/locale";
 import { imageEditorCard } from "./image-editor/locale";
+import { imageToPdfCard } from "./image-to-pdf/locale";
 import { pdfToolCard } from "./pdf-editor/locale";
 import { qrCodeCard } from "./qr-code-generator/locale";
 import { spinningWheelCard } from "./spinning-wheel/locale";
@@ -24,6 +26,11 @@ const tools = [
 		path: "/pdf-editor",
 		icon: FilePenLine,
 		card: pdfToolCard,
+	},
+	{
+		path: "/image-to-pdf",
+		icon: Images,
+		card: imageToPdfCard,
 	},
 	{
 		path: "/color-picker",

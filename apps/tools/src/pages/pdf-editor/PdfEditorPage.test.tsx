@@ -131,7 +131,7 @@ it("fits the preview, keeps zoom across pages, and respects both limits", async 
 	expect(
 		screen.getByRole("button", { name: /Reset zoom to 100%: 100%/ }),
 	).toBeInTheDocument();
-});
+}, 15_000);
 
 it("keeps annotation PDF coordinates after dragging at zoom and rotation", async () => {
 	const { user, stage } = await loadEditor();

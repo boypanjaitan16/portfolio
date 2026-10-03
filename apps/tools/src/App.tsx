@@ -19,6 +19,12 @@ const DataFormatterPage = lazy(() =>
 	})),
 );
 
+const ImageToPdfPage = lazy(() =>
+	import("./pages/image-to-pdf/ImageToPdfPage").then((module) => ({
+		default: module.ImageToPdfPage,
+	})),
+);
+
 export default function App() {
 	return (
 		<LocaleProvider>
@@ -26,6 +32,14 @@ export default function App() {
 				<Route element={<ToolsLayout />}>
 					<Route path="/" element={<ToolsPage />} />
 					<Route path="/pdf-editor" element={<PdfEditorPage />} />
+					<Route
+						path="/image-to-pdf"
+						element={
+							<Suspense fallback={<LazyPageFallback />}>
+								<ImageToPdfPage />
+							</Suspense>
+						}
+					/>
 					<Route path="/color-picker" element={<ColorPickerPage />} />
 					<Route path="/qr-code-generator" element={<QrCodeGeneratorPage />} />
 					<Route path="/spinning-wheel" element={<SpinningWheelPage />} />

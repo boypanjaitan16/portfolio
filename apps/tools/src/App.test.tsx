@@ -75,6 +75,34 @@ it("opens the PDF editor directly with the saved locale and updates its copy", a
 	expect(window.localStorage.getItem("portfolio-locale")).toBe("en");
 });
 
+it("opens Images to PDF from its card and directly in the saved locale", async () => {
+	const user = userEvent.setup();
+	const { unmount } = render(
+		<MemoryRouter initialEntries={["/"]}>
+			<App />
+		</MemoryRouter>,
+	);
+	const card = screen.getByRole("link", { name: /Images to PDF/ });
+	expect(card).toHaveAttribute("href", "/image-to-pdf");
+	await user.click(card);
+	expect(
+		await screen.findByRole("heading", { name: "Images to PDF" }),
+	).toBeInTheDocument();
+	unmount();
+	window.localStorage.setItem("portfolio-locale", "id");
+	render(
+		<MemoryRouter initialEntries={["/image-to-pdf"]}>
+			<App />
+		</MemoryRouter>,
+	);
+	expect(
+		await screen.findByRole("heading", { name: "Gambar ke PDF" }),
+	).toBeInTheDocument();
+	expect(
+		screen.getByText("Setiap gambar menjadi satu halaman."),
+	).toBeInTheDocument();
+});
+
 it("opens the color picker from its card and shows its local translations", async () => {
 	const user = userEvent.setup();
 	render(

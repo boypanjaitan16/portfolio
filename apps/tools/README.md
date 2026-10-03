@@ -22,6 +22,12 @@ The public tools app is served at `/tools/`. For monorepo setup and GitHub Pages
 
 PDF.js renders previews and pdf-lib creates the download; files are processed in the browser. Preview zoom starts at 100% of the fit-to-preview size, ranges from 50% to 300% in 25% steps, and persists when switching pages. Annotation coordinates stay in the original PDF page space so the export matches the preview. The editor does not open encrypted PDFs or support editing existing text, filling forms, or OCR.
 
+## Images to PDF
+
+`/tools/image-to-pdf` combines up to 30 PNG, JPEG, or WebP images into one PDF, with one image per page. Users can add images by file picker or drag and drop, preview them, change their order, and remove them before downloading. Each input is limited to 50 MB, 50 megapixels, and 16,384 pixels on either side. Images are decoded with EXIF orientation applied, then drawn from pixels, so source metadata is not copied into the PDF.
+
+The default A4 page size and optional Letter size follow each image's portrait or landscape orientation. Images fit without cropping inside a 10 mm white margin. The match-image-ratio option uses a page with the image's aspect ratio and an A4-length longest side. Embedded image resolution is capped at 300 DPI at its displayed size. Everything is processed in the browser, and a failed image prevents a partial PDF download.
+
 ## Color Picker
 
 `/tools/color-picker` reads one pixel from an uploaded PNG, JPEG, or WebP image in the browser. Hover or touch movement previews its HEX, RGB, and opacity; clicking or releasing a touch selects a color for copying. Fully transparent pixels show their opacity without a copyable HEX or RGB value. The tool does not sample other parts of the screen or extract a palette.
