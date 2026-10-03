@@ -113,3 +113,31 @@ it("opens the color picker directly with the saved locale and switches language"
 	).toBeInTheDocument();
 	expect(window.localStorage.getItem("portfolio-locale")).toBe("en");
 });
+
+it("opens the QR code generator from its card and directly with the saved locale", async () => {
+	const user = userEvent.setup();
+	const { unmount } = render(
+		<MemoryRouter initialEntries={["/"]}>
+			<App />
+		</MemoryRouter>,
+	);
+	const card = screen.getByRole("link", { name: /QR Code Generator/ });
+	expect(card).toHaveAttribute("href", "/qr-code-generator");
+	await user.click(card);
+	expect(
+		screen.getByRole("heading", { name: "QR Code Generator" }),
+	).toBeInTheDocument();
+	unmount();
+	window.localStorage.setItem("portfolio-locale", "id");
+	render(
+		<MemoryRouter initialEntries={["/qr-code-generator"]}>
+			<App />
+		</MemoryRouter>,
+	);
+	expect(
+		screen.getByRole("heading", { name: "Pembuat Kode QR" }),
+	).toBeInTheDocument();
+	expect(
+		screen.getByText(/Buat kode QR dari teks atau URL/),
+	).toBeInTheDocument();
+});

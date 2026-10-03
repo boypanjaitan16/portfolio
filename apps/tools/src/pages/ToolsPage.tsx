@@ -1,9 +1,16 @@
-import { ArrowUpRight, FilePenLine, Github, Pipette } from "lucide-react";
+import {
+	ArrowUpRight,
+	FilePenLine,
+	Github,
+	Pipette,
+	QrCode,
+} from "lucide-react";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useToolsLocale } from "../toolsLocale";
 import { colorPickerCard } from "./color-picker/locale";
 import { pdfToolCard } from "./pdf-editor/locale";
+import { qrCodeCard } from "./qr-code-generator/locale";
 
 const tools = [
 	{
@@ -15,6 +22,11 @@ const tools = [
 		path: "/color-picker",
 		icon: Pipette,
 		card: colorPickerCard,
+	},
+	{
+		path: "/qr-code-generator",
+		icon: QrCode,
+		card: qrCodeCard,
 	},
 ] as const;
 

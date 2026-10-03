@@ -3,6 +3,7 @@ import { ToolsLayout } from "./components/ToolsLayout";
 import { ColorPickerPage } from "./pages/color-picker/ColorPickerPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
 import { PdfEditorPage } from "./pages/pdf-editor/PdfEditorPage";
+import { QrCodeGeneratorPage } from "./pages/qr-code-generator/QrCodeGeneratorPage";
 import { ToolsPage } from "./pages/ToolsPage";
 import { LocaleProvider } from "./toolsLocale";
 
@@ -14,6 +15,7 @@ export default function App() {
 					<Route path="/" element={<ToolsPage />} />
 					<Route path="/pdf-editor" element={<PdfEditorPage />} />
 					<Route path="/color-picker" element={<ColorPickerPage />} />
+					<Route path="/qr-code-generator" element={<QrCodeGeneratorPage />} />
 					<Route path="*" element={<NotFoundPage />} />
 				</Route>
 			</Routes>
