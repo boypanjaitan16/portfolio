@@ -382,9 +382,6 @@ export function ColorPickerPage() {
 			</Link>
 			<div className="mt-10 flex flex-wrap items-end justify-between gap-5">
 				<div>
-					<p className="font-mono text-xs font-semibold uppercase tracking-[0.2em] text-primary">
-						{t.privacy}
-					</p>
 					<h1 className="mt-4 font-display text-5xl font-semibold tracking-tight md:text-6xl">
 						{t.title}
 					</h1>

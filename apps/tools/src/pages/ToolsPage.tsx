@@ -1,5 +1,6 @@
 import {
 	ArrowUpRight,
+	CircleDashed,
 	FilePenLine,
 	Github,
 	Pipette,
@@ -11,6 +12,7 @@ import { useToolsLocale } from "../toolsLocale";
 import { colorPickerCard } from "./color-picker/locale";
 import { pdfToolCard } from "./pdf-editor/locale";
 import { qrCodeCard } from "./qr-code-generator/locale";
+import { spinningWheelCard } from "./spinning-wheel/locale";
 
 const tools = [
 	{
@@ -28,6 +30,11 @@ const tools = [
 		icon: QrCode,
 		card: qrCodeCard,
 	},
+	{
+		path: "/spinning-wheel",
+		icon: CircleDashed,
+		card: spinningWheelCard,
+	},
 ] as const;
 
 export function ToolsPage() {
@@ -38,9 +45,6 @@ export function ToolsPage() {
 	return (
 		<>
 			<main className="mx-auto max-w-7xl px-5 pb-24 pt-16 md:px-10 md:pt-24">
-				<p className="font-mono text-xs font-semibold uppercase tracking-[0.22em] text-primary">
-					{t.collection}
-				</p>
 				<h1 className="mt-5 max-w-3xl font-display text-5xl font-semibold leading-tight tracking-tight md:text-7xl">
 					{t.homeTitle}
 				</h1>

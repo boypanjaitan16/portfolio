@@ -141,3 +141,28 @@ it("opens the QR code generator from its card and directly with the saved locale
 		screen.getByText(/Buat kode QR dari teks atau URL/),
 	).toBeInTheDocument();
 });
+
+it("opens the spinning wheel from its card and directly with the saved locale", async () => {
+	const user = userEvent.setup();
+	const { unmount } = render(
+		<MemoryRouter initialEntries={["/"]}>
+			<App />
+		</MemoryRouter>,
+	);
+	const card = screen.getByRole("link", { name: /Spinning Wheel/ });
+	expect(card).toHaveAttribute("href", "/spinning-wheel");
+	await user.click(card);
+	expect(
+		screen.getByRole("heading", { name: "Spinning Wheel" }),
+	).toBeInTheDocument();
+	unmount();
+	window.localStorage.setItem("portfolio-locale", "id");
+	render(
+		<MemoryRouter initialEntries={["/spinning-wheel"]}>
+			<App />
+		</MemoryRouter>,
+	);
+	expect(
+		screen.getByRole("heading", { name: "Roda Undian" }),
+	).toBeInTheDocument();
+});

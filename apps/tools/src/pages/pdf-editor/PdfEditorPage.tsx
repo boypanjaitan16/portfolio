@@ -326,9 +326,6 @@ export function PdfEditorPage() {
 			</Link>
 			<div className="mt-9 flex flex-wrap items-end justify-between gap-6">
 				<div>
-					<p className="font-mono text-xs font-semibold uppercase tracking-[0.2em] text-primary">
-						{t.privacy}
-					</p>
 					<h1 className="mt-3 text-4xl font-semibold tracking-tight sm:text-6xl">
 						{t.pdfTitle}
 					</h1>

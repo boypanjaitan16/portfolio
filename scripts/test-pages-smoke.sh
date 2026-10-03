@@ -39,6 +39,7 @@ for (const [pathname, expected] of [
 	["/tools/pdf-editor", "/tools/?__redirect=%2Ftools%2Fpdf-editor"],
 	["/tools/color-picker", "/tools/?__redirect=%2Ftools%2Fcolor-picker"],
 	["/tools/qr-code-generator", "/tools/?__redirect=%2Ftools%2Fqr-code-generator"],
+	["/tools/spinning-wheel", "/tools/?__redirect=%2Ftools%2Fspinning-wheel"],
 	["/missing", "/?__redirect=%2Fmissing"],
 ]) {
 	let redirectedTo = "";

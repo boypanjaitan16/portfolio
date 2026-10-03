@@ -4,6 +4,7 @@ import { ColorPickerPage } from "./pages/color-picker/ColorPickerPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
 import { PdfEditorPage } from "./pages/pdf-editor/PdfEditorPage";
 import { QrCodeGeneratorPage } from "./pages/qr-code-generator/QrCodeGeneratorPage";
+import { SpinningWheelPage } from "./pages/spinning-wheel/SpinningWheelPage";
 import { ToolsPage } from "./pages/ToolsPage";
 import { LocaleProvider } from "./toolsLocale";
 
@@ -16,6 +17,7 @@ export default function App() {
 					<Route path="/pdf-editor" element={<PdfEditorPage />} />
 					<Route path="/color-picker" element={<ColorPickerPage />} />
 					<Route path="/qr-code-generator" element={<QrCodeGeneratorPage />} />
+					<Route path="/spinning-wheel" element={<SpinningWheelPage />} />
 					<Route path="*" element={<NotFoundPage />} />
 				</Route>
 			</Routes>
