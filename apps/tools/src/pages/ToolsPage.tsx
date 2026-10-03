@@ -1,6 +1,7 @@
 import {
 	ArrowUpRight,
 	CircleDashed,
+	Crop,
 	FilePenLine,
 	Pipette,
 	QrCode,
@@ -9,6 +10,7 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useToolsLocale } from "../toolsLocale";
 import { colorPickerCard } from "./color-picker/locale";
+import { imageEditorCard } from "./image-editor/locale";
 import { pdfToolCard } from "./pdf-editor/locale";
 import { qrCodeCard } from "./qr-code-generator/locale";
 import { spinningWheelCard } from "./spinning-wheel/locale";
@@ -33,6 +35,11 @@ const tools = [
 		path: "/spinning-wheel",
 		icon: CircleDashed,
 		card: spinningWheelCard,
+	},
+	{
+		path: "/image-editor",
+		icon: Crop,
+		card: imageEditorCard,
 	},
 ] as const;
 

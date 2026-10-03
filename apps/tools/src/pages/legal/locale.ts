@@ -36,7 +36,7 @@ const en = {
 			"Use the tools for content you are allowed to handle and in ways that follow applicable law. Processing happens in your browser; the tools do not upload your input or generated files.",
 		responsibilityTitle: "Check and keep your results",
 		responsibilityBody:
-			"You are responsible for the content you enter and the results you use. Check generated PDFs, QR codes, colors, and draw results before relying on or sharing them. Keep your own copies of important files and lists; browser storage can be cleared.",
+			"You are responsible for the content you enter and the results you use. Check generated PDFs, edited images, QR codes, colors, and draw results before relying on or sharing them. Keep your own copies of important files and lists; browser storage can be cleared.",
 		availabilityTitle: "Availability",
 		availabilityBody:
 			"The tools are provided as available. Features may change or become unavailable, and uninterrupted operation or suitability for a particular purpose is not guaranteed.",
@@ -83,7 +83,7 @@ const id = {
 			"Gunakan tools untuk konten yang berhak Anda kelola dan sesuai hukum yang berlaku. Pemrosesan dilakukan di browser; tools tidak mengunggah input atau file hasil Anda.",
 		responsibilityTitle: "Periksa dan simpan hasil Anda",
 		responsibilityBody:
-			"Anda bertanggung jawab atas konten yang dimasukkan dan hasil yang digunakan. Periksa PDF, kode QR, warna, dan hasil undian sebelum mengandalkan atau membagikannya. Simpan salinan sendiri untuk file dan daftar penting; penyimpanan browser dapat terhapus.",
+			"Anda bertanggung jawab atas konten yang dimasukkan dan hasil yang digunakan. Periksa PDF, gambar yang diedit, kode QR, warna, dan hasil undian sebelum mengandalkan atau membagikannya. Simpan salinan sendiri untuk file dan daftar penting; penyimpanan browser dapat terhapus.",
 		availabilityTitle: "Ketersediaan",
 		availabilityBody:
 			"Tools disediakan sesuai ketersediaan. Fitur dapat berubah atau tidak tersedia, dan kelancaran tanpa gangguan maupun kecocokan untuk tujuan tertentu tidak dijamin.",

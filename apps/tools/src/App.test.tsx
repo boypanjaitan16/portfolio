@@ -167,6 +167,33 @@ it("opens the spinning wheel from its card and directly with the saved locale", 
 	).toBeInTheDocument();
 });
 
+it("opens the image editor from its card and directly with the saved locale", async () => {
+	const user = userEvent.setup();
+	const { unmount } = render(
+		<MemoryRouter initialEntries={["/"]}>
+			<App />
+		</MemoryRouter>,
+	);
+	const card = screen.getByRole("link", {
+		name: /Image Editor & EXIF Remover/,
+	});
+	expect(card).toHaveAttribute("href", "/image-editor");
+	await user.click(card);
+	expect(
+		screen.getByRole("heading", { name: "Image Editor & EXIF Remover" }),
+	).toBeInTheDocument();
+	unmount();
+	window.localStorage.setItem("portfolio-locale", "id");
+	render(
+		<MemoryRouter initialEntries={["/image-editor"]}>
+			<App />
+		</MemoryRouter>,
+	);
+	expect(
+		screen.getByRole("heading", { name: "Editor Gambar & Penghapus EXIF" }),
+	).toBeInTheDocument();
+});
+
 it("shows the legal links in the shared footer and navigates between both pages", async () => {
 	const user = userEvent.setup();
 	render(
