@@ -40,6 +40,8 @@ for (const [pathname, expected] of [
 	["/tools/color-picker", "/tools/?__redirect=%2Ftools%2Fcolor-picker"],
 	["/tools/qr-code-generator", "/tools/?__redirect=%2Ftools%2Fqr-code-generator"],
 	["/tools/spinning-wheel", "/tools/?__redirect=%2Ftools%2Fspinning-wheel"],
+	["/tools/privacy-policy", "/tools/?__redirect=%2Ftools%2Fprivacy-policy"],
+	["/tools/terms-of-service", "/tools/?__redirect=%2Ftools%2Fterms-of-service"],
 	["/missing", "/?__redirect=%2Fmissing"],
 ]) {
 	let redirectedTo = "";

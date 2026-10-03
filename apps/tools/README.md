@@ -4,7 +4,7 @@ The public tools app is served at `/tools/`. For monorepo setup and GitHub Pages
 
 ## Structure and adding a tool
 
-- `src/App.tsx` wires the locale provider and routes. `src/components/ToolsLayout.tsx` owns the shared header and route outlet. `src/pages/ToolsPage.tsx` owns the responsive tool grid and landing page footer; `src/pages/NotFoundPage.tsx` handles unknown routes.
+- `src/App.tsx` wires the locale provider and routes. `src/components/ToolsLayout.tsx` owns the shared header, route outlet, and footer. `src/pages/ToolsPage.tsx` owns the responsive tool grid; `src/pages/NotFoundPage.tsx` handles unknown routes.
 - Put each tool's page, translations, model, services, assets, and tests in `src/pages/<route-slug>/`. The PDF Editor is the example at `src/pages/pdf-editor/`.
 - To add a tool, create its folder, register its route in `App.tsx`, and add a card in `ToolsPage.tsx`. Keep the card's name and description in that tool's translation module. Cover navigation, direct access, and both languages in tests.
 
@@ -12,7 +12,7 @@ The public tools app is served at `/tools/`. For monorepo setup and GitHub Pages
 
 - Keep EN/ID tool copy in the tool's own translation module, with matching keys checked by TypeScript. `src/toolsLocale.tsx` owns the shared navigation, landing page, and not-found copy and the `portfolio-locale` preference shared with home.
 - Preserve the `/tools/` Vite base path and React Router basename. GitHub Pages redirects direct tool URLs through the root `404.html`; `src/main.tsx` restores the URL before routing. Check the fallback when changing routes or asset paths.
-- Keep the shared header sticky above page content. Align its inner content and the landing page footer to the same `max-w-7xl` width and horizontal padding; keep dialogs above the header.
+- Keep the shared header sticky above page content. Align its inner content and the shared footer to the same `max-w-7xl` width and horizontal padding; keep dialogs above the header.
 
 ## PDF Editor
 
@@ -33,6 +33,10 @@ Users can add, replace, or remove one local PNG, JPEG, or WebP center logo up to
 ## Spinning Wheel
 
 `/tools/spinning-wheel` draws one item at a time from an editable list. Users can add items individually or open a collapsed panel to add one per line, edit names, remove items, and choose each item's color. Names must be unique after trimming and case folding. Each remaining item has one equal-sized wheel slice; after a spin, the winner appears in a confetti dialog and remains on the wheel until the user confirms removal. The last item can also be drawn. The list and colors are saved in this browser's local storage. An unconfirmed result is not saved, so reloading the page keeps that item in the list. The tool does not use an account, server, or saved winner history.
+
+## Legal pages
+
+`/tools/privacy-policy` and `/tools/terms-of-service` are available in EN/ID from the shared footer on every Tools page. They apply only to Tools. The privacy page explains local processing, the saved language and Spinning Wheel preferences, and the network requests needed to load the site from GitHub Pages. Both pages link to the separate portfolio contact form and explain that submitting it sends the entered details to the contact service.
 
 ## Verification
 

@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import App from "./App";
@@ -165,4 +165,72 @@ it("opens the spinning wheel from its card and directly with the saved locale", 
 	expect(
 		screen.getByRole("heading", { name: "Roda Undian" }),
 	).toBeInTheDocument();
+});
+
+it("shows the legal links in the shared footer and navigates between both pages", async () => {
+	const user = userEvent.setup();
+	render(
+		<MemoryRouter initialEntries={["/"]}>
+			<App />
+		</MemoryRouter>,
+	);
+	const footer = screen.getByRole("contentinfo");
+	expect(footer).toHaveTextContent("Privacy Policy");
+	expect(footer).toHaveTextContent("Terms of Service");
+	await user.click(screen.getByRole("link", { name: /PDF Editor/ }));
+	expect(screen.getAllByRole("contentinfo")).toHaveLength(1);
+	await user.click(
+		within(footer).getByRole("link", { name: "Privacy Policy" }),
+	);
+	expect(
+		screen.getByRole("heading", { name: "Privacy Policy", level: 1 }),
+	).toBeInTheDocument();
+	expect(
+		screen.getByText(/do not upload your input or generated files/),
+	).toBeInTheDocument();
+	expect(
+		screen.getByText(/GitHub says it logs visitors' IP addresses/),
+	).toBeInTheDocument();
+	expect(
+		screen.getByRole("link", { name: "portfolio contact form" }),
+	).toHaveAttribute("href", "/#contact-title");
+	await user.click(
+		screen.getByRole("link", { name: /Read the Terms of Service/ }),
+	);
+	expect(
+		screen.getByRole("heading", { name: "Terms of Service", level: 1 }),
+	).toBeInTheDocument();
+	expect(screen.getAllByRole("contentinfo")).toHaveLength(1);
+});
+
+it("opens both legal routes directly in Indonesian and updates their copy and title", async () => {
+	window.localStorage.setItem("portfolio-locale", "id");
+	const user = userEvent.setup();
+	render(
+		<MemoryRouter initialEntries={["/terms-of-service"]}>
+			<App />
+		</MemoryRouter>,
+	);
+	expect(
+		screen.getByRole("heading", { name: "Ketentuan Layanan", level: 1 }),
+	).toBeInTheDocument();
+	expect(document.title).toBe("Ketentuan Layanan | Boy's Tools");
+	expect(
+		screen.getByText(/Formulir tersebut terpisah dari Tools/),
+	).toBeInTheDocument();
+	await user.click(
+		screen.getByRole("link", { name: /Baca Kebijakan Privasi/ }),
+	);
+	expect(
+		screen.getByRole("heading", { name: "Kebijakan Privasi", level: 1 }),
+	).toBeInTheDocument();
+	expect(
+		screen.getByText(/Penyimpanan lokal menyimpan pilihan bahasa/),
+	).toBeInTheDocument();
+	await user.click(screen.getByRole("button", { name: "EN" }));
+	expect(
+		screen.getByRole("heading", { name: "Privacy Policy", level: 1 }),
+	).toBeInTheDocument();
+	expect(document.title).toBe("Privacy Policy | Boy's Tools");
+	expect(window.localStorage.getItem("portfolio-locale")).toBe("en");
 });

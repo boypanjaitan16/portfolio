@@ -20,6 +20,9 @@ const en = {
 	openTool: "Open tool",
 	notFound: "Page not found",
 	backToTools: "Back to tools",
+	footerNavigation: "Legal pages",
+	privacyPolicy: "Privacy Policy",
+	termsOfService: "Terms of Service",
 };
 
 const id = {
@@ -33,6 +36,9 @@ const id = {
 	openTool: "Buka tool",
 	notFound: "Halaman tidak ditemukan",
 	backToTools: "Kembali ke tools",
+	footerNavigation: "Halaman kebijakan",
+	privacyPolicy: "Kebijakan Privasi",
+	termsOfService: "Ketentuan Layanan",
 } satisfies Record<keyof typeof en, string>;
 
 const translations = { en, id } satisfies Record<

@@ -1,10 +1,11 @@
+import { Home } from "lucide-react";
 import { Link, Outlet } from "react-router-dom";
 import { useToolsLocale } from "../toolsLocale";
 
 export function ToolsLayout() {
 	const { locale, setLocale, t } = useToolsLocale();
 	return (
-		<div className="min-h-screen bg-paper text-ink">
+		<div className="flex min-h-screen flex-col bg-paper text-ink">
 			<header className="sticky top-0 z-40 border-b border-ink/15 bg-paper">
 				<div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-5 py-5 md:px-10">
 					<Link
@@ -17,9 +18,6 @@ export function ToolsLayout() {
 						<span>Boy&apos;s tools</span>
 					</Link>
 					<div className="flex items-center gap-5 font-mono text-xs font-semibold uppercase tracking-wider">
-						<a href="/" className="hover:text-primary">
-							{t.portfolio}
-						</a>
 						<fieldset
 							aria-label={t.language}
 							className="flex gap-1 border border-ink/25 p-1"
@@ -39,7 +37,27 @@ export function ToolsLayout() {
 					</div>
 				</div>
 			</header>
-			<Outlet />
+			<div className="flex-1">
+				<Outlet />
+			</div>
+			<footer className="border-t border-ink/15">
+				<div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-5 px-5 py-8 text-sm text-muted md:px-10">
+					<nav
+						aria-label={t.footerNavigation}
+						className="flex flex-wrap items-center gap-x-6 gap-y-3"
+					>
+						<Link to="/privacy-policy" className="hover:text-primary">
+							{t.privacyPolicy}
+						</Link>
+						<Link to="/terms-of-service" className="hover:text-primary">
+							{t.termsOfService}
+						</Link>
+					</nav>
+					<a href="/" aria-label="GitHub" className="hover:text-primary">
+						<Home size={20} />
+					</a>
+				</div>
+			</footer>
 		</div>
 	);
 }

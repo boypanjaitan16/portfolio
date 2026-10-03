@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import { ToolsLayout } from "./components/ToolsLayout";
 import { ColorPickerPage } from "./pages/color-picker/ColorPickerPage";
+import { LegalPage } from "./pages/legal/LegalPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
 import { PdfEditorPage } from "./pages/pdf-editor/PdfEditorPage";
 import { QrCodeGeneratorPage } from "./pages/qr-code-generator/QrCodeGeneratorPage";
@@ -18,6 +19,14 @@ export default function App() {
 					<Route path="/color-picker" element={<ColorPickerPage />} />
 					<Route path="/qr-code-generator" element={<QrCodeGeneratorPage />} />
 					<Route path="/spinning-wheel" element={<SpinningWheelPage />} />
+					<Route
+						path="/privacy-policy"
+						element={<LegalPage kind="privacy" />}
+					/>
+					<Route
+						path="/terms-of-service"
+						element={<LegalPage kind="terms" />}
+					/>
 					<Route path="*" element={<NotFoundPage />} />
 				</Route>
 			</Routes>
